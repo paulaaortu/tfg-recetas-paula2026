@@ -1,435 +1,135 @@
-/* src/pages/Home.css */
-
-/* ── Variables ── */
-:root {
-    --green: #839E88;
-    --green-dark: #6a8770;
-    --beige: #FBF7F4;
-    --pink: #F3DDE8;
-    --gray-dark: #3B3B3B;
-    --gray-mid: #6b6b6b;
-    --white: #ffffff;
-    --radius-card: 16px;
-    --radius-btn: 50px;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+.home-container {
+    padding-bottom: 90px;
 }
 
 body {
-    background: #e8e4e0;
-    font-family: 'Georgia', serif;
-    color: var(--gray-dark);
+    background: #FBF7F4;
 }
 
-/* ════════════════════════════════
-   MÓVIL (base — < 768px)
-   Ocupa toda la pantalla, sin borde redondeado
-   ════════════════════════════════ */
-.home-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-}
-
-.home-container {
-    width: 100%;
-    min-height: 100vh;
-    background: var(--beige);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding-bottom: 90px;
-    /* espacio para el nav fijo */
-}
-
-/* ── Header ── */
-.header {
-    padding: 48px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.greeting h1 {
-    font-size: 1.9rem;
-    font-weight: 700;
-    color: var(--gray-dark);
-    line-height: 1.1;
-    letter-spacing: -0.5px;
-}
-
-.name-underline {
-    text-decoration: underline;
-    text-decoration-color: var(--green);
-    text-underline-offset: 4px;
-}
-
-.subtitle {
-    font-size: 0.9rem;
-    color: var(--gray-mid);
-    margin-top: 4px;
-    font-family: 'Helvetica Neue', sans-serif;
-}
-
-/* Pantry card */
+/* Pantry Card */
 .pantry-card {
-    background: var(--green);
-    border-radius: var(--radius-card);
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    background: #839E88;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    color: #FBF7F4;
 }
 
-.pantry-card-top {
+.pantry-card button {
+    background: #FBF7F4;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+/* Recommendations */
+
+.recommendations {
+    padding: 0 20px;
+}
+
+.title-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.pantry-title {
-    font-weight: 700;
-    color: var(--white);
-    font-size: 1rem;
-}
-
-.pantry-icon {
-    font-size: 1.4rem;
-}
-
-.pantry-count {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-family: 'Helvetica Neue', sans-serif;
-    font-weight: 600;
-}
-
-.pantry-btn {
-    align-self: flex-start;
-    background: var(--pink);
-    color: var(--gray-dark);
-    border: none;
-    border-radius: var(--radius-btn);
-    padding: 10px 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 4px;
-    font-family: 'Helvetica Neue', sans-serif;
-    transition: opacity 0.2s;
-}
-
-.pantry-btn:hover {
-    opacity: 0.85;
-}
-
-/* ── Recipe Cards ── */
-.recipes-section {
-    padding: 8px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.recipes-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.recipes-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--gray-dark);
-}
-
-.view-all-btn {
-    background: none;
-    border: none;
-    color: var(--green-dark);
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-family: 'Helvetica Neue', sans-serif;
 }
 
 .recipes-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
-.recipe-card {
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    background: var(--white);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.recipe-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.recipe-img-wrapper {
-    width: 100%;
-    height: 110px;
-    overflow: hidden;
-}
-
-.recipe-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.recipe-info {
-    background: var(--green);
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.recipe-name {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.3;
-}
-
-.recipe-time {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.85);
-    font-family: 'Helvetica Neue', sans-serif;
-}
-
-/* ── Bottom Nav — móvil: fijo en la parte inferior de la pantalla ── */
+/* Bottom Navigation Floating Aesthetic */
 .bottom-nav {
     position: fixed;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
-    background: var(--white);
-    border-radius: 50px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: #ffffff;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    padding: 10px 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    z-index: 100;
+    padding: 12px 0;
+    border-radius: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
     background: none;
     border: none;
+    color: #6a8770;
+    padding: 0;
+    font-size: 11px;
     cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 40px;
-    transition: background 0.2s, color 0.2s;
-    color: var(--gray-mid);
+    transition: all 0.2s ease;
+}
+
+.nav-icon-container {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 2px;
+    transition: all 0.2s ease;
 }
 
 .nav-item--active {
-    background: var(--green);
-    color: var(--white);
-}
-
-.nav-label {
-    font-size: 0.65rem;
-    font-family: 'Helvetica Neue', sans-serif;
+    color: #3B3B3B;
     font-weight: 600;
 }
 
-
-/* ════════════════════════════════
-   TABLET (768px – 1023px)
-   Centrado como card ancha
-   ════════════════════════════════ */
-@media (min-width: 768px) {
-    body {
-        background: #dedad6;
-    }
-
-    .home-wrapper {
-        align-items: center;
-        padding: 40px 24px;
-        min-height: 100vh;
-    }
-
-    .home-container {
-        width: 520px;
-        min-height: auto;
-        border-radius: 28px;
-        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.14);
-        padding-bottom: 100px;
-    }
-
-    .header {
-        padding: 40px 32px 24px;
-    }
-
-    .greeting h1 {
-        font-size: 2.2rem;
-    }
-
-    .recipes-section {
-        padding: 8px 32px 28px;
-    }
-
-    .recipes-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-    }
-
-    .recipe-img-wrapper {
-        height: 140px;
-    }
-
-    /* Nav fijo dentro del card en tablet */
-    .bottom-nav {
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        right: 16px;
-    }
+.nav-item--active .nav-icon-container {
+    background-color: rgba(131, 158, 136, 0.2);
+    color: #839E88;
 }
 
+.nav-label {
+    margin-top: 4px;
+}
 
-/* ════════════════════════════════
-   ESCRITORIO (≥ 1024px)
-   Layout de dos columnas: sidebar + contenido
-   ════════════════════════════════ */
-@media (min-width: 1024px) {
-    .home-wrapper {
-        align-items: flex-start;
-        padding: 0;
-    }
+/* Recipe Cards */
+.recipe-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
 
-    .home-container {
-        width: 100%;
-        max-width: 100%;
-        min-height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        grid-template-rows: auto 1fr;
-        grid-template-areas:
-            "sidebar  main"
-            "sidebar  main"
-            "sidenav  main";
-        padding-bottom: 0;
-    }
+.recipe-card:hover {
+    transform: translateY(-4px);
+}
 
-    /* Header ocupa el sidebar izquierdo */
-    .header {
-        grid-area: sidebar;
-        padding: 56px 32px 32px;
-        background: var(--green);
-        min-height: 100vh;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        gap: 28px;
-    }
+.recipe-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
 
-    .greeting h1 {
-        font-size: 2.4rem;
-        color: var(--white);
-    }
+.recipe-info {
+    padding: 12px;
+}
 
-    .name-underline {
-        text-decoration-color: var(--pink);
-    }
+.recipe-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    color: #3B3B3B;
+}
 
-    .subtitle {
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    /* Pantry card más clara sobre el fondo verde */
-    .pantry-card {
-        background: rgba(255, 255, 255, 0.18);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(4px);
-    }
-
-    .pantry-count {
-        color: rgba(255, 255, 255, 0.95);
-    }
-
-    /* Recetas ocupan el área principal */
-    .recipes-section {
-        grid-area: main;
-        padding: 56px 48px 40px;
-        gap: 24px;
-    }
-
-    .recipes-title {
-        font-size: 1.3rem;
-    }
-
-    .recipes-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    .recipe-img-wrapper {
-        height: 160px;
-    }
-
-    .recipe-name {
-        font-size: 0.9rem;
-    }
-
-    /* Nav va abajo del sidebar */
-    .bottom-nav {
-        grid-area: sidenav;
-        position: sticky;
-        bottom: 0;
-        left: auto;
-        right: auto;
-        border-radius: 0;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: stretch;
-        padding: 16px 16px 32px;
-        background: var(--green);
-        box-shadow: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        gap: 4px;
-    }
-
-    .nav-item {
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 12px;
-        padding: 10px 16px;
-        border-radius: 12px;
-        color: rgba(255, 255, 255, 0.75);
-    }
-
-    .nav-item--active {
-        background: rgba(255, 255, 255, 0.2);
-        color: var(--white);
-    }
-
-    .nav-label {
-        font-size: 0.85rem;
-    }
+.recipe-info span {
+    font-size: 12px;
+    color: #6a8770;
+    display: block;
+    line-height: 1.4;
 }

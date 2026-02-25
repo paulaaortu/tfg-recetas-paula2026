@@ -59,9 +59,18 @@ const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
 interface BottomNavProps {
     initialTab?: Tab
     onChange?: (tab: Tab) => void
+    userName: string
+    pantryCount: number
+    onViewRecipes: () => void
 }
 
-export default function BottomNav({ initialTab = 'inicio', onChange }: BottomNavProps) {
+export default function BottomNav({
+    initialTab = 'inicio',
+    onChange,
+    userName,
+    pantryCount,
+    onViewRecipes
+}: BottomNavProps) {
     const [active, setActive] = useState<Tab>(initialTab)
 
     const handleClick = (tab: Tab) => {
@@ -77,7 +86,9 @@ export default function BottomNav({ initialTab = 'inicio', onChange }: BottomNav
                     className={`nav-item ${active === tab.id ? 'nav-item--active' : ''}`}
                     onClick={() => handleClick(tab.id)}
                 >
-                    {tab.icon}
+                    <div className="nav-icon-container">
+                        {tab.icon}
+                    </div>
                     <span className="nav-label">{tab.label}</span>
                 </button>
             ))}
