@@ -133,3 +133,29 @@ body {
     display: block;
     line-height: 1.4;
 }
+
+/* Responsive Design (Desktop) */
+@media (min-width: 768px) {
+    .home-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+
+    .recipes-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .recommendations {
+        padding: 0;
+    }
+
+    .pantry-card {
+        margin: 20px 0;
+    }
+
+    .recipe-card img {
+        height: 160px;
+    }
+}
