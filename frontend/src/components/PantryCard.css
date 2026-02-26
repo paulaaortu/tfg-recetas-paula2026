@@ -1,0 +1,49 @@
+/* Pantry Card Styles */
+.pantry-card {
+    background: #839E88;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    color: #FBF7F4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pantry-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.pantry-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.pantry-icon {
+    font-size: 24px;
+}
+
+.pantry-count {
+    margin: 8px 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.pantry-btn {
+    background: #FBF7F4;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    margin-top: 10px;
+    color: #839E88;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    width: 100%;
+}
+
+.pantry-btn:hover {
+    background: #ffffff;
+}

@@ -6,22 +6,27 @@ body {
     background: #FBF7F4;
 }
 
-/* Pantry Card */
-.pantry-card {
-    background: #839E88;
-    margin: 20px;
+/* Greeting */
+.greeting {
     padding: 20px;
-    border-radius: 16px;
-    color: #FBF7F4;
 }
 
-.pantry-card button {
-    background: #FBF7F4;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 20px;
-    margin-top: 10px;
+.greeting h1 {
+    font-size: 28px;
+    margin: 0;
+    color: #3B3B3B;
 }
+
+.name-underline {
+    border-bottom: 3px solid #839E88;
+}
+
+.subtitle {
+    margin: 4px 0 0 0;
+    color: #6a8770;
+    font-size: 16px;
+}
+
 
 /* Recommendations */
 

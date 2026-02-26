@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
+import PantryCard from '../components/PantryCard'
 import Menu from '../components/Menu'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
@@ -25,8 +26,16 @@ function Home() {
     return (
         <div className="home-wrapper">
             <div className="home-container">
-                <Header
-                    userName="Paula"
+                <Header />
+
+                <div className="greeting">
+                    <h1>
+                        Hola, <span className="name-underline">Paula</span>
+                    </h1>
+                    <p className="subtitle">¿Qué cocinamos hoy?</p>
+                </div>
+
+                <PantryCard
                     pantryCount={16}
                     onViewRecipes={() => console.log('Ver recetas')}
                 />
