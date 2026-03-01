@@ -34,8 +34,12 @@ const RegisterPage: React.FC = () => {
     };
 
     const handleTabChange = (tab: string) => {
-        if (tab === 'inicio') {
-            navigate('/');
+        if (tab === 'inicio') navigate('/')
+        if (tab === 'social') navigate('/social')
+        if (tab === 'perfil') {
+            const hasSession = localStorage.getItem('user')
+            if (hasSession) navigate('/perfil')
+            else navigate('/login')
         }
     };
 

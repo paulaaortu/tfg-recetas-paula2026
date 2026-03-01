@@ -41,7 +41,11 @@ function Home() {
     const handleTabChange = (tab: string) => {
         setActiveTab(tab as any)
         if (tab === 'social') navigate('/social')
-        if (tab === 'perfil') navigate('/login')
+        if (tab === 'inicio') navigate('/')
+        if (tab === 'perfil') {
+            const hasSession = localStorage.getItem('user')
+            navigate(hasSession ? '/perfil' : '/login')
+        }
     }
 
     return (
