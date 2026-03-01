@@ -67,7 +67,7 @@ function Home() {
                 <section className="recommendations">
                     <div className="title-row">
                         <h2>{userName ? 'Recomendaciones para ti' : 'Nuestras Recetas'}</h2>
-                        <span className="see-all">Ver todas</span>
+                        <span className="see-all" style={{ color: '#839E88' }}>Ver todas</span>
                     </div>
 
                     <div className="recipes-grid">

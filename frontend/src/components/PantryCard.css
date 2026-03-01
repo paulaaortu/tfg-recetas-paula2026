@@ -32,12 +32,12 @@
 }
 
 .pantry-btn {
-    background: #FBF7F4;
+    background: #F3DDE8;
     border: none;
     padding: 10px 16px;
     border-radius: 20px;
     margin-top: 10px;
-    color: #839E88;
+    color: #3B3B3B;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease;

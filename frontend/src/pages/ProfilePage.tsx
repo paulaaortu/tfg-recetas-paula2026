@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import { User, Mail, LogOut, ChevronRight, Settings, Shield, Bell } from 'lucide-react'
 import Header from '../components/Header'
 import Menu from '../components/Menu'
+import EditProfileModal from '../components/EditProfileModal'
+import { updateProfile } from '../services/authService'
 import './ProfilePage.css'
 
 function ProfilePage() {
     const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('perfil')
     const [userName, setUserName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
+    const [userId, setUserId] = useState<number | null>(null)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -22,11 +26,27 @@ function ProfilePage() {
             const user = JSON.parse(storedUser)
             setUserName(user.username)
             setEmail(user.email)
+            setUserId(user.id)
         } catch (e) {
             console.error('Error parsing user data:', e)
             navigate('/login')
         }
     }, [navigate])
+
+    const handleSaveProfile = async (updatedData: { username: string; email: string; password?: string }) => {
+        if (!userId) return;
+
+        const result = await updateProfile(userId, updatedData.username, updatedData.email, updatedData.password);
+
+        // Update local state
+        setUserName(result.user.username);
+        setEmail(result.user.email);
+
+        // Update localStorage
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const newUser = { ...storedUser, username: result.user.username, email: result.user.email };
+        localStorage.setItem('user', JSON.stringify(newUser));
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token')
@@ -56,44 +76,31 @@ function ProfilePage() {
                 <div className="profile-menu-groups">
                     <div className="profile-menu-group">
                         <h2 className="group-title">Cuenta</h2>
-                        <div className="menu-item">
+                        <div className="menu-item" onClick={() => setIsEditModalOpen(true)}>
                             <div className="menu-item-left">
                                 <User size={20} className="menu-icon" />
                                 <span>Editar Perfil</span>
                             </div>
                             <ChevronRight size={18} className="chevron" />
                         </div>
-                        <div className="menu-item">
-                            <div className="menu-item-left">
-                                <Mail size={20} className="menu-icon" />
-                                <span>Cambiar Email</span>
-                            </div>
-                            <ChevronRight size={18} className="chevron" />
-                        </div>
                     </div>
 
                     <div className="profile-menu-group">
-                        <h2 className="group-title">Ajustes</h2>
+                        <h2 className="group-title">Preferencias</h2>
                         <div className="menu-item">
                             <div className="menu-item-left">
-                                <Bell size={20} className="menu-icon" />
-                                <span>Notificaciones</span>
+                                <span>Intolerancias</span>
                             </div>
-                            <ChevronRight size={18} className="chevron" />
                         </div>
                         <div className="menu-item">
                             <div className="menu-item-left">
-                                <Shield size={20} className="menu-icon" />
-                                <span>Privacidad y Seguridad</span>
+                                <span>Objetivos</span>
                             </div>
-                            <ChevronRight size={18} className="chevron" />
                         </div>
                         <div className="menu-item">
                             <div className="menu-item-left">
-                                <Settings size={20} className="menu-icon" />
-                                <span>Preferencias</span>
+                                <span>Deporte</span>
                             </div>
-                            <ChevronRight size={18} className="chevron" />
                         </div>
                     </div>
 
@@ -115,6 +122,15 @@ function ProfilePage() {
                 pantryCount={0}
                 onViewRecipes={() => navigate('/')}
             />
+
+            {userId && userName && email && (
+                <EditProfileModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    user={{ id: userId, username: userName, email: email }}
+                    onSave={handleSaveProfile}
+                />
+            )}
         </div>
     )
 }

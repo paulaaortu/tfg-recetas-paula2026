@@ -76,3 +76,36 @@ export const login = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error interno del servidor.' });
     }
 };
+export const updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { username, email, password } = req.body;
+
+    try {
+        let query = 'UPDATE users SET username = $1, email = $2';
+        const params: any[] = [username, email];
+
+        if (password) {
+            const saltRounds = 10;
+            const passwordHash = await bcrypt.hash(password, saltRounds);
+            query += ', password_hash = $3 WHERE id = $4';
+            params.push(passwordHash, id);
+        } else {
+            query += ' WHERE id = $3';
+            params.push(id);
+        }
+
+        const result = await pool.query(query + ' RETURNING id, username, email', params);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        res.json({
+            message: 'Perfil actualizado correctamente.',
+            user: result.rows[0],
+        });
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
+    }
+};
