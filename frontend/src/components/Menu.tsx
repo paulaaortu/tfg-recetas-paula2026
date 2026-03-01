@@ -1,5 +1,5 @@
 // src/components/BottomNav.tsx
-import React, { useState } from 'react'
+import React from 'react'
 
 type Tab = 'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'
 
@@ -57,7 +57,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
 ]
 
 interface BottomNavProps {
-    initialTab?: Tab
+    activeTab: Tab
     onChange?: (tab: Tab) => void
     userName: string
     pantryCount: number
@@ -65,16 +65,13 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({
-    initialTab = 'inicio',
+    activeTab,
     onChange,
     userName,
     pantryCount,
     onViewRecipes
 }: BottomNavProps) {
-    const [active, setActive] = useState<Tab>(initialTab)
-
     const handleClick = (tab: Tab) => {
-        setActive(tab)
         onChange?.(tab)
     }
 
@@ -83,7 +80,7 @@ export default function BottomNav({
             {TABS.map((tab) => (
                 <button
                     key={tab.id}
-                    className={`nav-item ${active === tab.id ? 'nav-item--active' : ''}`}
+                    className={`nav-item ${activeTab === tab.id ? 'nav-item--active' : ''}`}
                     onClick={() => handleClick(tab.id)}
                 >
                     <div className="nav-icon-container">
