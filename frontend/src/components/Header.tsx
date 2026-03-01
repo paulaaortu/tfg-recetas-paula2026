@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { UserCircle, LogOut, ArrowLeft } from 'lucide-react'
+import { UserCircle, ArrowLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import logo from '../assets/título.svg'
 import './Header.css'
@@ -21,12 +21,7 @@ export default function Header({ onLogoClick }: { onLogoClick?: () => void }) {
         }
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        setIsLoggedIn(false)
-        navigate('/login')
-    }
+
 
     return (
         <header className="header">
@@ -45,11 +40,7 @@ export default function Header({ onLogoClick }: { onLogoClick?: () => void }) {
                 <div className="profile-icon-wrapper" onClick={handleProfileClick}>
                     <UserCircle size={32} className="header-icon" />
                 </div>
-                {isLoggedIn && (
-                    <div className="logout-icon-wrapper" onClick={handleLogout} title="Cerrar sesión">
-                        <LogOut size={24} className="header-icon logout-icon" />
-                    </div>
-                )}
+
             </div>
         </header>
     )
