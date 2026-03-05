@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Mail, LogOut, ChevronRight, Settings, Shield, Bell } from 'lucide-react'
+import { User, LogOut, ChevronRight } from 'lucide-react'
 import Header from '../components/Header'
 import Menu from '../components/Menu'
 import EditProfileModal from '../components/EditProfileModal'
@@ -62,7 +62,10 @@ function ProfilePage() {
 
     return (
         <div className="profile-page-container">
-            <Header />
+            <Header
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+            />
 
             <div className="profile-content">
                 <div className="profile-header-section">
@@ -118,9 +121,6 @@ function ProfilePage() {
             <Menu
                 activeTab={activeTab}
                 onChange={handleTabChange}
-                userName={userName || 'Invitado'}
-                pantryCount={0}
-                onViewRecipes={() => navigate('/')}
             />
 
             {userId && userName && email && (

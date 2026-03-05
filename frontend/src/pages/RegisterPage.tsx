@@ -11,15 +11,10 @@ const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [currentUserName, setCurrentUserName] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-            setCurrentUserName(user.username);
-        }
+        // No user info needed here anymore for Menu
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -45,7 +40,10 @@ const RegisterPage: React.FC = () => {
 
     return (
         <div className="auth-container">
-            <Header />
+            <Header
+                activeTab="perfil"
+                onTabChange={handleTabChange}
+            />
             <div className="auth-content">
                 <h1 className="auth-title">Registrarse</h1>
 
@@ -99,9 +97,6 @@ const RegisterPage: React.FC = () => {
             <Menu
                 activeTab="perfil"
                 onChange={handleTabChange}
-                userName={currentUserName || 'Invitado'}
-                pantryCount={0}
-                onViewRecipes={() => navigate('/')}
             />
         </div>
     );

@@ -1,9 +1,7 @@
-// src/components/BottomNav.tsx
 import React from 'react'
 
-type Tab = 'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'
-
-const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
+export type Tab = 'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'
+export const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
     {
         id: 'inicio',
         label: 'Inicio',
@@ -37,10 +35,8 @@ const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
         label: 'Social',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5" />
             </svg>
         ),
     },
@@ -49,46 +45,45 @@ const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [
         label: 'Perfil',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
+                <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
             </svg>
         ),
     },
 ]
 
-interface BottomNavProps {
+interface MenuProps {
     activeTab: Tab
     onChange?: (tab: Tab) => void
-    userName: string
-    pantryCount: number
-    onViewRecipes: () => void
 }
 
-export default function BottomNav({
-    activeTab,
-    onChange,
-    userName,
-    pantryCount,
-    onViewRecipes
-}: BottomNavProps) {
-    const handleClick = (tab: Tab) => {
-        onChange?.(tab)
-    }
+export default function Menu({ activeTab, onChange }: MenuProps) {
 
     return (
-        <nav className="bottom-nav">
-            {TABS.map((tab) => (
-                <button
-                    key={tab.id}
-                    className={`nav-item ${activeTab === tab.id ? 'nav-item--active' : ''}`}
-                    onClick={() => handleClick(tab.id)}
-                >
-                    <div className="nav-icon-container">
-                        {tab.icon}
-                    </div>
-                    <span className="nav-label">{tab.label}</span>
-                </button>
-            ))}
+        <nav className="main-menu">
+
+            <div className="menu-logo">
+                RECETARIO
+            </div>
+
+            <div className="menu-links">
+                {TABS.map((tab) => (
+                    <button
+                        key={tab.id}
+                        className={`nav-item nav-${tab.id} ${activeTab === tab.id ? 'nav-item--active' : ''}`}
+                        onClick={() => onChange?.(tab.id)}
+                    >
+                        <div className="nav-icon-container">
+                            {tab.icon}
+                        </div>
+
+                        <span className="nav-label">
+                            {tab.label}
+                        </span>
+                    </button>
+                ))}
+            </div>
+
         </nav>
     )
 }

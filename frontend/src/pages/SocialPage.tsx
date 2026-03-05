@@ -10,7 +10,6 @@ import './Home.css' // Reuse Home styles for consistency
 function SocialPage() {
     const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('social')
     const [recipes, setRecipes] = useState<Recipe[]>([])
-    const [userName, setUserName] = useState<string | null>(null)
     const recipeService = new RecipeService()
     const navigate = useNavigate()
 
@@ -31,13 +30,6 @@ function SocialPage() {
             }
         }
         fetchRecipes()
-
-        try {
-            const user = JSON.parse(storedUser)
-            setUserName(user.username)
-        } catch (e) {
-            console.error('Error parsing user data:', e)
-        }
     }, [navigate])
 
     const handleTabChange = (tab: string) => {
@@ -52,7 +44,10 @@ function SocialPage() {
 
     return (
         <div className="home-container">
-            <Header />
+            <Header
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+            />
             <div className="content">
                 <div className="greeting">
                     <h1>Comunidad</h1>
@@ -80,9 +75,6 @@ function SocialPage() {
                 <Menu
                     activeTab={activeTab}
                     onChange={handleTabChange}
-                    userName={userName || 'Invitado'}
-                    pantryCount={0}
-                    onViewRecipes={() => navigate('/')}
                 />
             </div>
         </div>

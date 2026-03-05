@@ -50,40 +50,83 @@ function Home() {
 
     return (
         <div className="home-container">
-            <Header />
+            <Header
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+            />
+
             <div className="content">
                 <div className="greeting">
-                    <h1>{userName ? `Hola, ` : 'Bienvenido'} <span className="name-underline">{userName}</span></h1>
+                    <h1>
+                        {userName ? `Hola, ` : 'Bienvenido'}
+                        <span className="name-underline">{userName}</span>
+                    </h1>
                     <p className="subtitle">¿Qué cocinamos hoy?</p>
                 </div>
 
-                {userName && (
-                    <PantryCard
-                        pantryCount={16}
-                        onViewRecipes={() => console.log('Ver recetas')}
-                    />
-                )}
+                {/* Barra búsqueda desktop */}
+                <div className="search-bar">
+                    <input placeholder="Busca una receta, ingrediente o categoría..." />
+                    <button>Buscar</button>
+                </div>
 
-                <section className="recommendations">
-                    <div className="title-row">
-                        <h2>{userName ? 'Recomendaciones para ti' : 'Nuestras Recetas'}</h2>
-                        <span className="see-all" style={{ color: '#839E88' }}>Ver todas</span>
+                <div className="desktop-layout">
+
+                    <div className="main-column">
+
+                        {userName && (
+                            <PantryCard
+                                pantryCount={16}
+                                onViewRecipes={() => console.log('Ver recetas')}
+                            />
+                        )}
+
+                        <section className="recommendations">
+                            <div className="title-row">
+                                <h2>{userName ? 'Recomendaciones para ti' : 'Nuestras Recetas'}</h2>
+                                <span className="see-all">Ver todas</span>
+                            </div>
+
+                            <div className="recipes-grid">
+                                {recipes.map((recipe) => (
+                                    <CardRecipes key={recipe.id} recipe={recipe} />
+                                ))}
+                            </div>
+                        </section>
+
                     </div>
 
-                    <div className="recipes-grid">
-                        {recipes.map((recipe) => (
-                            <CardRecipes key={recipe.id} recipe={recipe} />
-                        ))}
-                    </div>
-                </section>
+                    {/* SIDEBAR */}
+                    <aside className="sidebar">
+
+                        <div className="sidebar-section">
+                            <h3>🔥 En tendencia</h3>
+                            <ul>
+                                <li>Gazpacho andaluz</li>
+                                <li>Tortilla española</li>
+                                <li>Paella valenciana</li>
+                                <li>Croquetas caseras</li>
+                            </ul>
+                        </div>
+
+                        <div className="sidebar-section">
+                            <h3>🕓 Vistas recientemente</h3>
+                            <ul>
+                                <li>Sopa de zanahoria</li>
+                                <li>Tarta de limón</li>
+                                <li>Salteado de verduras</li>
+                            </ul>
+                        </div>
+
+                    </aside>
+
+                </div>
 
                 <Menu
                     activeTab={activeTab}
                     onChange={handleTabChange}
-                    userName={userName || 'Invitado'}
-                    pantryCount={16}
-                    onViewRecipes={() => console.log('Ver recetas')}
                 />
+
             </div>
         </div>
     )

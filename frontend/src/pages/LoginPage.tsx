@@ -10,15 +10,10 @@ const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [userName, setUserName] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-            setUserName(user.username);
-        }
+        // No user info needed here anymore for Menu
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +42,10 @@ const LoginPage: React.FC = () => {
 
     return (
         <div className="auth-container">
-            <Header />
+            <Header
+                activeTab="perfil"
+                onTabChange={handleTabChange}
+            />
             <div className="auth-content">
                 <h1 className="auth-title">Iniciar sesión</h1>
 
@@ -89,9 +87,6 @@ const LoginPage: React.FC = () => {
             <Menu
                 activeTab="perfil"
                 onChange={handleTabChange}
-                userName={userName || 'Invitado'}
-                pantryCount={0}
-                onViewRecipes={() => navigate('/')}
             />
         </div>
     );
