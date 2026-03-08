@@ -16,19 +16,19 @@ function ProfilePage() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user')
-        if (!storedUser) {
+        const usuarioLocal = localStorage.getItem('user')
+        if (!usuarioLocal) {
             navigate('/login')
             return
         }
 
         try {
-            const user = JSON.parse(storedUser)
+            const user = JSON.parse(usuarioLocal)
             setUserName(user.username)
             setEmail(user.email)
             setUserId(user.id)
-        } catch (e) {
-            console.error('Error parsing user data:', e)
+        } catch (error) {
+            console.error('Error cogiendo los datos del usuario:', error)
             navigate('/login')
         }
     }, [navigate])
@@ -38,13 +38,13 @@ function ProfilePage() {
 
         const result = await updateProfile(userId, updatedData.username, updatedData.email, updatedData.password);
 
-        // Update local state
+        //actualizar estado local
         setUserName(result.user.username);
         setEmail(result.user.email);
 
-        // Update localStorage
-        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-        const newUser = { ...storedUser, username: result.user.username, email: result.user.email };
+        //actualizar localstorage
+        const usuarioLocal = JSON.parse(localStorage.getItem('user') || '{}');
+        const newUser = { ...usuarioLocal, username: result.user.username, email: result.user.email };
         localStorage.setItem('user', JSON.stringify(newUser));
     };
 
@@ -61,24 +61,24 @@ function ProfilePage() {
     }
 
     return (
-        <div className="profile-page-container">
+        <div className="contenedor-perfil">
             <Header
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
             />
 
-            <div className="profile-content">
-                <div className="profile-header-section">
-                    <div className="profile-avatar-large">
+            <div>
+                <div className="cabezera">
+                    <div>
                         <User size={40} />
                     </div>
-                    <h1 className="profile-name">{userName}</h1>
-                    <p className="profile-email">{email}</p>
+                    <h1>{userName}</h1>
+                    <p>{email}</p>
                 </div>
 
-                <div className="profile-menu-groups">
+                <div className="menu-perfil">
                     <div className="profile-menu-group">
-                        <h2 className="group-title">Cuenta</h2>
+                        <h2>Cuenta</h2>
                         <div className="menu-item" onClick={() => setIsEditModalOpen(true)}>
                             <div className="menu-item-left">
                                 <User size={20} className="menu-icon" />
@@ -89,7 +89,7 @@ function ProfilePage() {
                     </div>
 
                     <div className="profile-menu-group">
-                        <h2 className="group-title">Preferencias</h2>
+                        <h2>Preferencias</h2>
                         <div className="menu-item">
                             <div className="menu-item-left">
                                 <span>Intolerancias</span>

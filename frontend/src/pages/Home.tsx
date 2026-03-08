@@ -26,14 +26,14 @@ function Home() {
         }
         fetchRecipes()
 
-        // Get user from localStorage
-        const storedUser = localStorage.getItem('user')
-        if (storedUser) {
+        //usuario de localStorage
+        const usuario = localStorage.getItem('user')
+        if (usuario) {
             try {
-                const user = JSON.parse(storedUser)
+                const user = JSON.parse(usuario)
                 setUserName(user.username)
-            } catch (e) {
-                console.error('Error parsing user from localStorage', e)
+            } catch (error) {
+                console.error('Error cargando usuario de localStorage', error)
             }
         }
     }, [])
@@ -49,31 +49,29 @@ function Home() {
     }
 
     return (
-        <div className="home-container">
+        <div className="contenedor-principal">
             <Header
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
             />
 
-            <div className="content">
-                <div className="greeting">
-                    <h1>
+            <div>
+                <div className="bienvenida">
+                    <h1 className="name-underline">
                         {userName ? `Hola, ` : 'Bienvenido'}
-                        <span className="name-underline">{userName}</span>
+                        <span>{userName}</span>
                     </h1>
-                    <p className="subtitle">¿Qué cocinamos hoy?</p>
+                    <p className="subtitulo">¿Qué cocinamos hoy?</p>
                 </div>
 
                 {/* Barra búsqueda desktop */}
-                <div className="search-bar">
+                <div className="barra-busqueda">
                     <input placeholder="Busca una receta, ingrediente o categoría..." />
                     <button>Buscar</button>
                 </div>
 
-                <div className="desktop-layout">
-
-                    <div className="main-column">
-
+                <div className="ordenador">
+                    <div>
                         {userName && (
                             <PantryCard
                                 pantryCount={16}
@@ -81,45 +79,19 @@ function Home() {
                             />
                         )}
 
-                        <section className="recommendations">
-                            <div className="title-row">
+                        <section>
+                            <div className="titulo">
                                 <h2>{userName ? 'Recomendaciones para ti' : 'Nuestras Recetas'}</h2>
                                 <span className="see-all">Ver todas</span>
                             </div>
 
-                            <div className="recipes-grid">
+                            <div className="grid-recetas">
                                 {recipes.map((recipe) => (
                                     <CardRecipes key={recipe.id} recipe={recipe} />
                                 ))}
                             </div>
                         </section>
-
                     </div>
-
-                    {/* SIDEBAR */}
-                    <aside className="sidebar">
-
-                        <div className="sidebar-section">
-                            <h3>🔥 En tendencia</h3>
-                            <ul>
-                                <li>Gazpacho andaluz</li>
-                                <li>Tortilla española</li>
-                                <li>Paella valenciana</li>
-                                <li>Croquetas caseras</li>
-                            </ul>
-                        </div>
-
-                        <div className="sidebar-section">
-                            <h3>🕓 Vistas recientemente</h3>
-                            <ul>
-                                <li>Sopa de zanahoria</li>
-                                <li>Tarta de limón</li>
-                                <li>Salteado de verduras</li>
-                            </ul>
-                        </div>
-
-                    </aside>
-
                 </div>
 
                 <Menu

@@ -1,111 +1,75 @@
-.home-container {
-    padding-top: 55px;
-    padding-bottom: 90px;
-    transition: padding 0.3s ease;
-}
-
 body {
     background: #FBF7F4;
 }
 
-/* Greeting */
-.greeting {
-    padding: 25px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+/*Home*/
+
+.contenedor-principal {
+    padding-top: 55px;
+    transition: padding 0.3s ease;
+
+    >div {
+        .bienvenida {
+            padding: 25px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+
+            >h1 {
+                font-size: 28px;
+                margin: 0;
+                color: #3B3B3B;
+
+                >span {
+                    border-bottom: 3px solid #3B3B3B;
+                }
+            }
+
+            >subtitulo {
+                margin-top: 4px;
+                color: #6a8770;
+                font-size: 16px;
+            }
+        }
+
+        .ordenador {
+            >div {
+                >section {
+                    padding: 0 20px;
+
+                    .titulo {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .grid-recetas {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 12px;
+                    }
+                }
+            }
+        }
+
+        >section {
+            padding: 0 20px;
+
+            >div {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+    }
 }
 
-.greeting h1 {
-    font-size: 28px;
-    margin: 0;
-    color: #3B3B3B;
-}
-
-.name-underline {
-    border-bottom: 3px solid #839E88;
-}
-
-.subtitle {
-    margin: 4px 0 0 0;
-    color: #6a8770;
-    font-size: 16px;
+.barra-busqueda {
+    display: none;
 }
 
 
-/* Recommendations */
+/*CardRecipes*/
 
-.recommendations {
-    padding: 0 20px;
-}
-
-.title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.recipes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-/* Bottom Navigation Floating Aesthetic */
-.bottom-nav {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    background: #ffffff;
-    display: flex;
-    justify-content: space-around;
-    padding: 12px 0;
-    border-radius: 40px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: none;
-    border: none;
-    color: #6a8770;
-    padding: 0;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.nav-icon-container {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-bottom: 2px;
-    transition: all 0.2s ease;
-}
-
-.nav-item--active {
-    color: #3B3B3B;
-    font-weight: 600;
-}
-
-.nav-item--active .nav-icon-container {
-    background-color: rgba(131, 158, 136, 0.2);
-    color: #839E88;
-}
-
-.nav-label {
-    margin-top: 4px;
-}
-
-/* Recipe Cards */
 .recipe-card {
     background: #ffffff;
     border-radius: 20px;
@@ -114,62 +78,37 @@ body {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease;
+
+    :hover {
+        transform: translateY(-4px);
+    }
+
+    >img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+    }
+
+    >div {
+        padding: 12px;
+
+        >h3 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: #3B3B3B;
+        }
+
+        >span {
+            font-size: 12px;
+            color: #6a8770;
+            display: block;
+            line-height: 1.4;
+        }
+    }
 }
 
-.recipe-card:hover {
-    transform: translateY(-4px);
-}
-
-.recipe-card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-}
-
-.recipe-info {
-    padding: 12px;
-}
-
-.recipe-info h3 {
-    margin: 0 0 4px 0;
-    font-size: 14px;
-    color: #3B3B3B;
-}
-
-.recipe-info span {
-    font-size: 12px;
-    color: #6a8770;
-    display: block;
-    line-height: 1.4;
-}
-
-
-/* SEARCH BAR */
-
-.search-bar {
-    display: none;
-}
-
-.search-bar input {
-    flex: 1;
-    padding: 14px 18px;
-    border-radius: 30px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-}
-
-.search-bar button {
-    background: #d9b8bf;
-    border: none;
-    padding: 12px 22px;
-    border-radius: 25px;
-    cursor: pointer;
-}
-
-/* MENU BASE */
-
-.main-menu {
+/*Menu*/
+.menu-movil {
     position: fixed;
     bottom: 20px;
     left: 20px;
@@ -183,40 +122,38 @@ body {
     z-index: 1000;
     max-width: 500px;
     margin: 0 auto;
-}
 
-.menu-logo {
-    display: none;
-}
+    >div {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
 
-/* LINKS */
+        >button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: #6a8770;
+            padding: 0;
+            font-size: 11px;
+            cursor: pointer;
 
-.menu-links {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-}
+            >div {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                margin-bottom: 2px;
+            }
 
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: none;
-    border: none;
-    color: #6a8770;
-    padding: 0;
-    font-size: 11px;
-    cursor: pointer;
-}
-
-.nav-icon-container {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-bottom: 2px;
+            >span {
+                margin-top: 4px;
+            }
+        }
+    }
 }
 
 .nav-item--active {
@@ -228,97 +165,69 @@ body {
     background: rgba(131, 158, 136, 0.2);
 }
 
-.sidebar {
-    display: none;
-}
 
-.nav-label {
-    margin-top: 4px;
-}
-
-
-
-
-/* DESKTOP LAYOUT */
-
+/*Pantalla ordenador*/
 @media (min-width: 1024px) {
-    .home-container {
+    .contenedor-principal {
         max-width: 1300px;
-        margin: 0 auto;
-        padding: 40px 40px 100px 40px;
+        padding: 40px 20px 20px 20px;
+
+        .barra-busqueda {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            background: #ffffff;
+            border-radius: 40px;
+            padding: 8px 12px;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(106, 135, 112, 0.1);
+
+            input {
+                flex: 1;
+                padding: 14px 18px;
+                border-radius: 30px;
+                border: none;
+                outline: none;
+                font-size: 15px;
+            }
+
+            button {
+                background: #d9b8bf;
+                border: none;
+                padding: 12px 22px;
+                border-radius: 25px;
+                cursor: pointer;
+            }
+        }
+
+        .ordenador {
+            display: grid;
+            gap: 40px;
+
+            >div {
+                width: 100%;
+
+                >section {
+                    padding: 0;
+
+                    .titulo {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .grid-recetas {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 20px;
+                    }
+                }
+            }
+        }
     }
 
-    .greeting {
-        padding: 25px 0;
-        margin-bottom: 20px;
-    }
-
-    .desktop-layout {
-        display: grid;
-        grid-template-columns: 3fr 1.2fr;
-        gap: 40px;
-        margin-top: 20px;
-    }
-
-    .main-column {
-        width: 100%;
-    }
-
-    .sidebar {
-        display: block;
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 20px;
-        height: fit-content;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .sidebar-section {
-        margin-bottom: 25px;
-    }
-
-    .sidebar-section h3 {
-        margin-bottom: 10px;
-        font-size: 16px;
-        color: #3B3B3B;
-    }
-
-    .sidebar-section ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .sidebar-section li {
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-        font-size: 14px;
-    }
-
-    .search-bar {
-        display: flex;
-        max-width: 700px;
-        margin: 0 auto 40px auto;
-        background: #ffffff;
-        border-radius: 40px;
-        padding: 8px 12px;
-        gap: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(106, 135, 112, 0.1);
-    }
-
-    /* recetas más grandes */
-
-    .recipes-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    .recommendations {
-        padding: 0;
-    }
-
-    .pantry-card {
+    .btn-accion-home {
         margin: 20px 0;
     }
 
@@ -326,10 +235,7 @@ body {
         height: 160px;
     }
 
-    /* ocultar menu flotante en desktop */
-
-    .main-menu,
-    .bottom-nav {
+    .menu-movil {
         display: none;
     }
 }

@@ -43,23 +43,18 @@ function SocialPage() {
     }
 
     return (
-        <div className="home-container">
+        <div className="contenedor-principal">
             <Header
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
             />
-            <div className="content">
-                <div className="greeting">
-                    <h1>Comunidad</h1>
-                    <p className="subtitle">Descubre recetas de otros usuarios</p>
+            <div>
+                <div className='bienvenida'>
+                    <h1>Recetas de la comunidad</h1>
                 </div>
 
-                <section className="recommendations">
-                    <div className="title-row">
-                        <h2>Recetas de la comunidad</h2>
-                    </div>
-
-                    <div className="recipes-grid">
+                <section>
+                    <div>
                         {recipes.length > 0 ? (
                             recipes.map((recipe) => (
                                 <CardRecipes key={recipe.id} recipe={recipe} />

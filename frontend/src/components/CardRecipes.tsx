@@ -9,7 +9,7 @@ export default function CardRecipes({ recipe }: Props) {
         <div className="recipe-card">
             <img src={recipe.image_url} alt={recipe.title} />
 
-            <div className="recipe-info">
+            <div>
                 <h3>{recipe.title}</h3>
                 <span>{recipe.description}</span>
             </div>

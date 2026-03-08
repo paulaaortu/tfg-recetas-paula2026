@@ -14,15 +14,15 @@ interface HeaderProps {
 
 export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderProps) {
     const navigate = useNavigate()
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [logueado, setLogueado] = useState(false)
 
     useEffect(() => {
         const user = localStorage.getItem('user')
-        setIsLoggedIn(!!user)
+        setLogueado(!!user)
     }, [])
 
     const handleProfileClick = () => {
-        if (isLoggedIn) {
+        if (logueado) {
             navigate('/perfil')
         } else {
             navigate('/login')
@@ -30,26 +30,26 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
     }
 
     return (
-        <header className="header">
-            <div className="header-content">
-                <div className="header-left">
-                    <div className="back-button-wrapper" onClick={() => navigate(-1)}>
-                        <ArrowLeft size={24} className="header-icon" />
+        <header>
+            <div>
+                <div className="logo-contenedor">
+                    <div className="botones" onClick={() => navigate(-1)}>
+                        <ArrowLeft size={24} />
                     </div>
 
-                    <div className="logo-container" onClick={() => {
+                    <div className="logo" onClick={() => {
                         navigate('/')
                         onLogoClick?.()
                     }}>
-                        <img src={logo} alt="Trébol Logo" className="logo-img" />
+                        <img src={logo} alt="Trébol Logo" />
                     </div>
                 </div>
 
-                <nav className="header-nav">
+                <nav>
                     {TABS.filter(tab => tab.id !== 'buscar').map((tab) => (
                         <button
                             key={tab.id}
-                            className={`header-nav-item ${activeTab === tab.id ? 'active' : ''}`}
+                            className={`header-activo ${activeTab === tab.id ? 'active' : ''}`}
                             onClick={() => onTabChange?.(tab.id)}
                         >
                             {tab.label}
@@ -57,8 +57,8 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
                     ))}
                 </nav>
 
-                <div className="header-actions">
-                    <div className="profile-icon-wrapper" onClick={handleProfileClick}>
+                <div className="acciones">
+                    <div className="botones" onClick={handleProfileClick}>
                         <UserCircle size={32} className="header-icon" />
                     </div>
                 </div>

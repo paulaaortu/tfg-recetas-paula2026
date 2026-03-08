@@ -41,33 +41,30 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="auth-container">
+        <div className="auth-contenedor">
             <Header
                 activeTab="perfil"
                 onTabChange={handleTabChange}
             />
-            <div className="auth-content">
-                <h1 className="auth-title">Iniciar sesión</h1>
-
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
+            <div>
+                <h1>Iniciar sesión</h1>
+                <form onSubmit={handleSubmit}>
+                    <div>
                         <User className="input-icon" size={20} />
                         <input
                             type="email"
                             placeholder="Email"
-                            className="auth-input"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
 
-                    <div className="input-group">
+                    <div>
                         <Lock className="input-icon" size={20} />
                         <input
                             type="password"
                             placeholder="Contraseña"
-                            className="auth-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -76,11 +73,12 @@ const LoginPage: React.FC = () => {
 
                     {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
 
-                    <button type="submit" className="auth-button">Iniciar sesión</button>
+                    <button type="submit">Iniciar sesión</button>
                 </form>
 
-                <div className="auth-footer">
-                    ¿No tienes cuenta? <span className="auth-link" onClick={() => navigate('/register')}>Regístrate</span>
+                <div>
+                    ¿No tienes cuenta?
+                    <span onClick={() => navigate('/register')}> Regístrate</span>
                 </div>
             </div>
 

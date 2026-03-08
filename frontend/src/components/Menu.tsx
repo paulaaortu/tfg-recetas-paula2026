@@ -60,24 +60,19 @@ interface MenuProps {
 export default function Menu({ activeTab, onChange }: MenuProps) {
 
     return (
-        <nav className="main-menu">
-
-            <div className="menu-logo">
-                RECETARIO
-            </div>
-
-            <div className="menu-links">
+        <nav className='menu-movil'>
+            <div>
                 {TABS.map((tab) => (
                     <button
                         key={tab.id}
                         className={`nav-item nav-${tab.id} ${activeTab === tab.id ? 'nav-item--active' : ''}`}
                         onClick={() => onChange?.(tab.id)}
                     >
-                        <div className="nav-icon-container">
+                        <div>
                             {tab.icon}
                         </div>
 
-                        <span className="nav-label">
+                        <span>
                             {tab.label}
                         </span>
                     </button>

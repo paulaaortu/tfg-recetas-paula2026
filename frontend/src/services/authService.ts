@@ -29,6 +29,7 @@ export const register = async (username: string, email: string, password: string
 
     return await response.json();
 };
+
 export const updateProfile = async (userId: number, username: string, email: string, password?: string) => {
     const body: any = { username, email };
     if (password) body.password = password;

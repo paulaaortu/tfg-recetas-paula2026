@@ -1,4 +1,4 @@
-.modal-overlay {
+.modal-editar {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,17 +11,149 @@
     z-index: 2000;
     backdrop-filter: blur(4px);
     padding: 20px;
+
+    >div {
+        background: white;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        animation: slideUp 0.3s ease-out;
+
+        >div {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            >h2 {
+                margin: 0;
+                font-size: 20px;
+                color: #333;
+                font-weight: 700;
+            }
+
+            >button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #999;
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                transition: color 0.2s;
+
+                :hover {
+                    color: #666;
+                }
+            }
+        }
+
+        >form {
+            padding: 25px 20px;
+
+            .form-group {
+                margin-bottom: 20px;
+
+                >label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #666;
+                }
+
+                >div {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+
+                    .input-icon {
+                        position: absolute;
+                        left: 12px;
+                        color: #8da48e;
+                    }
+
+                    >input {
+                        width: 100%;
+                        padding: 12px 12px 12px 42px;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 12px;
+                        font-size: 15px;
+                        transition: all 0.2s;
+
+                        :focus {
+                            outline: none;
+                            border-color: #8da48e;
+                            box-shadow: 0 0 0 3px rgba(141, 164, 142, 0.1);
+                        }
+                    }
+                }
+            }
+
+            .mensaje-error {
+                color: #e74c3c;
+                font-size: 14px;
+                margin-bottom: 15px;
+                background: #fff5f4;
+                padding: 10px;
+                border-radius: 8px;
+            }
+
+            .acciones {
+                display: flex;
+                gap: 12px;
+                margin-top: 30px;
+
+                >button {
+                    flex: 1;
+                    padding: 12px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    font-size: 15px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+
+
+                .cancel-btn {
+                    background: #f5f5f5;
+                    color: #666;
+                    border: none;
+
+                    :hover {
+                        background-color: #eeeeee;
+
+                    }
+                }
+
+                .save-btn {
+                    background: #8da48e;
+                    color: white;
+                    border: none;
+
+                    :hover {
+                        background-color: #7d937e;
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(141, 164, 142, 0.3);
+                    }
+
+                    :disabled {
+                        background-color: #cccccc;
+                        color: #888888;
+                        opacity: 0.8;
+                        cursor: not-allowed;
+                        transform: none;
+                        box-shadow: none;
+                    }
+                }
+            }
+        }
+    }
 }
 
-.modal-container {
-    background: white;
-    width: 100%;
-    max-width: 450px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    animation: slideUp 0.3s ease-out;
-}
 
 @keyframes slideUp {
     from {
@@ -33,134 +165,4 @@
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-.modal-header {
-    padding: 20px;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-    font-weight: 700;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #999;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    transition: color 0.2s;
-}
-
-.close-btn:hover {
-    color: #666;
-}
-
-.edit-profile-form {
-    padding: 25px 20px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
-}
-
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-icon {
-    position: absolute;
-    left: 12px;
-    color: #8da48e;
-}
-
-.input-wrapper input {
-    width: 100%;
-    padding: 12px 12px 12px 42px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 15px;
-    transition: all 0.2s;
-}
-
-.input-wrapper input:focus {
-    outline: none;
-    border-color: #8da48e;
-    box-shadow: 0 0 0 3px rgba(141, 164, 142, 0.1);
-}
-
-.error-message {
-    color: #e74c3c;
-    font-size: 14px;
-    margin-bottom: 15px;
-    background: #fff5f4;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 30px;
-}
-
-.cancel-btn,
-.save-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.cancel-btn {
-    background: #f5f5f5;
-    color: #666;
-    border: none;
-}
-
-.cancel-btn:hover {
-    background: #eeeeee;
-}
-
-.save-btn {
-    background: #8da48e;
-    color: white;
-    border: none;
-}
-
-.save-btn:hover {
-    background: #7d937e;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(141, 164, 142, 0.3);
-}
-
-.save-btn:disabled {
-    background-color: #cccccc;
-    color: #888888;
-    opacity: 0.8;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
 }

@@ -8,13 +8,13 @@ interface PantryCardProps {
 
 export default function PantryCard({ pantryCount, onViewRecipes }: PantryCardProps) {
     return (
-        <div className="pantry-card">
-            <div className="pantry-card-top">
-                <p className="pantry-title">Recetas con lo que tienes</p>
-                <span className="pantry-icon">📦</span>
+        <div className="btn-accion-home">
+            <div>
+                <p>Recetas con lo que tienes</p>
+                <span>📦</span>
             </div>
-            <p className="pantry-count">Tienes {pantryCount} ingredientes en tu despensa</p>
-            <button className="pantry-btn" onClick={onViewRecipes}>
+            <p >Tienes {pantryCount} ingredientes en tu despensa</p>
+            <button onClick={onViewRecipes}>
                 Ver que puedo cocinar
             </button>
         </div>

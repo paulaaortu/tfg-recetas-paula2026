@@ -41,19 +41,19 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
     const hasChanges = username !== user.username || email !== user.email || password !== '';
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-container">
-                <div className="modal-header">
+        <div className="modal-editar">
+            <div>
+                <div>
                     <h2>Editar Perfil</h2>
-                    <button className="close-btn" onClick={onClose}>
+                    <button onClick={onClose}>
                         <X size={24} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="edit-profile-form">
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="username">Nombre de usuario</label>
-                        <div className="input-wrapper">
+                        <div>
                             <User size={20} className="input-icon" />
                             <input
                                 type="text"
@@ -67,7 +67,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
 
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <div className="input-wrapper">
+                        <div>
                             <Mail size={20} className="input-icon" />
                             <input
                                 type="email"
@@ -81,7 +81,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
 
                     <div className="form-group">
                         <label htmlFor="password">Nueva Contraseña (dejar en blanco para no cambiar)</label>
-                        <div className="input-wrapper">
+                        <div>
                             <Lock size={20} className="input-icon" />
                             <input
                                 type="password"
@@ -93,9 +93,9 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
                         </div>
                     </div>
 
-                    {error && <div className="error-message">{error}</div>}
+                    {error && <div className="mensaje-error">{error}</div>}
 
-                    <div className="modal-actions">
+                    <div className="acciones">
                         <button type="button" className="cancel-btn" onClick={onClose} disabled={loading}>
                             Cancelar
                         </button>
