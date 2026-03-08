@@ -67,7 +67,7 @@ function ProfilePage() {
                 onTabChange={handleTabChange}
             />
 
-            <div>
+            <div className="perfil-contenido">
                 <div className="cabezera">
                     <div>
                         <User size={40} />
