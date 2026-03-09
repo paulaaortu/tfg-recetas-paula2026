@@ -46,6 +46,7 @@ body {
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
                         gap: 12px;
+                        max-width: fit-content;
                     }
                 }
             }
@@ -58,6 +59,7 @@ body {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
+                max-width: fit-content;
             }
         }
     }
@@ -71,16 +73,17 @@ body {
 /*CardRecipes*/
 
 .recipe-card {
-    background: #ffffff;
+    background: #6a8770;
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-    :hover {
-        transform: translateY(-4px);
+    &:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
     }
 
     >img {
@@ -95,14 +98,27 @@ body {
         >h3 {
             margin: 0 0 4px 0;
             font-size: 14px;
-            color: #3B3B3B;
+            color: #ffffff;
         }
 
         >span {
             font-size: 12px;
-            color: #6a8770;
+            color: #ffffff;
             display: block;
             line-height: 1.4;
+            align-items: baseline;
+        }
+
+        >span:last-child {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .clock-icon {
+            width: 12px;
+            height: 12px;
+            margin-right: 4px;
+            margin-top: 5px;
         }
     }
 }
@@ -169,8 +185,7 @@ body {
 /*Pantalla ordenador*/
 @media (min-width: 1024px) {
     .contenedor-principal {
-        max-width: 1300px;
-        padding: 40px 20px 20px 20px;
+        padding: 60px 30px 30px 30px;
 
         .barra-busqueda {
             display: flex;
@@ -209,8 +224,6 @@ body {
                 width: 100%;
 
                 >section {
-                    padding: 0;
-
                     .titulo {
                         display: flex;
                         justify-content: space-between;
@@ -221,8 +234,15 @@ body {
                         display: grid;
                         grid-template-columns: repeat(3, 1fr);
                         gap: 20px;
+                        max-width: fit-content;
                     }
                 }
+            }
+        }
+
+        >section {
+            >div {
+                max-width: fit-content;
             }
         }
     }

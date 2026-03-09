@@ -7,7 +7,7 @@ import type { Recipe } from '../types/recipes'
 import { useNavigate } from 'react-router-dom'
 import './Home.css' // Reuse Home styles for consistency
 
-function SocialPage() {
+function Social() {
     const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('social')
     const [recipes, setRecipes] = useState<Recipe[]>([])
     const recipeService = new RecipeService()
@@ -76,4 +76,4 @@ function SocialPage() {
     )
 }
 
-export default SocialPage
+export default Social

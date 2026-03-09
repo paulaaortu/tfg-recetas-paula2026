@@ -1,19 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home"
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import SocialPage from "./pages/SocialPage";
-import ProfilePage from "./pages/ProfilePage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Social from "./pages/Social";
+import Profile from "./pages/Profile";
+import RecipeDetails from "./pages/RecipeDetails";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/social" element={<SocialPage />} />
-        <Route path="/perfil" element={<ProfilePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/social" element={<Social />} />
+        <Route path="/perfil" element={<Profile />} />
+        <Route path="/recipe/:id" element={<RecipeDetails />} />
       </Routes>
     </Router>
   );

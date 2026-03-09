@@ -12,4 +12,11 @@ export class RecipeService {
         }
         return response.json();
     }
+    async getRecipeById(id: number) {
+        const response = await fetch(`${apiUrl}/api/recipes/${id}`);
+        if (!response.ok) {
+            throw new Error(`Error al obtener la receta: ${response.statusText}`);
+        }
+        return response.json();
+    }
 }

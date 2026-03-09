@@ -81,7 +81,7 @@ function Home() {
 
                         <section>
                             <div className="titulo">
-                                <h2>{userName ? 'Recomendaciones para ti' : 'Nuestras Recetas'}</h2>
+                                <h2>{userName ? 'Recomendaciones' : 'Nuestras Recetas'}</h2>
                                 <span className="see-all">Ver todas</span>
                             </div>
 

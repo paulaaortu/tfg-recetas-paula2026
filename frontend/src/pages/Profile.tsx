@@ -5,9 +5,9 @@ import Header from '../components/Header'
 import Menu from '../components/Menu'
 import EditProfileModal from '../components/EditProfileModal'
 import { updateProfile } from '../services/authService'
-import './ProfilePage.css'
+import './Profile.css'
 
-function ProfilePage() {
+function Profile() {
     const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('perfil')
     const [userName, setUserName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
@@ -135,4 +135,4 @@ function ProfilePage() {
     )
 }
 
-export default ProfilePage
+export default Profile

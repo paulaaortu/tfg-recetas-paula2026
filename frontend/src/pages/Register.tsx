@@ -6,7 +6,7 @@ import Menu from '../components/Menu';
 import { register } from '../services/authService';
 import './Auth.css';
 
-const RegisterPage: React.FC = () => {
+const Register: React.FC = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -99,4 +99,4 @@ const RegisterPage: React.FC = () => {
     );
 };
 
-export default RegisterPage;
+export default Register;
