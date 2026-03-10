@@ -45,7 +45,7 @@ export default function RecipeDetails() {
         return (
             <div className="contenedor-detalles">
                 <Header activeTab="inicio" onTabChange={handleTabChange} />
-                <div className="loading-container">
+                <div className="loading-contenedor">
                     <Loader2 className="animate-spin" size={40} />
                     <p>Cargando receta...</p>
                 </div>
@@ -58,11 +58,8 @@ export default function RecipeDetails() {
         return (
             <div className="contenedor-detalles">
                 <Header activeTab="inicio" onTabChange={handleTabChange} />
-                <div className="error-container">
+                <div className="error-contenedor">
                     <p>{error || 'Receta no encontrada'}</p>
-                    <button className="btn-volver" onClick={() => navigate(-1)}>
-                        <ChevronLeft size={20} /> Volver
-                    </button>
                 </div>
                 <Menu activeTab="inicio" onChange={handleTabChange} />
             </div>
@@ -74,40 +71,45 @@ export default function RecipeDetails() {
             <Header activeTab="inicio" onTabChange={handleTabChange} />
 
             <div className="detalles-contenido">
-                <button className="btn-volver" onClick={() => navigate(-1)}>
-                    <ChevronLeft size={20} /> Volver
-                </button>
+                <h2>{recipe.title}</h2>
+                <div className='info-receta'>
+                    <div className="bloque-izquierdo-escritorio">
+                        <img src={recipe.image_url || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=800&q=80'} alt={recipe.title} />
 
-                <div className="receta-imagen-container">
-                    <img src={recipe.image_url || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=800&q=80'} alt={recipe.title} />
-                </div>
-
-                <div className="receta-info-principal">
-                    <h1>{recipe.title}</h1>
-                    <div className="receta-meta">
-                        <div className="meta-item">
-                            <Clock size={18} />
-                            <span>{recipe.time} min</span>
+                        <span><strong>{recipe.description}</strong></span>
+                        <div className="info-basica">
+                            <div>
+                                <Clock size={18} />
+                                <span>{recipe.time} min</span>
+                            </div>
                         </div>
                     </div>
-                    <p style={{ marginTop: '15px', color: '#555', lineHeight: '1.5' }}>{recipe.description}</p>
-                </div>
 
-                <div className="receta-seccion">
-                    <h2>Ingredientes</h2>
-                    <ul className="ingredientes-lista">
-                        {recipe.ingredients.split('\n').map((ing, index) => (
-                            <li key={index}>{ing}</li>
-                        ))}
-                    </ul>
-                </div>
+                    <div className="divisor-seccion mobile-only" />
 
-                <div className="receta-seccion">
-                    <h2>Pasos a seguir</h2>
-                    <div className="pasos-texto">
-                        {recipe.steps}
+                    <div className="bloque-derecho-escritorio">
+                        <div className="receta-seccion">
+                            <h2>Ingredientes</h2>
+                            <ul>
+                                {recipe.ingredients.split(/[,\n;.]+/).map((ing, index) => {
+                                    const trimmedIng = ing.trim();
+                                    if (!trimmedIng) return null;
+                                    return <li key={index}>{trimmedIng}</li>;
+                                })}
+                            </ul>
+                        </div>
+
+                        <div className="divisor-seccion" />
+
+                        <div className="receta-seccion">
+                            <h2>Pasos a seguir</h2>
+                            <div className="pasos-texto">
+                                {recipe.steps}
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <Menu activeTab="inicio" onChange={handleTabChange} />
