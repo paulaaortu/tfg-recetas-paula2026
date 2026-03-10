@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Clock, ChevronLeft, Loader2 } from 'lucide-react';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
+import { useParams } from 'react-router-dom';
+import { Clock, Loader2 } from 'lucide-react';
 import { RecipeService } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -32,24 +29,13 @@ export default function RecipeDetails() {
         fetchRecipe();
     }, [id]);
 
-    const handleTabChange = (tab: string) => {
-        if (tab === 'inicio') navigate('/');
-        if (tab === 'social') navigate('/social');
-        if (tab === 'perfil') {
-            const hasSession = localStorage.getItem('user');
-            navigate(hasSession ? '/perfil' : '/login');
-        }
-    };
-
     if (loading) {
         return (
             <div className="contenedor-detalles">
-                <Header activeTab="inicio" onTabChange={handleTabChange} />
                 <div className="loading-contenedor">
                     <Loader2 className="animate-spin" size={40} />
                     <p>Cargando receta...</p>
                 </div>
-                <Menu activeTab="inicio" onChange={handleTabChange} />
             </div>
         );
     }
@@ -57,19 +43,15 @@ export default function RecipeDetails() {
     if (error || !recipe) {
         return (
             <div className="contenedor-detalles">
-                <Header activeTab="inicio" onTabChange={handleTabChange} />
                 <div className="error-contenedor">
                     <p>{error || 'Receta no encontrada'}</p>
                 </div>
-                <Menu activeTab="inicio" onChange={handleTabChange} />
             </div>
         );
     }
 
     return (
         <div className="contenedor-detalles">
-            <Header activeTab="inicio" onTabChange={handleTabChange} />
-
             <div className="detalles-contenido">
                 <h2>{recipe.title}</h2>
                 <div className='info-receta'>
@@ -112,7 +94,6 @@ export default function RecipeDetails() {
 
             </div>
 
-            <Menu activeTab="inicio" onChange={handleTabChange} />
         </div>
     );
 }

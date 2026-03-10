@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import Header from '../components/Header'
-import Menu from '../components/Menu'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
 import type { Recipe } from '../types/recipes'
@@ -8,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import './Home.css' // Reuse Home styles for consistency
 
 function Social() {
-    const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('social')
     const [recipes, setRecipes] = useState<Recipe[]>([])
     const recipeService = new RecipeService()
     const navigate = useNavigate()
@@ -32,22 +29,8 @@ function Social() {
         fetchRecipes()
     }, [navigate])
 
-    const handleTabChange = (tab: string) => {
-        setActiveTab(tab as any)
-        if (tab === 'inicio') navigate('/')
-        if (tab === 'perfil') {
-            const hasSession = localStorage.getItem('user')
-            navigate(hasSession ? '/perfil' : '/login')
-        }
-        if (tab === 'social') navigate('/social')
-    }
-
     return (
         <div className="contenedor-principal">
-            <Header
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
             <div>
                 <div className='bienvenida'>
                     <h1>Recetas de la comunidad</h1>
@@ -66,11 +49,6 @@ function Social() {
                         )}
                     </div>
                 </section>
-
-                <Menu
-                    activeTab={activeTab}
-                    onChange={handleTabChange}
-                />
             </div>
         </div>
     )

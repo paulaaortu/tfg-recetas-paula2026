@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { User, LogOut, ChevronRight } from 'lucide-react'
-import Header from '../components/Header'
-import Menu from '../components/Menu'
+import { useNavigate } from 'react-router-dom';
+import { User, LogOut, ChevronRight } from 'lucide-react';
 import EditProfileModal from '../components/EditProfileModal'
 import { updateProfile } from '../services/authService'
 import './Profile.css'
 
 function Profile() {
-    const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('perfil')
     const [userName, setUserName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [userId, setUserId] = useState<number | null>(null)
@@ -54,19 +51,12 @@ function Profile() {
         navigate('/login')
     }
 
-    const handleTabChange = (tab: string) => {
-        setActiveTab(tab as any)
-        if (tab === 'inicio') navigate('/')
-        if (tab === 'social') navigate('/social')
-    }
+    const user = userName && email && userId ? { id: userId, username: userName, email: email } : null;
+
+    if (!user) return null;
 
     return (
         <div className="contenedor-perfil">
-            <Header
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
-
             <div className="perfil-contenido">
                 <div className="cabezera">
                     <div>
@@ -117,11 +107,6 @@ function Profile() {
                     </div>
                 </div>
             </div>
-
-            <Menu
-                activeTab={activeTab}
-                onChange={handleTabChange}
-            />
 
             {userId && userName && email && (
                 <EditProfileModal

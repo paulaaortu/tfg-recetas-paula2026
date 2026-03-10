@@ -1,12 +1,15 @@
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export class RecipeService {
-    async getAllRecipes(official?: boolean) {
-        let url = `${apiUrl}/api/recipes`;
-        if (official !== undefined) {
-            url += `?official=${official}`;
-        }
-        const response = await fetch(url);
+    async getAllRecipes(official?: boolean, search?: string, category?: string) {
+        let url = `${apiUrl}/api/recipes?`;
+        const params = new URLSearchParams();
+
+        if (official !== undefined) params.append('official', String(official));
+        if (search) params.append('search', search);
+        if (category && category !== 'Ver todo') params.append('category', category);
+
+        const response = await fetch(url + params.toString());
         if (!response.ok) {
             throw new Error(`Error al obtener recetas: ${response.statusText}`);
         }

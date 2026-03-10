@@ -14,18 +14,13 @@ interface HeaderProps {
 
 export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderProps) {
     const navigate = useNavigate()
-    const [logueado, setLogueado] = useState(false)
-
-    useEffect(() => {
-        const user = localStorage.getItem('user')
-        setLogueado(!!user)
-    }, [])
-
     const handleProfileClick = () => {
-        if (logueado) {
-            navigate('/perfil')
+        if (onTabChange) {
+            onTabChange('perfil');
         } else {
-            navigate('/login')
+            // Fallback en caso de que no se pase onTabChange
+            const hasSession = localStorage.getItem('user');
+            navigate(hasSession ? '/perfil' : '/login');
         }
     }
 

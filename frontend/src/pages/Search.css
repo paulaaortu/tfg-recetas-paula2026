@@ -1,0 +1,163 @@
+.search-page {
+    padding-bottom: 100px;
+    background: #FBF7F4;
+    min-height: 100vh;
+    margin-top: 60px;
+}
+
+.search-container {
+    padding: 20px;
+}
+
+.search-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.search-input-wrapper .search-icon {
+    color: #8C8C8C;
+    margin-right: 10px;
+}
+
+.search-input-wrapper input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+    color: #3B3B3B;
+    background: transparent;
+    padding: 8px 0;
+}
+
+.filter-button {
+    width: 48px;
+    height: 48px;
+    background: #E8E2DE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    color: #3B3B3B;
+}
+
+.filter-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #D9B8BF;
+    color: #3B3B3B;
+    font-size: 10px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.categories-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 0 20px 20px 20px;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.categories-scroll::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.category-chip {
+    padding: 10px 20px;
+    border-radius: 30px;
+    white-space: nowrap;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-chip.active {
+    background: #839E88;
+    color: #ffffff;
+}
+
+.category-chip.inactive {
+    background: #F5E1E5;
+    color: #8C8385;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0 20px;
+}
+
+/* Custom Recipe Card for Search Results */
+.search-recipe-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.search-recipe-card:hover {
+    transform: translateY(-4px);
+}
+
+.search-recipe-card .card-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.search-recipe-card .card-info {
+    background: #839E88;
+    padding: 12px;
+    color: #ffffff;
+    flex: 1;
+}
+
+.search-recipe-card .card-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.search-recipe-card .card-info .card-meta {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+.search-recipe-card .card-info .clock-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+}

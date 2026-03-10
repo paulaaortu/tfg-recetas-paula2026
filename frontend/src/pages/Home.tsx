@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Header from '../components/Header'
 import PantryCard from '../components/PantryCard'
-import Menu from '../components/Menu'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
 import type { Recipe } from '../types/recipes'
 import './Home.css'
 
 function Home() {
-    const [activeTab, setActiveTab] = useState<'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'>('inicio')
     const [recipes, setRecipes] = useState<Recipe[]>([])
     const [userName, setUserName] = useState<string | null>(null)
     const recipeService = new RecipeService()
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -38,23 +33,8 @@ function Home() {
         }
     }, [])
 
-    const handleTabChange = (tab: string) => {
-        setActiveTab(tab as any)
-        if (tab === 'social') navigate('/social')
-        if (tab === 'inicio') navigate('/')
-        if (tab === 'perfil') {
-            const hasSession = localStorage.getItem('user')
-            navigate(hasSession ? '/perfil' : '/login')
-        }
-    }
-
     return (
         <div className="contenedor-principal">
-            <Header
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
-
             <div>
                 <div className="bienvenida">
                     <h1 className="name-underline">
@@ -93,12 +73,6 @@ function Home() {
                         </section>
                     </div>
                 </div>
-
-                <Menu
-                    activeTab={activeTab}
-                    onChange={handleTabChange}
-                />
-
             </div>
         </div>
     )

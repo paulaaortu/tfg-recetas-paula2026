@@ -1,13 +1,28 @@
 import { pool } from "../db";
 
 export class RecipeService {
-    async getAllRecipes(official?: string) {
+    async getAllRecipes(official?: string, search?: string, category?: string) {
         let query = "SELECT * FROM recipes";
         const params: any[] = [];
+        let conditions: string[] = [];
 
         if (official !== undefined) {
-            query += " WHERE is_official = $1";
             params.push(official === "true");
+            conditions.push(`is_official = $${params.length}`);
+        }
+
+        if (search) {
+            params.push(`%${search}%`);
+            conditions.push(`(title ILIKE $${params.length} OR description ILIKE $${params.length})`);
+        }
+
+        if (category && category !== 'Ver todo' && category !== 'undefined') {
+            params.push(`%${category}%`);
+            conditions.push(`(title ILIKE $${params.length} OR description ILIKE $${params.length})`);
+        }
+
+        if (conditions.length > 0) {
+            query += " WHERE " + conditions.join(" AND ");
         }
 
         const result = await pool.query(query, params);

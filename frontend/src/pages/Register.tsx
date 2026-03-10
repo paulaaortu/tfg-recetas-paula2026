@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
 import { register } from '../services/authService';
 import './Auth.css';
 
@@ -28,22 +26,8 @@ const Register: React.FC = () => {
         }
     };
 
-    const handleTabChange = (tab: string) => {
-        if (tab === 'inicio') navigate('/')
-        if (tab === 'social') navigate('/social')
-        if (tab === 'perfil') {
-            const hasSession = localStorage.getItem('user')
-            if (hasSession) navigate('/perfil')
-            else navigate('/login')
-        }
-    };
-
     return (
         <div className="auth-contenedor">
-            <Header
-                activeTab="perfil"
-                onTabChange={handleTabChange}
-            />
             <div>
                 <h1>Registrarse</h1>
 
@@ -90,11 +74,6 @@ const Register: React.FC = () => {
                     ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia sesión</span>
                 </div>
             </div>
-
-            <Menu
-                activeTab="perfil"
-                onChange={handleTabChange}
-            />
         </div>
     );
 };

@@ -4,9 +4,13 @@ import { RecipeService } from "../services/recipeService";
 const recipeService = new RecipeService();
 
 export const getAllRecipes = async (req: Request, res: Response) => {
-    const { official } = req.query;
+    const { official, search, category } = req.query;
     try {
-        const recipes = await recipeService.getAllRecipes(official as string);
+        const recipes = await recipeService.getAllRecipes(
+            official as string,
+            search as string,
+            category as string
+        );
         res.json(recipes);
     } catch (error) {
         res.status(500).json({ error: "Error cargando las recetas" });
