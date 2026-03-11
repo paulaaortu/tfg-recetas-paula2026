@@ -22,4 +22,12 @@ export class RecipeService {
         }
         return response.json();
     }
+
+    async getCategories() {
+        const response = await fetch(`${apiUrl}/api/recipes/categories`);
+        if (!response.ok) {
+            throw new Error(`Error al obtener categorías: ${response.statusText}`);
+        }
+        return response.json();
+    }
 }

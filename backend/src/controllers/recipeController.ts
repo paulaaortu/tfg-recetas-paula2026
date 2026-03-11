@@ -36,3 +36,12 @@ export const getRecipeById = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Error al obtener la receta" });
     }
 };
+
+export const getAllCategories = async (req: Request, res: Response) => {
+    try {
+        const categories = await recipeService.getCategories();
+        res.json(categories);
+    } catch (error) {
+        res.status(500).json({ error: "Error cargando las categorías" });
+    }
+};

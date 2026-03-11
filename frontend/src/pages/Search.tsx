@@ -5,14 +5,25 @@ import { RecipeService } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './Search.css';
 
-const CATEGORIES = ['Ver todo', 'Carnes', 'Pescados', 'Verduras', 'Postres', 'Desayunos'];
-
 export default function Search() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
     const [activeCategory, setActiveCategory] = useState('Ver todo');
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
     const recipeService = new RecipeService();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await recipeService.getCategories();
+                setCategories(data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -47,13 +58,20 @@ export default function Search() {
             </div>
 
             <div className="categories-scroll">
-                {CATEGORIES.map(category => (
+                <button
+                    key="Ver todo"
+                    className={`category-chip ${activeCategory === 'Ver todo' ? 'active' : 'inactive'}`}
+                    onClick={() => setActiveCategory('Ver todo')}
+                >
+                    Ver todo
+                </button>
+                {categories.map(category => (
                     <button
-                        key={category}
-                        className={`category-chip ${activeCategory === category ? 'active' : 'inactive'}`}
-                        onClick={() => setActiveCategory(category)}
+                        key={category.id}
+                        className={`category-chip ${activeCategory === category.name ? 'active' : 'inactive'}`}
+                        onClick={() => setActiveCategory(category.name)}
                     >
-                        {category}
+                        {category.name}
                     </button>
                 ))}
             </div>

@@ -69,6 +69,10 @@ body {
     display: none;
 }
 
+.categories-scroll-home {
+    display: none;
+}
+
 
 /*CardRecipes*/
 
@@ -214,6 +218,46 @@ body {
                 border-radius: 25px;
                 cursor: pointer;
             }
+        }
+
+        .categories-scroll-home {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories-scroll-home::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-chip {
+            padding: 10px 24px;
+            border-radius: 30px;
+            white-space: nowrap;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-chip.active {
+            background: #839E88;
+            color: #ffffff;
+        }
+
+        .category-chip.inactive {
+            background: #F5E1E5;
+            color: #8C8385;
+        }
+
+        .category-chip:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.95);
         }
 
         .ordenador {
