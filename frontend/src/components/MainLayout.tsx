@@ -13,6 +13,7 @@ const MainLayout: React.FC = () => {
         const path = location.pathname;
         if (path === '/') return 'inicio';
         if (path === '/buscar') return 'buscar';
+        if (path === '/despensa') return 'despensa';
         if (path === '/social') return 'social';
         if (path === '/perfil' || path === '/login' || path === '/register') return 'perfil';
         if (path.startsWith('/recipe/')) return 'inicio'; // O podrías retornar una pestaña vacía si prefieres
@@ -22,6 +23,7 @@ const MainLayout: React.FC = () => {
     const handleTabChange = (tab: Tab) => {
         if (tab === 'inicio') navigate('/');
         if (tab === 'buscar') navigate('/buscar');
+        if (tab === 'despensa') navigate('/despensa');
         if (tab === 'social') navigate('/social');
         if (tab === 'perfil') {
             const hasSession = localStorage.getItem('user');

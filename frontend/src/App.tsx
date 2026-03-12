@@ -6,6 +6,7 @@ import Social from "./pages/Social";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search.tsx";
 import RecipeDetails from "./pages/RecipeDetails";
+import Pantry from "./pages/Pantry";
 import MainLayout from "./components/MainLayout";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/perfil" element={<Profile />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/buscar" element={<Search />} />
+          <Route path="/despensa" element={<Pantry />} />
         </Route>
       </Routes>
     </Router>
