@@ -1,15 +1,37 @@
 import { Request, Response } from "express";
 import { RecipeService } from "../services/recipeService";
 
+import jwt from "jsonwebtoken";
+
 const recipeService = new RecipeService();
+const JWT_SECRET = process.env.JWT_SECRET || 'jsnE982nsAsok.';
 
 export const getAllRecipes = async (req: Request, res: Response) => {
-    const { official, search, category } = req.query;
+    const { official, search, category, strictPantry } = req.query;
+    let userId: number | undefined;
+
+    if (strictPantry === 'true') {
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.split(' ')[1];
+            try {
+                const decoded = jwt.verify(token, JWT_SECRET) as { id: number; username: string };
+                userId = decoded.id;
+            } catch (error) {
+                return res.status(401).json({ message: 'Token inválido o expirado.' });
+            }
+        } else {
+            return res.status(401).json({ message: 'No autorizado. Token requerido para búsqueda por despensa.' });
+        }
+    }
+
     try {
         const recipes = await recipeService.getAllRecipes(
             official as string,
             search as string,
-            category as string
+            category as string,
+            strictPantry as string,
+            userId
         );
         res.json(recipes);
     } catch (error) {
@@ -43,5 +65,44 @@ export const getAllCategories = async (req: Request, res: Response) => {
         res.json(categories);
     } catch (error) {
         res.status(500).json({ error: "Error cargando las categorías" });
+    }
+};
+
+export const createRecipe = async (req: Request, res: Response) => {
+    try {
+        // req.user might be populated by authMiddleware if we set Request typing, but since it's an AuthRequest, let's type cast
+        const user = (req as any).user;
+        if (!user || !user.id) {
+            return res.status(401).json({ message: "No autorizado" });
+        }
+
+        const { title, description, time, ingredients, steps, category_id, is_official } = req.body;
+
+        if (!title || !ingredients || !steps || !category_id) {
+            return res.status(400).json({ message: "Faltan campos obligatorios" });
+        }
+
+        let imageUrl = '';
+        if (req.file) {
+            // Convertir la ruta del file server en URL pública
+            imageUrl = `/uploads/${req.file.filename}`;
+        }
+
+        const newRecipe = await recipeService.createRecipe({
+            title,
+            description,
+            time: time ? Number(time) : undefined,
+            ingredients,
+            steps,
+            category_id: Number(category_id),
+            author_id: user.id,
+            image_url: imageUrl,
+            is_official: is_official === 'true' || is_official === true
+        });
+
+        res.status(201).json(newRecipe);
+    } catch (error) {
+        console.error("Error al crear la receta", error);
+        res.status(500).json({ error: "Error interno creando la receta" });
     }
 };

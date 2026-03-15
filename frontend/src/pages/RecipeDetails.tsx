@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Clock, Loader2 } from 'lucide-react';
+import { Clock, Loader2, Tag, AlertTriangle, Activity } from 'lucide-react';
 import { RecipeService } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './RecipeDetails.css';
@@ -50,6 +50,23 @@ export default function RecipeDetails() {
         );
     }
 
+    // Extraer Dificultad y Alérgenos si fueron inyectados en la descripción (como en las recetas de la comunidad).
+    const descriptionLines = recipe.description ? recipe.description.split('\n') : [];
+    let cleanDescription = '';
+    let difficulty = '';
+    let allergens = '';
+
+    descriptionLines.forEach(line => {
+        if (line.startsWith('Dificultad:')) {
+            difficulty = line.replace('Dificultad:', '').trim();
+        } else if (line.startsWith('Alérgenos:')) {
+            allergens = line.replace('Alérgenos:', '').trim();
+        } else {
+            cleanDescription += line + '\n';
+        }
+    });
+    cleanDescription = cleanDescription.trim();
+
     return (
         <div className="contenedor-detalles">
             <div className="detalles-contenido">
@@ -58,12 +75,41 @@ export default function RecipeDetails() {
                     <div className="bloque-izquierdo-escritorio">
                         <img src={recipe.image_url || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=800&q=80'} alt={recipe.title} />
 
-                        <span><strong>{recipe.description}</strong></span>
-                        <div className="info-basica">
-                            <div>
-                                <Clock size={18} />
-                                <span>{recipe.time} min</span>
+                        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginTop: '10px' }}>
+                            <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Tiempo</small>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    <Clock size={16} />
+                                    <span>{recipe.time} min</span>
+                                </div>
                             </div>
+                            {recipe.category_name && (
+                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Categoría</small>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <Tag size={16} />
+                                        <span>{recipe.category_name}</span>
+                                    </div>
+                                </div>
+                            )}
+                            {difficulty && (
+                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Dificultad</small>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <Activity size={16} />
+                                        <span>{difficulty}</span>
+                                    </div>
+                                </div>
+                            )}
+                            {allergens && allergens !== 'Ninguno' && (
+                                <div className="info-basica" style={{ color: '#d9534f', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <small style={{ fontSize: '10px', color: '#d9534f', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Alérgenos</small>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <AlertTriangle size={16} />
+                                        <span>{allergens}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

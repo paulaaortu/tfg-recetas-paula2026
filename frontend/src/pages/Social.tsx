@@ -49,6 +49,14 @@ function Social() {
                         )}
                     </div>
                 </section>
+
+                <button 
+                    className="fab-add-recipe" 
+                    onClick={() => navigate('/upload')}
+                    title="Añadir receta"
+                >
+                    +
+                </button>
             </div>
         </div>
     )

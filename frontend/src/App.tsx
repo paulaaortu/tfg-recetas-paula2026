@@ -8,6 +8,7 @@ import Search from "./pages/Search.tsx";
 import RecipeDetails from "./pages/RecipeDetails";
 import Pantry from "./pages/Pantry";
 import MainLayout from "./components/MainLayout";
+import Upload from "./pages/Upload";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/social" element={<Social />} />
+          <Route path="/upload" element={<Upload />} />
           <Route path="/perfil" element={<Profile />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/buscar" element={<Search />} />

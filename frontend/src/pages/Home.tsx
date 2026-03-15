@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import PantryCard from '../components/PantryCard'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
+import { getPantryItems } from '../services/pantryService'
 import type { Recipe } from '../types/recipes'
 import './Home.css'
 
@@ -11,6 +12,8 @@ function Home() {
     const [userName, setUserName] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [activeCategory, setActiveCategory] = useState('Ver todo')
+    const [strictPantry, setStrictPantry] = useState(false)
+    const [pantryCount, setPantryCount] = useState(0)
     const recipeService = new RecipeService()
 
     useEffect(() => {
@@ -28,14 +31,18 @@ function Home() {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory)
+                // If searching or filtering by category, disable strictPantry
+                if (searchTerm || activeCategory !== 'Ver todo') {
+                    setStrictPantry(false);
+                }
+                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory, strictPantry)
                 setRecipes(data)
             } catch (error) {
                 console.error('Error al cargar recetas:', error)
             }
         }
         fetchRecipes()
-    }, [searchTerm, activeCategory])
+    }, [searchTerm, activeCategory, strictPantry])
 
     useEffect(() => {
         //usuario de localStorage
@@ -44,6 +51,13 @@ function Home() {
             try {
                 const user = JSON.parse(usuario)
                 setUserName(user.username)
+                
+                // Fetch pantry items
+                getPantryItems().then(items => {
+                    setPantryCount(items.length)
+                }).catch(err => {
+                    console.error('Error loading pantry count', err)
+                })
             } catch (error) {
                 console.error('Error cargando usuario de localStorage', error)
             }
@@ -66,7 +80,10 @@ function Home() {
                     <input
                         placeholder="Busca una receta, ingrediente o categoría..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value)
+                            if (strictPantry) setStrictPantry(false)
+                        }}
                     />
                     <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
                 </div>
@@ -92,22 +109,27 @@ function Home() {
 
                 <div className="ordenador">
                     <div>
-                        {!searchTerm && activeCategory === 'Ver todo' && userName && (
+                        {!searchTerm && activeCategory === 'Ver todo' && !strictPantry && userName && (
                             <PantryCard
-                                pantryCount={16}
-                                onViewRecipes={() => console.log('Ver recetas')}
+                                pantryCount={pantryCount}
+                                onViewRecipes={() => setStrictPantry(true)}
                             />
                         )}
 
                         <section>
                             <div className="titulo">
                                 <h2>
-                                    {searchTerm || activeCategory !== 'Ver todo'
-                                        ? 'Resultados de búsqueda'
-                                        : (userName ? 'Recomendaciones' : 'Nuestras Recetas')}
+                                    {strictPantry
+                                        ? 'Recetas con lo que tienes en la despensa'
+                                        : (searchTerm || activeCategory !== 'Ver todo'
+                                            ? 'Resultados de búsqueda'
+                                            : (userName ? 'Recomendaciones' : 'Nuestras Recetas'))}
                                 </h2>
-                                {!searchTerm && activeCategory === 'Ver todo' && (
+                                {!searchTerm && activeCategory === 'Ver todo' && !strictPantry && (
                                     <span className="see-all">Ver todas</span>
+                                )}
+                                {strictPantry && (
+                                    <span className="see-all" onClick={() => setStrictPantry(false)} style={{cursor: 'pointer', color: 'red'}}>Limpiar filtro</span>
                                 )}
                             </div>
 

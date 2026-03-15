@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { UserCircle, ArrowLeft } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import logo from '../assets/título.svg'
+import { TABS } from './Menu'
 import type { Tab } from './Menu'
 import './Header.css'
 
@@ -39,13 +39,17 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
                     </div>
                 </div>
 
-                <nav className="desktop-nav">
-                    <a href="#" onClick={(e) => { e.preventDefault(); onTabChange?.('inicio'); }} className={activeTab === 'inicio' ? 'active' : ''}>Inicio</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); onTabChange?.('buscar'); }} className={activeTab === 'buscar' ? 'active' : ''}>Explorar</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); onTabChange?.('despensa'); }} className={activeTab === 'despensa' ? 'active' : ''}>Despensa</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); onTabChange?.('social'); }} className={activeTab === 'social' ? 'active' : ''}>Social</a>
+                <nav>
+                    {TABS.filter(tab => tab.id !== 'perfil' && tab.id !== 'buscar').map((tab) => (
+                        <button
+                            key={tab.id}
+                            className={`header-activo ${activeTab === tab.id ? 'active' : ''}`}
+                            onClick={() => onTabChange?.(tab.id)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </nav>
-
                 <div className="acciones">
                     <div className="botones" onClick={handleProfileClick}>
                         <UserCircle size={32} className="header-icon" />

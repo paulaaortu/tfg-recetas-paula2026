@@ -14,7 +14,6 @@ const Pantry: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [userName, setUserName] = useState<string | null>(null);
 
     // Form state
     const [newItem, setNewItem] = useState({
@@ -22,6 +21,11 @@ const Pantry: React.FC = () => {
         quantity: '',
         unit: ''
     });
+
+    useEffect(() => {
+        loadPantry();
+    }, []);
+
 
     const loadPantry = async () => {
         try {
