@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RecipeService } from '../services/recipeService';
 import './Upload.css';
@@ -19,20 +19,26 @@ export default function Upload() {
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [availableCategories, setAvailableCategories] = useState<{ id: number, name: string }[]>([]);
+    const [availableAllergens, setAvailableAllergens] = useState<string[]>([]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Hardcoded categories mapping from DB loosely for UI sake
-    const availableCategories = [
-        { id: 1, name: 'Carnes' },
-        { id: 2, name: 'Pescados' },
-        { id: 3, name: 'Verduras' },
-        { id: 4, name: 'Postres' },
-        { id: 5, name: 'Desayunos' },
-        { id: 6, name: 'Otros' }
-    ];
-
-    const availableAllergens = ['Gluten', 'Lácteos', 'Huevos', 'Frutos secos'];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [categoriesData, allergensData] = await Promise.all([
+                    recipeService.getCategories(),
+                    recipeService.getAllAllergens()
+                ]);
+                setAvailableCategories(categoriesData);
+                setAvailableAllergens(allergensData.map((a: any) => a.name)); // Assuming the UI expects an array of strings
+            } catch (error) {
+                console.error('Error al cargar datos iniciales:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleAddIngredient = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && ingredientInput.trim() !== '') {

@@ -41,6 +41,14 @@ export class RecipeService {
         return response.json();
     }
 
+    async getAllAllergens() {
+        const response = await fetch(`${apiUrl}/api/recipes/allergens`);
+        if (!response.ok) {
+            throw new Error(`Error al obtener alérgenos: ${response.statusText}`);
+        }
+        return response.json();
+    }
+
     async createRecipe(recipeData: FormData) {
         const token = localStorage.getItem('token');
         const headers: Record<string, string> = {};

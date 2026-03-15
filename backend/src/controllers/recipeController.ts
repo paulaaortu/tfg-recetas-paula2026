@@ -68,6 +68,15 @@ export const getAllCategories = async (req: Request, res: Response) => {
     }
 };
 
+export const getAllAllergies = async (req: Request, res: Response) => {
+    try {
+        const allergies = await recipeService.getAllAllergies();
+        res.json(allergies);
+    } catch (error) {
+        res.status(500).json({ error: "Error cargando los alérgenos" });
+    }
+};
+
 export const createRecipe = async (req: Request, res: Response) => {
     try {
         // req.user might be populated by authMiddleware if we set Request typing, but since it's an AuthRequest, let's type cast

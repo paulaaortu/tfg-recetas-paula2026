@@ -1,13 +1,15 @@
-/* c:\Multimedia\Repositorio\tfg-recetas-paula2026\frontend\src\pages\Upload.css */
-
 .upload-container {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 140px); /* 70px header + 70px menu typical height */
-    background-color: #9ab4a1; /* Mint green base */
+    min-height: calc(100vh - 140px);
+    /* 70px header + 70px menu typical height */
+    background-color: #9ab4a1;
+    /* Mint green base */
     font-family: 'Inter', sans-serif;
-    padding-top: 70px; /* To account for fixed Header */
-    padding-bottom: 80px; /* Space for Menu */
+    padding-top: 70px;
+    /* To account for fixed Header */
+    padding-bottom: 80px;
+    /* Space for Menu */
 }
 
 .upload-header {
@@ -57,7 +59,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-bottom: 100px; /* space for absolute button if needed */
+    padding-bottom: 100px;
+    /* space for absolute button if needed */
 }
 
 .form-group {
@@ -92,7 +95,7 @@
     background-color: #ffffff;
     outline: none;
     color: #555;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .upload-form-sheet input::placeholder,
@@ -151,7 +154,7 @@
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .pill.active {
