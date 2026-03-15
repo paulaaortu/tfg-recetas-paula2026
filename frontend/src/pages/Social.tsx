@@ -4,6 +4,7 @@ import { RecipeService } from '../services/recipeService'
 import type { Recipe } from '../types/recipes'
 import { useNavigate } from 'react-router-dom'
 import './Home.css' // Reuse Home styles for consistency
+import './Social.css'
 
 function Social() {
     const [recipes, setRecipes] = useState<Recipe[]>([])
@@ -19,7 +20,7 @@ function Social() {
 
         const fetchRecipes = async () => {
             try {
-                // Fetch ONLY user recipes (official=false)
+                //solo recetas de usuarios
                 const data = await recipeService.getAllRecipes(false)
                 setRecipes(data)
             } catch (error) {
@@ -50,8 +51,8 @@ function Social() {
                     </div>
                 </section>
 
-                <button 
-                    className="fab-add-recipe" 
+                <button
+                    className="fab-add-recipe"
                     onClick={() => navigate('/upload')}
                     title="Añadir receta"
                 >

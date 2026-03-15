@@ -1,0 +1,41 @@
+.contenedor-principal {
+    >div {
+        >button {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            border-radius: 100%;
+            background-color: #6a8770;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #5a7460;
+                transform: scale(1.1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+}
+
+
+@media (min-width: 1024px) {
+    .contenedor-principal {
+        >div {
+            >button {
+                bottom: 30px;
+                right: 40px;
+            }
+        }
+    }
+}
