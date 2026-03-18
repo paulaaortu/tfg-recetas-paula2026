@@ -21,6 +21,15 @@
             text-align: center;
         }
 
+        .receta-descripcion-corta {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
         .info-receta {
             display: flex;
             flex-direction: column;
@@ -118,9 +127,16 @@
 
             >h2 {
                 font-size: 48px;
-                margin-bottom: 40px;
+                margin-bottom: 10px;
                 text-align: left;
                 color: #2D3A2F;
+            }
+
+            .receta-descripcion-corta {
+                font-size: 20px;
+                text-align: left;
+                margin-top: 0;
+                margin-bottom: 40px;
             }
 
             .info-receta {

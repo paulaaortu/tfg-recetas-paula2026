@@ -1,4 +1,10 @@
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+export const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+export const getImageUrl = (url: string | undefined | null) => {
+    if (!url) return 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=800&q=80';
+    if (url.startsWith('http')) return url;
+    return `${apiUrl}${url}`;
+};
 
 export class RecipeService {
     async getAllRecipes(official?: boolean, search?: string, category?: string, strictPantry?: boolean) {
@@ -67,6 +73,64 @@ export class RecipeService {
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.message || `Error al crear receta: ${response.statusText}`);
+        }
+
+        return response.json();
+    }
+
+    async getMyRecipes() {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/my-recipes`, { headers });
+        if (!response.ok) throw new Error('Error al obtener mis recetas');
+        return response.json();
+    }
+
+    async getFavorites() {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/favorites`, { headers });
+        if (!response.ok) throw new Error('Error al obtener favoritos');
+        return response.json();
+    }
+
+    async addFavorite(id: number) {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/${id}/favorite`, { method: 'POST', headers });
+        if (!response.ok) throw new Error('Error al añadir favorito');
+        return response.json();
+    }
+
+    async removeFavorite(id: number) {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/${id}/favorite`, { method: 'DELETE', headers });
+        if (!response.ok) throw new Error('Error al eliminar favorito');
+        return response.json();
+    }
+
+    async isFavorite(id: number) {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/${id}/is-favorite`, { headers });
+        if (!response.ok) throw new Error('Error al verificar favorito');
+        return response.json();
+    }
+
+    async updateRecipe(id: number, recipeData: FormData) {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const response = await fetch(`${apiUrl}/api/recipes/${id}`, {
+            method: 'PUT',
+            headers,
+            body: recipeData
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Error al actualizar receta: ${response.statusText}`);
         }
 
         return response.json();

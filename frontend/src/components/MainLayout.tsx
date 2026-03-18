@@ -8,7 +8,6 @@ const MainLayout: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Determinar la pestaña activa basándose en la ruta actual
     const getActiveTab = (): Tab => {
         const path = location.pathname;
         if (path === '/') return 'inicio';
@@ -16,7 +15,7 @@ const MainLayout: React.FC = () => {
         if (path === '/despensa') return 'despensa';
         if (path === '/social') return 'social';
         if (path === '/perfil' || path === '/login' || path === '/register') return 'perfil';
-        if (path.startsWith('/recipe/')) return 'inicio'; // O podrías retornar una pestaña vacía si prefieres
+        if (path.startsWith('/recipe/')) return 'inicio';
         return 'inicio';
     };
 

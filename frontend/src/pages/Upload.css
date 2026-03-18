@@ -186,3 +186,82 @@
     opacity: 0.7;
     cursor: not-allowed;
 }
+
+/* Success Popup */
+.success-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* subtle blur for elegance */
+}
+
+.success-popup-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 80%;
+    width: 320px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: popupFadeIn 0.3s ease-out;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.success-popup-icon {
+    font-size: 50px;
+    color: #8fa093;
+}
+
+.success-popup-content h3 {
+    margin: 0;
+    color: #333;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.success-popup-content p {
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.success-popup-btn {
+    background-color: #8fa093;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(143, 160, 147, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.success-popup-btn:active {
+    transform: scale(0.97);
+}

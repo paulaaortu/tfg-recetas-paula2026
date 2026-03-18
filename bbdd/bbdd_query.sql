@@ -42,6 +42,8 @@ CREATE TABLE recipes (
     id SERIAL PRIMARY KEY,
     title VARCHAR(150) NOT NULL,
     description TEXT,
+    difficulty VARCHAR(50),
+    allergens TEXT,
     time INTEGER,
     ingredients TEXT NOT NULL,
     steps TEXT NOT NULL,
@@ -143,15 +145,15 @@ VALUES
 ('Carnes'), ('Pescados'), ('Verduras'), ('Postres'), ('Desayunos'), ('Otros');
 
 -- Recetas oficiales
-INSERT INTO recipes (title, description, time, ingredients, steps, image_url, is_official, category_id)
+INSERT INTO recipes (title, description, difficulty, allergens, time, ingredients, steps, image_url, is_official, category_id)
 VALUES
-('Tortilla de patatas', 'Receta tradicional española', 25, 'Patatas, huevos, aceite, sal', 'Pelar patatas, freír, batir huevos, mezclar y cuajar', 'https://images.pexels.com/photos/14941246/pexels-photo-14941246.jpeg?_gl=1*i91e7c*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY3MzgkajU2JGwwJGgw', true, 6),
-('Gazpacho', 'Sopa fría de tomate', 30, 'Tomate, pepino, pimiento, aceite, vinagre, sal', 'Triturar todos los ingredientes y servir frío', 'https://plus.unsplash.com/premium_photo-1692781059201-d049a375a4d4?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', true, 3);
+('Tortilla de patatas', 'Receta tradicional española', 'Media', 'Ninguno', 25, 'Patatas, huevos, aceite, sal', 'Pelar patatas, freír, batir huevos, mezclar y cuajar', 'https://images.pexels.com/photos/14941246/pexels-photo-14941246.jpeg?_gl=1*i91e7c*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY3MzgkajU2JGwwJGgw', true, 6),
+('Gazpacho', 'Sopa fría de tomate', 'Fácil', 'Ninguno', 30, 'Tomate, pepino, pimiento, aceite, vinagre, sal', 'Triturar todos los ingredientes y servir frío', 'https://plus.unsplash.com/premium_photo-1692781059201-d049a375a4d4?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', true, 3);
 
 -- Recetas de usuarios
-INSERT INTO recipes (title, description, time, ingredients, steps, image_url, is_official, author_id, category_id)
+INSERT INTO recipes (title, description, difficulty, allergens, time, ingredients, steps, image_url, is_official, author_id, category_id)
 VALUES
-('Ensalada de quinoa', 'Receta saludable', 15, 'Quinoa, tomate, pepino, limón', 'Cocer quinoa, mezclar ingredientes, aliñar', 'https://images.pexels.com/photos/248509/pexels-photo-248509.jpeg?_gl=1*47kvg4*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY4ODgkajMxJGwwJGgw', false, 1, 3);
+('Ensalada de quinoa', 'Receta saludable', 'Fácil', 'Ninguno', 15, 'Quinoa, tomate, pepino, limón', 'Cocer quinoa, mezclar ingredientes, aliñar', 'https://images.pexels.com/photos/248509/pexels-photo-248509.jpeg?_gl=1*47kvg4*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY4ODgkajMxJGwwJGgw', false, 1, 3);
 
 -- Favoritos
 INSERT INTO favorites (user_id, recipe_id)

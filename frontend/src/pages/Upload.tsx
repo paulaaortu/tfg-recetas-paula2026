@@ -9,6 +9,7 @@ export default function Upload() {
 
     // Form states
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [timeStr, setTimeStr] = useState('');
     const [difficulty, setDifficulty] = useState('Fácil');
     const [category, setCategory] = useState<number | null>(null);
@@ -21,6 +22,7 @@ export default function Upload() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [availableCategories, setAvailableCategories] = useState<{ id: number, name: string }[]>([]);
     const [availableAllergens, setAvailableAllergens] = useState<string[]>([]);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,13 +87,12 @@ export default function Upload() {
         const timeMatches = timeStr.match(/\d+/);
         const timeNum = timeMatches ? parseInt(timeMatches[0], 10) : 0;
 
-        // Compile description to include UI-only fields
-        const formattedDescription = `Dificultad: ${difficulty}\nAlérgenos: ${allergens.length > 0 ? allergens.join(', ') : 'Ninguno'}`;
-
         const formData = new FormData();
         formData.append('title', title.trim());
+        formData.append('description', description.trim());
+        formData.append('difficulty', difficulty);
+        formData.append('allergens', allergens.length > 0 ? allergens.join(', ') : 'Ninguno');
         formData.append('time', timeNum.toString());
-        formData.append('description', formattedDescription);
         formData.append('ingredients', ingredients.join(', '));
         formData.append('steps', steps.trim());
         formData.append('category_id', category.toString());
@@ -104,8 +105,7 @@ export default function Upload() {
         try {
             await recipeService.createRecipe(formData);
 
-            alert('¡Receta publicada con éxito!');
-            navigate('/social');
+            setShowSuccessPopup(true);
         } catch (error: any) {
             console.error('Error al subir receta:', error);
             alert('Hubo un error al publicar la receta. Inténtalo de nuevo.');
@@ -157,6 +157,17 @@ export default function Upload() {
                         placeholder="Ej: Lasaña de verduras..." 
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
+
+                {/* Descripción Corta */}
+                <div className="form-group">
+                    <label>DESCRIPCIÓN CORTA</label>
+                    <input 
+                        type="text" 
+                        placeholder="Una frase sobre tu receta..." 
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
 
@@ -248,7 +259,6 @@ export default function Upload() {
                     ></textarea>
                 </div>
 
-                {/* Submit button */}
                 <button 
                     className="submit-recipe-btn" 
                     onClick={handleSubmit} 
@@ -258,6 +268,23 @@ export default function Upload() {
                 </button>
 
             </div>
+
+            {/* Success Popup */}
+            {showSuccessPopup && (
+                <div className="success-popup-overlay">
+                    <div className="success-popup-content">
+                        <div className="success-popup-icon">✅</div>
+                        <h3>¡Receta publicada!</h3>
+                        <p>Tu receta se ha publicado con éxito.</p>
+                        <button 
+                            className="success-popup-btn" 
+                            onClick={() => navigate('/social')}
+                        >
+                            Continuar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

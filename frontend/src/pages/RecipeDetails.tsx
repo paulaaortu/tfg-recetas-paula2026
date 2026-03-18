@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Clock, Loader2, Tag, AlertTriangle, Activity } from 'lucide-react';
-import { RecipeService } from '../services/recipeService';
+import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart } from 'lucide-react';
+import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './RecipeDetails.css';
 
@@ -10,7 +10,13 @@ export default function RecipeDetails() {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavLoading, setIsFavLoading] = useState(false);
     const recipeService = new RecipeService();
+    
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const isLoggedIn = !!token;
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -19,6 +25,11 @@ export default function RecipeDetails() {
                 setLoading(true);
                 const data = await recipeService.getRecipeById(parseInt(id));
                 setRecipe(data);
+
+                if (isLoggedIn) {
+                    const favData = await recipeService.isFavorite(parseInt(id));
+                    setIsFavorite(favData.isFavorite);
+                }
             } catch (err: any) {
                 console.error('Error fetching recipe details:', err);
                 setError('No se pudo cargar la receta. Inténtalo de nuevo más tarde.');
@@ -27,7 +38,25 @@ export default function RecipeDetails() {
             }
         };
         fetchRecipe();
-    }, [id]);
+    }, [id, isLoggedIn]);
+
+    const handleToggleFavorite = async () => {
+        if (!id || !isLoggedIn || isFavLoading) return;
+        setIsFavLoading(true);
+        try {
+            if (isFavorite) {
+                await recipeService.removeFavorite(parseInt(id));
+                setIsFavorite(false);
+            } else {
+                await recipeService.addFavorite(parseInt(id));
+                setIsFavorite(true);
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        } finally {
+            setIsFavLoading(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -50,30 +79,45 @@ export default function RecipeDetails() {
         );
     }
 
-    // Extraer Dificultad y Alérgenos si fueron inyectados en la descripción (como en las recetas de la comunidad).
-    const descriptionLines = recipe.description ? recipe.description.split('\n') : [];
-    let cleanDescription = '';
-    let difficulty = '';
-    let allergens = '';
-
-    descriptionLines.forEach(line => {
-        if (line.startsWith('Dificultad:')) {
-            difficulty = line.replace('Dificultad:', '').trim();
-        } else if (line.startsWith('Alérgenos:')) {
-            allergens = line.replace('Alérgenos:', '').trim();
-        } else {
-            cleanDescription += line + '\n';
-        }
-    });
-    cleanDescription = cleanDescription.trim();
+    // Use difficulty and allergens from the database directly, fallback if not present
+    const cleanDescription = recipe.description || '';
+    const difficulty = recipe.difficulty || '';
+    const allergens = recipe.allergens || '';
 
     return (
         <div className="contenedor-detalles">
             <div className="detalles-contenido">
-                <h2>{recipe.title}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                    <h2>{recipe.title}</h2>
+                    {isLoggedIn && (
+                        <button 
+                            onClick={handleToggleFavorite}
+                            disabled={isFavLoading}
+                            style={{ 
+                                background: 'transparent', 
+                                border: 'none', 
+                                cursor: 'pointer',
+                                padding: '5px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                outline: 'none'
+                            }}
+                            title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
+                        >
+                            <Heart 
+                                size={28} 
+                                color={isFavorite ? "#d9534f" : "#6a8770"} 
+                                fill={isFavorite ? "#d9534f" : "none"}
+                                style={{ transition: 'all 0.2s' }}
+                            />
+                        </button>
+                    )}
+                </div>
+                {cleanDescription && <p className="receta-descripcion-corta">{cleanDescription}</p>}
+                
                 <div className='info-receta'>
                     <div className="bloque-izquierdo-escritorio">
-                        <img src={recipe.image_url || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=800&q=80'} alt={recipe.title} />
+                        <img src={getImageUrl(recipe.image_url)} alt={recipe.title} />
 
                         <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginTop: '10px' }}>
                             <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

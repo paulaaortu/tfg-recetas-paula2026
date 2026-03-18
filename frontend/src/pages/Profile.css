@@ -123,3 +123,63 @@
         background-color: #fff5f4;
     }
 }
+
+/* Tabs */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background-color: transparent;
+    border: 2px solid #8da48e;
+    border-radius: 25px;
+    color: #8da48e;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background-color: rgba(141, 164, 142, 0.1);
+}
+
+.tab-btn.active {
+    background-color: #8da48e;
+    color: white;
+}
+
+/* Recipes Tab Content */
+.recipes-tab-content {
+    background: transparent;
+}
+
+.grid-recetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+}
+
+@media (min-width: 768px) {
+    .grid-recetas {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+}
+
+.no-recipes-msg {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    margin-top: 40px;
+    width: 100%;
+    grid-column: 1 / -1;
+}

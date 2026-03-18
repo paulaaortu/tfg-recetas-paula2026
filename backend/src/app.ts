@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Servir la carpeta public como estáticos
-app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 
 // Rutas
 app.use('/api/recipes', recipesRoutes);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, SlidersHorizontal, Clock } from 'lucide-react';
-import { RecipeService } from '../services/recipeService';
+import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './Search.css';
 
@@ -79,7 +79,7 @@ export default function Search() {
             <div className="results-grid">
                 {filteredRecipes.map(recipe => (
                     <div key={recipe.id} className="search-recipe-card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
-                        <img src={recipe.image_url} alt={recipe.title} className="card-image" />
+                        <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="card-image" />
                         <div className="card-info">
                             <h3>{recipe.title}</h3>
                             <div className="card-meta">

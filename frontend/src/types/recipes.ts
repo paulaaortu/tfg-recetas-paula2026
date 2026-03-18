@@ -2,6 +2,8 @@ export interface Recipe {
     id: number;
     title: string;
     description: string;
+    difficulty?: string;
+    allergens?: string;
     time: number;
     ingredients: string;
     steps: string;
