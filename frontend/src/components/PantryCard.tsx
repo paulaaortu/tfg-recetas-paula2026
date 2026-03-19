@@ -1,4 +1,4 @@
-// src/components/PantryCard.tsx
+import { Package } from 'lucide-react'
 import './PantryCard.css'
 
 interface PantryCardProps {
@@ -11,7 +11,7 @@ export default function PantryCard({ pantryCount, onViewRecipes }: PantryCardPro
         <div className="btn-accion-home">
             <div>
                 <p>Recetas con lo que tienes</p>
-                <span>📦</span>
+                <Package size={20} />
             </div>
             <p >Tienes {pantryCount} ingredientes en tu despensa</p>
             <button onClick={onViewRecipes}>

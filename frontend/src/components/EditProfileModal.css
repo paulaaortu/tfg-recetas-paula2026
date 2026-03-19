@@ -73,7 +73,7 @@
                     .input-icon {
                         position: absolute;
                         left: 12px;
-                        color: #8da48e;
+                        color: #839E88;
                     }
 
                     >input {
@@ -86,8 +86,8 @@
 
                         :focus {
                             outline: none;
-                            border-color: #8da48e;
-                            box-shadow: 0 0 0 3px rgba(141, 164, 142, 0.1);
+                            border-color: #839E88;
+                            box-shadow: 0 0 0 3px rgba(131, 158, 136, 0.1);
                         }
                     }
                 }
@@ -119,8 +119,8 @@
 
 
                 .cancel-btn {
-                    background: #f5f5f5;
-                    color: #666;
+                    background: #F3DDE8;
+                    color: #6b4a5e;
                     border: none;
 
                     :hover {
@@ -130,14 +130,14 @@
                 }
 
                 .save-btn {
-                    background: #8da48e;
+                    background: #839E88;
                     color: white;
                     border: none;
 
                     :hover {
-                        background-color: #7d937e;
+                        background-color: #6e8872;
                         transform: translateY(-1px);
-                        box-shadow: 0 4px 12px rgba(141, 164, 142, 0.3);
+                        box-shadow: 0 4px 12px rgba(131, 158, 136, 0.3);
                     }
 
                     :disabled {

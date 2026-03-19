@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPantryItems, addPantryItem, deletePantryItem } from '../services/pantryService';
 import './Pantry.css';
+import { Trash, Plus } from 'lucide-react';
 
 interface PantryItem {
     id: number;
@@ -14,6 +15,7 @@ const Pantry: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<PantryItem | null>(null);
 
     // Form state
     const [newItem, setNewItem] = useState({
@@ -53,13 +55,19 @@ const Pantry: React.FC = () => {
         }
     };
 
-    const handleDeleteItem = async (id: number) => {
-        if (!window.confirm('¿Seguro que quieres eliminar este ingrediente?')) return;
+    const handleDeleteItem = (item: PantryItem) => {
+        setItemToDelete(item);
+    };
+
+    const confirmDelete = async () => {
+        if (!itemToDelete) return;
         try {
-            await deletePantryItem(id);
+            await deletePantryItem(itemToDelete.id);
             loadPantry();
         } catch (err: any) {
             alert(err.message);
+        } finally {
+            setItemToDelete(null);
         }
     };
 
@@ -67,7 +75,7 @@ const Pantry: React.FC = () => {
         <div className="contenedor-despensa">
             <div className="pantry-header">
                 <h2>Mis Ingredientes</h2>
-                <button className="add-btn" onClick={() => setIsModalOpen(true)}>+</button>
+                <button onClick={() => setIsModalOpen(true)}><Plus /></button>
             </div>
 
             {loading ? (
@@ -89,8 +97,8 @@ const Pantry: React.FC = () => {
                                     <p>{item.quantity} {item.unit}</p>
                                 )}
                             </div>
-                            <button className="delete-btn" onClick={() => handleDeleteItem(item.id)}>
-                                🗑️
+                            <button className="delete-btn" onClick={() => handleDeleteItem(item)}>
+                                <Trash />
                             </button>
                         </div>
                     ))}
@@ -140,6 +148,23 @@ const Pantry: React.FC = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {itemToDelete && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h2>Eliminar ingrediente</h2>
+                        <p>¿Seguro que quieres eliminar <strong>{itemToDelete.ingredient_name}</strong> de tu despensa?</p>
+                        <div className="modal-actions">
+                            <button type="button" className="cancel-btn" onClick={() => setItemToDelete(null)}>
+                                Cancelar
+                            </button>
+                            <button type="button" className="delete-confirm-btn" onClick={confirmDelete}>
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

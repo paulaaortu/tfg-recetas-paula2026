@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { X, Clock, CheckCircle } from 'lucide-react';
 import { RecipeService } from '../services/recipeService';
 import './Upload.css';
 
@@ -135,7 +136,9 @@ export default function Upload() {
                     {imagePreview && (
                         <button className="photo-btn" onClick={triggerFileInput} style={{ opacity: 0.8 }}>Cambiar foto</button>
                     )}
-                    <button className="close-btn" onClick={() => navigate(-1)}>✕</button>
+                    <button className="close-btn" onClick={() => navigate(-1)}>
+                        <X size={24} />
+                    </button>
                     <input 
                         type="file" 
                         ref={fileInputRef} 
@@ -176,7 +179,7 @@ export default function Upload() {
                     <div className="form-group half">
                         <label>TIEMPO</label>
                         <div className="input-with-icon">
-                            <span className="icon">⏱️</span>
+                            <Clock size={18} className="icon" />
                             <input 
                                 type="text" 
                                 placeholder="30min" 
@@ -226,7 +229,7 @@ export default function Upload() {
                         <div className="pills-container display-pills">
                             {ingredients.map((ing, idx) => (
                                 <button key={idx} className="pill light-green" onClick={() => removeIngredient(ing)}>
-                                    {ing} ✕
+                                    {ing} <X size={14} style={{ marginLeft: '4px' }} />
                                 </button>
                             ))}
                         </div>
@@ -273,7 +276,7 @@ export default function Upload() {
             {showSuccessPopup && (
                 <div className="success-popup-overlay">
                     <div className="success-popup-content">
-                        <div className="success-popup-icon">✅</div>
+                        <CheckCircle size={50} className="success-popup-icon" />
                         <h3>¡Receta publicada!</h3>
                         <p>Tu receta se ha publicado con éxito.</p>
                         <button 

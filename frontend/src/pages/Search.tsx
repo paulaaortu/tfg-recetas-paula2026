@@ -77,18 +77,28 @@ export default function Search() {
             </div>
 
             <div className="results-grid">
-                {filteredRecipes.map(recipe => (
-                    <div key={recipe.id} className="search-recipe-card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
-                        <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="card-image" />
-                        <div className="card-info">
-                            <h3>{recipe.title}</h3>
-                            <div className="card-meta">
-                                <Clock className="clock-icon" />
-                                <span>{recipe.time} min</span>
+                {filteredRecipes.length > 0 ? (
+                    filteredRecipes.map(recipe => (
+                        <div key={recipe.id} className="search-recipe-card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
+                            <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="card-image" />
+                            <div className="card-info">
+                                <h3>{recipe.title}</h3>
+                                <div className="card-meta">
+                                    <Clock className="clock-icon" />
+                                    <span>{recipe.time} min</span>
+                                </div>
                             </div>
                         </div>
+                    ))
+                ) : (
+                    <div className="no-results" style={{ gridColumn: '1 / -1' }}>
+                        <p>
+                            {searchTerm 
+                                ? `No se encontraron recetas para "${searchTerm}"` 
+                                : "No hay recetas disponibles en esta categoría."}
+                        </p>
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

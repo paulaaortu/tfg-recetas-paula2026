@@ -2,12 +2,11 @@
     min-height: 100vh;
     background-color: #FBF7F4;
     padding-bottom: 80px;
-    margin-top: 50px;
 
     .detalles-contenido {
         max-width: 800px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 10px 15px;
         margin-bottom: 10px;
 
         .divisor-seccion {
@@ -16,7 +15,7 @@
         }
 
         >h2 {
-            font-size: 30px;
+            font-size: 24px;
             color: #3B3B3B;
             text-align: center;
         }

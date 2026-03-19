@@ -3,10 +3,9 @@
     flex-direction: column;
     min-height: calc(100vh - 140px);
     /* 70px header + 70px menu typical height */
-    background-color: #9ab4a1;
-    /* Mint green base */
+    background-color: #c9a8b8;
+    /* Soft pink base */
     font-family: 'Inter', sans-serif;
-    padding-top: 70px;
     /* To account for fixed Header */
     padding-bottom: 80px;
     /* Space for Menu */
@@ -81,7 +80,7 @@
 .upload-form-sheet label {
     font-size: 14px;
     font-weight: 700;
-    color: #8fa093;
+    color: #b07090;
     text-transform: uppercase;
 }
 
@@ -164,9 +163,9 @@
 }
 
 .pill.light-green {
-    background-color: #e5f0e7;
-    border-color: #e5f0e7;
-    color: #5a7b64;
+    background-color: #F3DDE8;
+    border-color: #F3DDE8;
+    color: #7a5a68;
 }
 
 .submit-recipe-btn {

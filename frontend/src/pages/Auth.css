@@ -6,7 +6,6 @@
   width: 100vw;
   background-color: #fbf7f4;
   overflow: hidden;
-  padding-top: 80px;
   box-sizing: border-box;
 
   >div {
@@ -51,7 +50,7 @@
           padding: 16px 16px 16px 48px;
           border-radius: 12px;
           border: none;
-          background-color: #f5e6eb;
+          background-color: #F3DDE8;
           /* Soft pink */
           font-size: 16px;
           color: #333;
@@ -71,7 +70,7 @@
         padding: 14px;
         border-radius: 20px;
         border: none;
-        background-color: #8da48e;
+        background-color: #839E88;
         color: white;
         font-size: 18px;
         font-weight: 600;
@@ -79,7 +78,7 @@
         transition: background-color 0.2s;
 
         :hover {
-          background-color: #7a8f7b;
+          background-color: #6e8872;
         }
       }
     }
@@ -87,11 +86,11 @@
     >div {
       margin-top: 24px;
       font-size: 14px;
-      color: #8da48e;
+      color: #839E88;
       font-weight: 600;
 
       >span {
-        color: #8da48e;
+        color: #839E88;
         text-decoration: underline;
         cursor: pointer;
       }

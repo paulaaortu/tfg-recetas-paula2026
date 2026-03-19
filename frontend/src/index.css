@@ -70,3 +70,21 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.no-results {
+  text-align: center;
+  padding: 20px 15px;
+  background-color: #F3DDE8; 
+  border-radius: 20px;
+  margin: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  color: #3B3B3B;
+  width: 100%;
+  box-sizing: border-box;
+
+  >p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

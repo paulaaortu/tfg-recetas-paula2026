@@ -1,5 +1,4 @@
 .contenedor-perfil {
-    padding-top: 55px;
     padding-bottom: 90px;
     background-color: #fbf7f4;
     min-height: 100vh;
@@ -20,7 +19,7 @@
             >div {
                 width: 80px;
                 height: 80px;
-                background-color: #8da48e;
+                background-color: #839E88;
                 color: white;
                 border-radius: 50%;
                 display: flex;
@@ -59,6 +58,7 @@
                     letter-spacing: 0.5px;
                     padding: 15px 20px 10px;
                     margin: 0;
+                    border-bottom: 2px solid #F3DDE8;
                 }
 
                 background: white;
@@ -91,7 +91,7 @@
                         font-size: 15px;
 
                         .menu-icon {
-                            color: #8da48e;
+                            color: #839E88;
                         }
 
                         .chevron {
@@ -139,9 +139,9 @@
     gap: 8px;
     padding: 8px 15px;
     background-color: transparent;
-    border: 2px solid #8da48e;
+    border: 2px solid #839E88;
     border-radius: 25px;
-    color: #8da48e;
+    color: #839E88;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -149,11 +149,11 @@
 }
 
 .tab-btn:hover {
-    background-color: rgba(141, 164, 142, 0.1);
+    background-color: rgba(243, 221, 232, 0.4);
 }
 
 .tab-btn.active {
-    background-color: #8da48e;
+    background-color: #839E88;
     color: white;
 }
 

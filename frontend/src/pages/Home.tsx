@@ -51,7 +51,7 @@ function Home() {
             try {
                 const user = JSON.parse(usuario)
                 setUserName(user.username)
-                
+
                 // Fetch pantry items
                 getPantryItems().then(items => {
                     setPantryCount(items.length)
@@ -120,7 +120,7 @@ function Home() {
                             <div className="titulo">
                                 <h2>
                                     {strictPantry
-                                        ? 'Recetas con lo que tienes en la despensa'
+                                        ? 'Recetas con lo que tienes'
                                         : (searchTerm || activeCategory !== 'Ver todo'
                                             ? 'Resultados de búsqueda'
                                             : (userName ? 'Recomendaciones' : 'Nuestras Recetas'))}
@@ -129,14 +129,32 @@ function Home() {
                                     <span className="see-all">Ver todas</span>
                                 )}
                                 {strictPantry && (
-                                    <span className="see-all" onClick={() => setStrictPantry(false)} style={{cursor: 'pointer', color: 'red'}}>Limpiar filtro</span>
+                                    <span className="see-all" onClick={() => setStrictPantry(false)} style={{ cursor: 'pointer', color: 'red' }}>Limpiar</span>
                                 )}
                             </div>
 
                             <div className="grid-recetas">
-                                {recipes.map((recipe) => (
-                                    <CardRecipes key={recipe.id} recipe={recipe} />
-                                ))}
+                                {recipes.length > 0 ? (
+                                    recipes.map((recipe) => (
+                                        <CardRecipes key={recipe.id} recipe={recipe} />
+                                    ))
+                                ) : (
+                                    <div className="no-results" style={{ gridColumn: '1 / -1' }}>
+                                        <p>
+                                            {strictPantry
+                                                ? "Vaya, parece que no tienes ingredientes suficientes para ninguna de nuestras recetas."
+                                                : (searchTerm
+                                                    ? `No se encontraron recetas para "${searchTerm}"`
+                                                    : "No hay recetas disponibles en este momento.")
+                                            }
+                                        </p>
+                                        {strictPantry && (
+                                            <p style={{ marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
+                                                Prueba a añadir más alimentos a tu despensa o limpia el filtro.
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </section>
                     </div>

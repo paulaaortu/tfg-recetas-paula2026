@@ -3,11 +3,13 @@ import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
 import type { Recipe } from '../types/recipes'
 import { useNavigate } from 'react-router-dom'
+import { Plus, Search } from 'lucide-react'
 import './Home.css' // Reuse Home styles for consistency
 import './Social.css'
 
 function Social() {
     const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [search, setSearch] = useState('')
     const recipeService = new RecipeService()
     const navigate = useNavigate()
 
@@ -20,7 +22,6 @@ function Social() {
 
         const fetchRecipes = async () => {
             try {
-                //solo recetas de usuarios
                 const data = await recipeService.getAllRecipes(false)
                 setRecipes(data)
             } catch (error) {
@@ -30,6 +31,10 @@ function Social() {
         fetchRecipes()
     }, [navigate])
 
+    const filtered = recipes.filter(r =>
+        r.title?.toLowerCase().includes(search.toLowerCase())
+    )
+
     return (
         <div className="contenedor-principal">
             <div>
@@ -37,16 +42,30 @@ function Social() {
                     <h1>Recetas de la comunidad</h1>
                 </div>
 
+                <div className="social-search-bar">
+                    <Search size={18} className="social-search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Buscar recetas..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                    />
+                </div>
+
                 <section>
                     <div>
-                        {recipes.length > 0 ? (
-                            recipes.map((recipe) => (
+                        {filtered.length > 0 ? (
+                            filtered.map((recipe) => (
                                 <CardRecipes key={recipe.id} recipe={recipe} />
                             ))
                         ) : (
-                            <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-                                Aún no hay recetas de la comunidad. ¡Sé el primero en compartir!
-                            </p>
+                            <div className="no-results" style={{ gridColumn: '1 / -1' }}>
+                                <p>
+                                    {search
+                                        ? `No se encontraron recetas para "${search}"`
+                                        : 'Aún no hay recetas de la comunidad. ¡Sé el primero en compartir!'}
+                                </p>
+                            </div>
                         )}
                     </div>
                 </section>
@@ -56,7 +75,7 @@ function Social() {
                     onClick={() => navigate('/upload')}
                     title="Añadir receta"
                 >
-                    +
+                    <Plus />
                 </button>
             </div>
         </div>
