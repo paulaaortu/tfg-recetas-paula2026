@@ -29,6 +29,8 @@ export class RecipeService {
             query += " WHERE " + conditions.join(" AND ");
         }
 
+        query += " ORDER BY r.created_at DESC";
+
         const result = await pool.query(query, params);
         let recipes = result.rows;
 
@@ -51,6 +53,66 @@ export class RecipeService {
         }
 
         return recipes;
+    }
+
+    async getRecommendedRecipes(userId: number) {
+        // Get user preferences
+        const [intolerancesRes, objectivesRes] = await Promise.all([
+            pool.query(
+                `SELECT i.name FROM intolerances i
+                 JOIN user_intolerances ui ON i.id = ui.intolerance_id
+                 WHERE ui.user_id = $1`,
+                [userId]
+            ),
+            pool.query(
+                `SELECT o.name FROM objectives o
+                 JOIN user_objectives uo ON o.id = uo.objective_id
+                 WHERE uo.user_id = $1`,
+                [userId]
+            ),
+        ]);
+
+        const userIntolerances = intolerancesRes.rows.map((r: any) => r.name.toLowerCase());
+        const userObjectives = objectivesRes.rows.map((r: any) => r.name.toLowerCase());
+
+        // Base query - get all official recipes
+        let query = `
+            SELECT r.*, c.name as category_name 
+            FROM recipes r
+            LEFT JOIN categories c ON r.category_id = c.id
+        `;
+
+        // Filter intolerances: exclude recipes where allergens contain any user intolerance
+        const conditions: string[] = [];
+        const params: any[] = [];
+
+        if (userIntolerances.length > 0) {
+            const intoleranceConditions = userIntolerances.map((intolerance: string) => {
+                params.push(`%${intolerance}%`);
+                return `(r.allergens IS NULL OR LOWER(r.allergens) NOT LIKE $${params.length})`;
+            });
+            conditions.push(`(${intoleranceConditions.join(' AND ')})`);
+        }
+
+        if (conditions.length > 0) {
+            query += ' WHERE ' + conditions.join(' AND ');
+        }
+
+        // If user wants to lose weight, prioritize low-calorie recipes
+        const wantsToLoseWeight = userObjectives.some((obj: string) =>
+            obj.includes('adelgazar') || obj.includes('perder')
+        );
+
+        if (wantsToLoseWeight) {
+            query += ` ORDER BY CASE WHEN r.calories IS NULL THEN 9999 ELSE r.calories END ASC`;
+        } else {
+            query += ` ORDER BY r.created_at DESC`;
+        }
+
+        query += ` LIMIT 20`;
+
+        const result = await pool.query(query, params);
+        return result.rows;
     }
 
     async getCategories() {
@@ -82,6 +144,7 @@ export class RecipeService {
         difficulty?: string;
         allergens?: string;
         time?: number;
+        calories?: number;
         ingredients: string;
         steps: string;
         image_url?: string;
@@ -91,8 +154,8 @@ export class RecipeService {
     }) {
         const query = `
             INSERT INTO recipes 
-            (title, description, difficulty, allergens, time, ingredients, steps, image_url, is_official, category_id, author_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            (title, description, difficulty, allergens, time, calories, ingredients, steps, image_url, is_official, category_id, author_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
             RETURNING *
         `;
         const values = [
@@ -101,6 +164,7 @@ export class RecipeService {
             recipe.difficulty || null,
             recipe.allergens || null,
             recipe.time || null,
+            recipe.calories || null,
             recipe.ingredients,
             recipe.steps,
             recipe.image_url || null,
@@ -170,6 +234,7 @@ export class RecipeService {
         difficulty?: string;
         allergens?: string;
         time?: number;
+        calories?: number;
         ingredients: string;
         steps: string;
         category_id: number;
@@ -182,27 +247,27 @@ export class RecipeService {
             query = `
                 UPDATE recipes 
                 SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5, 
-                    ingredients = $6, steps = $7, category_id = $8, image_url = $9
+                    calories = $6, ingredients = $7, steps = $8, category_id = $9, image_url = $10
+                WHERE id = $11 AND author_id = $12
+                RETURNING *
+            `;
+            values = [
+                recipe.title, recipe.description || null, recipe.difficulty || null, 
+                recipe.allergens || null, recipe.time || null, recipe.calories || null,
+                recipe.ingredients, recipe.steps, recipe.category_id, recipe.image_url, id, userId
+            ];
+        } else {
+            query = `
+                UPDATE recipes 
+                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5,
+                    calories = $6, ingredients = $7, steps = $8, category_id = $9
                 WHERE id = $10 AND author_id = $11
                 RETURNING *
             `;
             values = [
                 recipe.title, recipe.description || null, recipe.difficulty || null, 
-                recipe.allergens || null, recipe.time || null, recipe.ingredients, 
-                recipe.steps, recipe.category_id, recipe.image_url, id, userId
-            ];
-        } else {
-            query = `
-                UPDATE recipes 
-                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5, 
-                    ingredients = $6, steps = $7, category_id = $8
-                WHERE id = $9 AND author_id = $10
-                RETURNING *
-            `;
-            values = [
-                recipe.title, recipe.description || null, recipe.difficulty || null, 
-                recipe.allergens || null, recipe.time || null, recipe.ingredients, 
-                recipe.steps, recipe.category_id, id, userId
+                recipe.allergens || null, recipe.time || null, recipe.calories || null,
+                recipe.ingredients, recipe.steps, recipe.category_id, id, userId
             ];
         }
 

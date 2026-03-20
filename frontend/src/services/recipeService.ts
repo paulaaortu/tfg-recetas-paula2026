@@ -31,6 +31,15 @@ export class RecipeService {
         }
         return response.json();
     }
+
+    async getRecommendedRecipes() {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await fetch(`${apiUrl}/api/recipes/recommended`, { headers });
+        if (!response.ok) throw new Error('Error al obtener recomendaciones');
+        return response.json();
+    }
+
     async getRecipeById(id: number) {
         const response = await fetch(`${apiUrl}/api/recipes/${id}`);
         if (!response.ok) {

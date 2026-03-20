@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { User, LogOut, ChevronRight, Settings, BookOpen, Heart, Loader2 } from 'lucide-react';
+import { User, LogOut, ChevronRight, Settings, BookOpen, Heart, Loader2, ShieldAlert, Target, Dumbbell, Check, X } from 'lucide-react';
 import EditProfileModal from '../components/EditProfileModal'
 import { updateProfile } from '../services/authService'
 import { RecipeService } from '../services/recipeService'
+import { getUserPreferences, getPreferencesCatalog, saveUserPreferences } from '../services/profileService'
+import type { UserPreferences, PreferencesCatalog } from '../services/profileService'
 import CardRecipes from '../components/CardRecipes'
 import type { Recipe } from '../types/recipes'
 import './Profile.css'
+
+type PreferenceType = 'intolerances' | 'objectives' | 'sports';
 
 function Profile() {
     const [userName, setUserName] = useState<string | null>(null)
@@ -17,6 +21,14 @@ function Profile() {
     const [myRecipes, setMyRecipes] = useState<Recipe[]>([])
     const [favorites, setFavorites] = useState<Recipe[]>([])
     const [loadingRecipes, setLoadingRecipes] = useState(false)
+
+    // Preferences state
+    const [preferences, setPreferences] = useState<UserPreferences>({ intolerances: [], objectives: [], sports: [] })
+    const [catalog, setCatalog] = useState<PreferencesCatalog>({ intolerances: [], objectives: [], sports: [] })
+    const [openModal, setOpenModal] = useState<PreferenceType | null>(null)
+    const [selectedIds, setSelectedIds] = useState<number[]>([])
+    const [savingPrefs, setSavingPrefs] = useState(false)
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -36,6 +48,23 @@ function Profile() {
             navigate('/login')
         }
     }, [navigate])
+
+    useEffect(() => {
+        // Load catalog and user preferences
+        const loadPreferences = async () => {
+            try {
+                const [cat, prefs] = await Promise.all([
+                    getPreferencesCatalog(),
+                    getUserPreferences(),
+                ])
+                setCatalog(cat)
+                setPreferences(prefs)
+            } catch (err) {
+                console.error('Error cargando preferencias:', err)
+            }
+        }
+        loadPreferences()
+    }, [])
 
     useEffect(() => {
         if (activeTab === 'ajustes') return;
@@ -64,11 +93,9 @@ function Profile() {
 
         const result = await updateProfile(userId, updatedData.username, updatedData.email, updatedData.password);
 
-        //actualizar estado local
         setUserName(result.user.username);
         setEmail(result.user.email);
 
-        //actualizar localstorage
         const usuarioLocal = JSON.parse(localStorage.getItem('user') || '{}');
         const newUser = { ...usuarioLocal, username: result.user.username, email: result.user.email };
         localStorage.setItem('user', JSON.stringify(newUser));
@@ -78,6 +105,51 @@ function Profile() {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         navigate('/login')
+    }
+
+    const openPreferenceModal = (type: PreferenceType) => {
+        let currentIds: number[] = [];
+        if (type === 'intolerances') currentIds = preferences.intolerances.map(i => i.id);
+        if (type === 'objectives') currentIds = preferences.objectives.map(o => o.id);
+        if (type === 'sports') currentIds = preferences.sports.map(s => s.id);
+        setSelectedIds(currentIds);
+        setOpenModal(type);
+    }
+
+    const toggleId = (id: number) => {
+        setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+    }
+
+    const handleSavePreferences = async () => {
+        setSavingPrefs(true);
+        try {
+            const payload = {
+                intolerance_ids: openModal === 'intolerances' ? selectedIds : preferences.intolerances.map(i => i.id),
+                objective_ids: openModal === 'objectives' ? selectedIds : preferences.objectives.map(o => o.id),
+                sport_ids: openModal === 'sports' ? selectedIds : preferences.sports.map(s => s.id),
+            };
+            const updated = await saveUserPreferences(payload);
+            setPreferences(updated);
+            setOpenModal(null);
+        } catch (err) {
+            console.error('Error guardando preferencias:', err);
+        } finally {
+            setSavingPrefs(false);
+        }
+    }
+
+    const getModalOptions = () => {
+        if (openModal === 'intolerances') return catalog.intolerances;
+        if (openModal === 'objectives') return catalog.objectives;
+        if (openModal === 'sports') return catalog.sports;
+        return [];
+    }
+
+    const getModalTitle = () => {
+        if (openModal === 'intolerances') return 'Selecciona tus intolerancias';
+        if (openModal === 'objectives') return 'Selecciona tus objetivos';
+        if (openModal === 'sports') return 'Selecciona tus deportes';
+        return '';
     }
 
     const user = userName && email && userId ? { id: userId, username: userName, email: email } : null;
@@ -95,19 +167,19 @@ function Profile() {
                     <p>{email}</p>
                 </div>
                 <div className="profile-tabs">
-                    <button 
+                    <button
                         className={`tab-btn ${activeTab === 'ajustes' ? 'active' : ''}`}
                         onClick={() => setActiveTab('ajustes')}
                     >
                         <Settings size={20} /> Ajustes
                     </button>
-                    <button 
+                    <button
                         className={`tab-btn ${activeTab === 'misRecetas' ? 'active' : ''}`}
                         onClick={() => setActiveTab('misRecetas')}
                     >
                         <BookOpen size={20} /> Mis Recetas
                     </button>
-                    <button 
+                    <button
                         className={`tab-btn ${activeTab === 'favoritas' ? 'active' : ''}`}
                         onClick={() => setActiveTab('favoritas')}
                     >
@@ -130,20 +202,59 @@ function Profile() {
 
                         <div className="profile-menu-group">
                             <h2>Preferencias</h2>
-                            <div className="menu-item">
+
+                            {/* INTOLERANCIAS */}
+                            <div className="menu-item" onClick={() => openPreferenceModal('intolerances')}>
                                 <div className="menu-item-left">
-                                    <span>Intolerancias</span>
+                                    <ShieldAlert size={20} className="menu-icon" />
+                                    <div>
+                                        <span>Intolerancias</span>
+                                        {preferences.intolerances.length > 0 && (
+                                            <div className="preference-chips">
+                                                {preferences.intolerances.map(i => (
+                                                    <span key={i.id} className="pref-chip">{i.name}</span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+                                <ChevronRight size={18} className="chevron" />
                             </div>
-                            <div className="menu-item">
+
+                            {/* OBJETIVOS */}
+                            <div className="menu-item" onClick={() => openPreferenceModal('objectives')}>
                                 <div className="menu-item-left">
-                                    <span>Objetivos</span>
+                                    <Target size={20} className="menu-icon" />
+                                    <div>
+                                        <span>Objetivos</span>
+                                        {preferences.objectives.length > 0 && (
+                                            <div className="preference-chips">
+                                                {preferences.objectives.map(o => (
+                                                    <span key={o.id} className="pref-chip">{o.name}</span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+                                <ChevronRight size={18} className="chevron" />
                             </div>
-                            <div className="menu-item">
+
+                            {/* DEPORTE */}
+                            <div className="menu-item" onClick={() => openPreferenceModal('sports')}>
                                 <div className="menu-item-left">
-                                    <span>Deporte</span>
+                                    <Dumbbell size={20} className="menu-icon" />
+                                    <div>
+                                        <span>Deporte</span>
+                                        {preferences.sports.length > 0 && (
+                                            <div className="preference-chips">
+                                                {preferences.sports.map(s => (
+                                                    <span key={s.id} className="pref-chip">{s.name}</span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+                                <ChevronRight size={18} className="chevron" />
                             </div>
                         </div>
 
@@ -173,7 +284,7 @@ function Profile() {
                                 {activeTab === 'favoritas' && favorites.length === 0 && (
                                     <p className="no-recipes-msg">Aún no tienes recetas favoritas.</p>
                                 )}
-                                
+
                                 {activeTab === 'misRecetas' && myRecipes.map(recipe => (
                                     <CardRecipes key={recipe.id} recipe={recipe} />
                                 ))}
@@ -186,6 +297,7 @@ function Profile() {
                 )}
             </div>
 
+            {/* EDIT PROFILE MODAL */}
             {userId && userName && email && (
                 <EditProfileModal
                     isOpen={isEditModalOpen}
@@ -193,6 +305,52 @@ function Profile() {
                     user={{ id: userId, username: userName, email: email }}
                     onSave={handleSaveProfile}
                 />
+            )}
+
+            {/* PREFERENCE PICKER MODAL */}
+            {openModal && (
+                <div className="modal-overlay" onClick={() => setOpenModal(null)}>
+                    <div className="modal-preference" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-preference-header">
+                            <h3>{getModalTitle()}</h3>
+                            <button className="modal-close-btn" onClick={() => setOpenModal(null)}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="modal-preference-options">
+                            {getModalOptions().map((option) => {
+                                const isSelected = selectedIds.includes(option.id);
+                                return (
+                                    <div
+                                        key={option.id}
+                                        className={`preference-option ${isSelected ? 'selected' : ''}`}
+                                        onClick={() => toggleId(option.id)}
+                                    >
+                                        <div className="preference-option-check">
+                                            {isSelected && <Check size={16} />}
+                                        </div>
+                                        <div className="preference-option-text">
+                                            <span className="preference-option-name">{option.name}</span>
+                                            {'description' in option && option.description && (
+                                                <small className="preference-option-desc">{option.description}</small>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="modal-preference-footer">
+                            <button className="btn-cancel" onClick={() => setOpenModal(null)}>Cancelar</button>
+                            <button
+                                className="btn-save"
+                                onClick={handleSavePreferences}
+                                disabled={savingPrefs}
+                            >
+                                {savingPrefs ? 'Guardando...' : 'Guardar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     )

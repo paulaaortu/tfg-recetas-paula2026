@@ -1,7 +1,6 @@
 .contenedor-detalles {
     min-height: 100vh;
     background-color: #FBF7F4;
-    padding-bottom: 80px;
 
     .detalles-contenido {
         max-width: 800px;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getPantryItems, addPantryItem, deletePantryItem } from '../services/pantryService';
 import './Pantry.css';
 import { Trash, Plus } from 'lucide-react';
+import LoginOverlay from '../components/LoginOverlay';
 
 interface PantryItem {
     id: number;
@@ -17,6 +18,10 @@ const Pantry: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<PantryItem | null>(null);
 
+    // Check session
+    const user = localStorage.getItem('user');
+    const isLoggedIn = !!user;
+
     // Form state
     const [newItem, setNewItem] = useState({
         name: '',
@@ -25,9 +30,10 @@ const Pantry: React.FC = () => {
     });
 
     useEffect(() => {
-        loadPantry();
-    }, []);
-
+        if (isLoggedIn) {
+            loadPantry();
+        }
+    }, [isLoggedIn]);
 
     const loadPantry = async () => {
         try {
@@ -41,6 +47,10 @@ const Pantry: React.FC = () => {
             setLoading(false);
         }
     };
+
+    if (!isLoggedIn) {
+        return <LoginOverlay pageName="Despensa" />;
+    }
 
     const handleAddItem = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,7 +100,7 @@ const Pantry: React.FC = () => {
             ) : (
                 <div className="pantry-list">
                     {items.map(item => (
-                        <div key={item.id}>
+                        <div key={item.id} className="pantry-item">
                             <div>
                                 <h3>{item.ingredient_name}</h3>
                                 {item.quantity && (

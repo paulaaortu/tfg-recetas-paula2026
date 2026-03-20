@@ -7,8 +7,6 @@
     /* Soft pink base */
     font-family: 'Inter', sans-serif;
     /* To account for fixed Header */
-    padding-bottom: 80px;
-    /* Space for Menu */
 }
 
 .upload-header {

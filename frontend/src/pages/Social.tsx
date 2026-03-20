@@ -4,6 +4,7 @@ import { RecipeService } from '../services/recipeService'
 import type { Recipe } from '../types/recipes'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search } from 'lucide-react'
+import LoginOverlay from '../components/LoginOverlay'
 import './Home.css' // Reuse Home styles for consistency
 import './Social.css'
 
@@ -13,23 +14,27 @@ function Social() {
     const recipeService = new RecipeService()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user')
-        if (!storedUser) {
-            navigate('/login')
-            return
-        }
+    // Check session
+    const user = localStorage.getItem('user')
+    const isLoggedIn = !!user
 
-        const fetchRecipes = async () => {
-            try {
-                const data = await recipeService.getAllRecipes(false)
-                setRecipes(data)
-            } catch (error) {
-                console.error('Error al cargar recetas sociales:', error)
+    useEffect(() => {
+        if (isLoggedIn) {
+            const fetchRecipes = async () => {
+                try {
+                    const data = await recipeService.getAllRecipes(false)
+                    setRecipes(data)
+                } catch (error) {
+                    console.error('Error al cargar recetas sociales:', error)
+                }
             }
+            fetchRecipes()
         }
-        fetchRecipes()
-    }, [navigate])
+    }, [isLoggedIn])
+
+    if (!isLoggedIn) {
+        return <LoginOverlay pageName="Comunidad (Social)" />;
+    }
 
     const filtered = recipes.filter(r =>
         r.title?.toLowerCase().includes(search.toLowerCase())

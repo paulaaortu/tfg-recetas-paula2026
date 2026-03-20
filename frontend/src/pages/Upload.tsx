@@ -12,6 +12,7 @@ export default function Upload() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [timeStr, setTimeStr] = useState('');
+    const [calories, setCalories] = useState(''); // New field
     const [difficulty, setDifficulty] = useState('Fácil');
     const [category, setCategory] = useState<number | null>(null);
     const [ingredientInput, setIngredientInput] = useState('');
@@ -94,6 +95,9 @@ export default function Upload() {
         formData.append('difficulty', difficulty);
         formData.append('allergens', allergens.length > 0 ? allergens.join(', ') : 'Ninguno');
         formData.append('time', timeNum.toString());
+        if (calories) {
+            formData.append('calories', calories);
+        }
         formData.append('ingredients', ingredients.join(', '));
         formData.append('steps', steps.trim());
         formData.append('category_id', category.toString());
@@ -189,13 +193,23 @@ export default function Upload() {
                         </div>
                     </div>
                     <div className="form-group half">
-                        <label>DIFICULTAD</label>
-                        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
-                            <option value="Fácil">Fácil</option>
-                            <option value="Media">Media</option>
-                            <option value="Difícil">Difícil</option>
-                        </select>
+                        <label>CALORÍAS (Kcal)</label>
+                        <input 
+                            type="number" 
+                            placeholder="Ej: 350" 
+                            value={calories}
+                            onChange={(e) => setCalories(e.target.value)}
+                        />
                     </div>
+                </div>
+
+                <div className="form-group">
+                    <label>DIFICULTAD</label>
+                    <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+                        <option value="Fácil">Fácil</option>
+                        <option value="Media">Media</option>
+                        <option value="Difícil">Difícil</option>
+                    </select>
                 </div>
 
                 {/* Categorías */}

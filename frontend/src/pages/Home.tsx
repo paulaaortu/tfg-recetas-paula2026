@@ -8,12 +8,14 @@ import './Home.css'
 
 function Home() {
     const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [recommendedRecipes, setRecommendedRecipes] = useState<Recipe[]>([])
     const [categories, setCategories] = useState<{ id: number, name: string }[]>([])
     const [userName, setUserName] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [activeCategory, setActiveCategory] = useState('Ver todo')
     const [strictPantry, setStrictPantry] = useState(false)
     const [pantryCount, setPantryCount] = useState(0)
+    const [loadingRecommended, setLoadingRecommended] = useState(false)
     const recipeService = new RecipeService()
 
     useEffect(() => {
@@ -45,7 +47,7 @@ function Home() {
     }, [searchTerm, activeCategory, strictPantry])
 
     useEffect(() => {
-        //usuario de localStorage
+        // usuario de localStorage
         const usuario = localStorage.getItem('user')
         if (usuario) {
             try {
@@ -58,11 +60,28 @@ function Home() {
                 }).catch(err => {
                     console.error('Error loading pantry count', err)
                 })
+
+                // Fetch personalized recommendations
+                const fetchRecommended = async () => {
+                    setLoadingRecommended(true)
+                    try {
+                        const data = await recipeService.getRecommendedRecipes()
+                        setRecommendedRecipes(data)
+                    } catch (err) {
+                        console.error('Error cargando recomendaciones:', err)
+                    } finally {
+                        setLoadingRecommended(false)
+                    }
+                }
+                fetchRecommended()
             } catch (error) {
                 console.error('Error cargando usuario de localStorage', error)
             }
         }
     }, [])
+
+    // Show recommendations section only when not searching/filtering
+    const showRecommendations = !!userName && !searchTerm && activeCategory === 'Ver todo' && !strictPantry
 
     return (
         <div className="contenedor-principal">
@@ -116,6 +135,33 @@ function Home() {
                             />
                         )}
 
+                        {/* RECOMENDACIONES PERSONALIZADAS */}
+                        {showRecommendations && (
+                            <section style={{ marginBottom: '30px' }}>
+                                <div className="titulo">
+                                    <h2>✨ Recomendaciones para ti</h2>
+                                </div>
+                                {loadingRecommended ? (
+                                    <div className="grid-recetas">
+                                        <p style={{ opacity: 0.6, gridColumn: '1 / -1' }}>Cargando recomendaciones...</p>
+                                    </div>
+                                ) : recommendedRecipes.length > 0 ? (
+                                    <div className="grid-recetas">
+                                        {recommendedRecipes.map((recipe) => (
+                                            <CardRecipes key={recipe.id} recipe={recipe} />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="grid-recetas">
+                                        <p style={{ opacity: 0.6, gridColumn: '1 / -1' }}>
+                                            Configura tus preferencias en el perfil para ver recomendaciones personalizadas.
+                                        </p>
+                                    </div>
+                                )}
+                            </section>
+                        )}
+
+                        {/* TODAS LAS RECETAS / BÚSQUEDA */}
                         <section>
                             <div className="titulo">
                                 <h2>
@@ -123,7 +169,7 @@ function Home() {
                                         ? 'Recetas con lo que tienes'
                                         : (searchTerm || activeCategory !== 'Ver todo'
                                             ? 'Resultados de búsqueda'
-                                            : (userName ? 'Recomendaciones' : 'Nuestras Recetas'))}
+                                            : (showRecommendations ? 'Explorar recetas' : (userName ? 'Recomendaciones' : 'Nuestras Recetas')))}
                                 </h2>
                                 {!searchTerm && activeCategory === 'Ver todo' && !strictPantry && (
                                     <span className="see-all">Ver todas</span>

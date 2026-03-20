@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllRecipes, getRecipeById, getAllCategories, createRecipe, getAllAllergies, getFavorites, getMyRecipes, addFavorite, removeFavorite, isFavorite, updateRecipe } from '../controllers/recipeController';
+import { getAllRecipes, getRecipeById, getAllCategories, createRecipe, getAllAllergies, getFavorites, getMyRecipes, addFavorite, removeFavorite, isFavorite, updateRecipe, getRecommendedRecipes } from '../controllers/recipeController';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { upload } from '../middlewares/uploadMiddleware';
 
@@ -12,6 +12,7 @@ router.get("/allergens", getAllAllergies);
 
 router.get("/favorites", authMiddleware, getFavorites);
 router.get("/my-recipes", authMiddleware, getMyRecipes);
+router.get("/recommended", authMiddleware, getRecommendedRecipes);
 
 router.post("/:id/favorite", authMiddleware, addFavorite);
 router.delete("/:id/favorite", authMiddleware, removeFavorite);

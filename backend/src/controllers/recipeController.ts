@@ -39,6 +39,19 @@ export const getAllRecipes = async (req: Request, res: Response) => {
     }
 };
 
+export const getRecommendedRecipes = async (req: Request, res: Response) => {
+    try {
+        const user = (req as any).user;
+        if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
+        const recipes = await recipeService.getRecommendedRecipes(user.id);
+        res.json(recipes);
+    } catch (error) {
+        res.status(500).json({ error: "Error cargando recomendaciones" });
+    }
+};
+
+
+
 export const getRecipeById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const numericId = Number(id);

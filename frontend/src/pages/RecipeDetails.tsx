@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart } from 'lucide-react';
+import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame } from 'lucide-react';
 import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import './RecipeDetails.css';
@@ -154,6 +154,16 @@ export default function RecipeDetails() {
                                     </div>
                                 </div>
                             )}
+                            {recipe.calories != null && (
+                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Calorías</small>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <Flame size={16} color="#e67e22" />
+                                        <span>{recipe.calories} kcal</span>
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
                     </div>
 

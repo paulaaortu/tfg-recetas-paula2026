@@ -5,6 +5,7 @@ export interface Recipe {
     difficulty?: string;
     allergens?: string;
     time: number;
+    calories?: number;
     ingredients: string;
     steps: string;
     image_url?: string;

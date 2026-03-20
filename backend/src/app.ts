@@ -5,6 +5,7 @@ import 'dotenv/config';
 import recipesRoutes from './routes/recipeRoute';
 import authRoutes from './routes/authRoutes';
 import pantryRoutes from './routes/pantryRoutes';
+import profileRoutes from './routes/profileRoutes';
 
 const app = express();
 
@@ -18,5 +19,6 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 app.use('/api/recipes', recipesRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pantry', pantryRoutes);
+app.use('/api/profile', profileRoutes);
 
 export default app;

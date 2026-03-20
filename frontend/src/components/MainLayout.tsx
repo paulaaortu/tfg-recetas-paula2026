@@ -35,7 +35,7 @@ const MainLayout: React.FC = () => {
     return (
         <>
             <Header activeTab={activeTab} onTabChange={handleTabChange} />
-            <main style={{ paddingTop: '70px' }}>
+            <main style={{ paddingTop: '70px', paddingBottom: '120px' }}>
                 <Outlet />
             </main>
             <Menu activeTab={activeTab} onChange={handleTabChange} />

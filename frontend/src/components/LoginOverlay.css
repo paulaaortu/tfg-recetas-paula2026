@@ -1,0 +1,89 @@
+.login-overlay-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+    background-color: #FBF7F4;
+}
+
+.login-overlay-content {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.login-overlay-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #F3DDE8;
+    color: #839E88;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.login-overlay-content h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.login-overlay-content p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.login-overlay-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.login-overlay-btn-primary {
+    background-color: #839E88;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-overlay-btn-primary:hover {
+    background-color: #6a8770;
+    transform: translateY(-2px);
+}
+
+.login-overlay-btn-secondary {
+    background-color: transparent;
+    color: #839E88;
+    border: 2px solid #839E88;
+    border-radius: 25px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-overlay-btn-secondary:hover {
+    background-color: rgba(131, 158, 136, 0.05);
+}
