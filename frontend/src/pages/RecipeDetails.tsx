@@ -113,6 +113,11 @@ export default function RecipeDetails() {
                         </button>
                     )}
                 </div>
+                {!recipe.is_official && recipe.author_name && (
+                    <p style={{ textAlign: 'center', fontSize: '14px', color: '#6a8770', marginTop: '-5px', marginBottom: '10px' }}>
+                        Publicada por <strong>{recipe.author_name}</strong>
+                    </p>
+                )}
                 {cleanDescription && <p className="receta-descripcion-corta">{cleanDescription}</p>}
                 
                 <div className='info-receta'>

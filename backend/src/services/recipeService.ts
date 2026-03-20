@@ -3,9 +3,10 @@ import { pool } from "../db";
 export class RecipeService {
     async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number) {
         let query = `
-            SELECT r.*, c.name as category_name 
+            SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
+            LEFT JOIN users u ON r.author_id = u.id
         `;
         const params: any[] = [];
         let conditions: string[] = [];
@@ -77,9 +78,11 @@ export class RecipeService {
 
         // Base query - get all official recipes
         let query = `
-            SELECT r.*, c.name as category_name 
+            SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
+            LEFT JOIN users u ON r.author_id = u.id
+            WHERE r.is_official = true
         `;
 
         // Filter intolerances: exclude recipes where allergens contain any user intolerance
@@ -87,15 +90,35 @@ export class RecipeService {
         const params: any[] = [];
 
         if (userIntolerances.length > 0) {
-            const intoleranceConditions = userIntolerances.map((intolerance: string) => {
-                params.push(`%${intolerance}%`);
-                return `(r.allergens IS NULL OR LOWER(r.allergens) NOT LIKE $${params.length})`;
+            // Mapping of intolerances to list of corresponding allergen keywords in recipes
+            const intoleranceMap: { [key: string]: string[] } = {
+                'lactosa': ['lactosa', 'lácteos', 'leche', 'queso', 'mantequilla'],
+                'huevo': ['huevo', 'huevos'],
+                'fructosa': ['fructosa'],
+                'gluten (celiaquía)': ['gluten', 'trigo', 'cebada', 'centeno', 'avena'],
+                'sodio': ['sodio', 'sal'],
+            };
+
+            const allergenConditions: string[] = [];
+            
+            userIntolerances.forEach((intolerance: string) => {
+                const searchTerms = intoleranceMap[intolerance] || [intolerance];
+                
+                searchTerms.forEach(term => {
+                    params.push(`%${term}%`);
+                    allergenConditions.push(`(r.allergens IS NOT NULL AND LOWER(r.allergens) LIKE $${params.length})`);
+                });
             });
-            conditions.push(`(${intoleranceConditions.join(' AND ')})`);
+
+            if (allergenConditions.length > 0) {
+                // If the recipe has ANY of the forbidden allergens, skip it.
+                // Note: since we already have WHERE is_official = true, we use AND NOT (...)
+                conditions.push(`NOT (${allergenConditions.join(' OR ')})`);
+            }
         }
 
         if (conditions.length > 0) {
-            query += ' WHERE ' + conditions.join(' AND ');
+            query += ' AND ' + conditions.join(' AND ');
         }
 
         // If user wants to lose weight, prioritize low-calorie recipes
@@ -129,9 +152,10 @@ export class RecipeService {
 
     async getRecipeById(id: number) {
         const query = `
-            SELECT r.*, c.name as category_name 
+            SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
+            LEFT JOIN users u ON r.author_id = u.id
             WHERE r.id = $1
         `;
         const result = await pool.query(query, [id]);
@@ -179,10 +203,11 @@ export class RecipeService {
 
     async getFavorites(userId: number) {
         const query = `
-            SELECT r.*, c.name as category_name
+            SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
             JOIN favorites f ON r.id = f.recipe_id
             LEFT JOIN categories c ON r.category_id = c.id
+            LEFT JOIN users u ON r.author_id = u.id
             WHERE f.user_id = $1
             ORDER BY f.created_at DESC
         `;
@@ -192,9 +217,10 @@ export class RecipeService {
 
     async getMyRecipes(userId: number) {
         const query = `
-            SELECT r.*, c.name as category_name
+            SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
+            LEFT JOIN users u ON r.author_id = u.id
             WHERE r.author_id = $1
             ORDER BY r.created_at DESC
         `;
