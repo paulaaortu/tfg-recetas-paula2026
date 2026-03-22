@@ -88,3 +88,19 @@ button:focus-visible {
     font-weight: 500;
   }
 }
+
+/* Recetas Grid System */
+.grid-recetas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .grid-recetas {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 25px !important;
+    max-width: none !important;
+  }
+}

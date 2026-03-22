@@ -49,12 +49,6 @@ body {
                         }
                     }
 
-                    .grid-recetas {
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 12px;
-                        max-width: fit-content;
-                    }
                 }
             }
         }
@@ -67,7 +61,7 @@ body {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
-                max-width: fit-content;
+                width: 100%;
             }
         }
     }
@@ -301,35 +295,6 @@ body {
             filter: brightness(0.95);
         }
 
-        .ordenador {
-            display: grid;
-            gap: 40px;
-
-            >div {
-                width: 100%;
-
-                >section {
-                    .titulo {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    }
-
-                    .grid-recetas {
-                        display: grid;
-                        grid-template-columns: repeat(1, 1fr);
-                        gap: 20px;
-                        max-width: fit-content;
-                    }
-                }
-            }
-        }
-
-        >section {
-            >div {
-                max-width: fit-content;
-            }
-        }
     }
 
     .btn-accion-home {

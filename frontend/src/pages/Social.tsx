@@ -59,7 +59,7 @@ function Social() {
                 </div>
 
                 <section>
-                    <div>
+                    <div className="grid-recetas">
                         {filtered.length > 0 ? (
                             filtered.map((recipe) => (
                                 <CardRecipes key={recipe.id} recipe={recipe} />
