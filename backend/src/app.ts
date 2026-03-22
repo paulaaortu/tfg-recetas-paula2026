@@ -6,6 +6,7 @@ import recipesRoutes from './routes/recipeRoute';
 import authRoutes from './routes/authRoutes';
 import pantryRoutes from './routes/pantryRoutes';
 import profileRoutes from './routes/profileRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use('/api/recipes', recipesRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/admin', adminRoutes);
 
 export default app;

@@ -24,7 +24,7 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
     }
 
     return (
-        <header>
+        <header className="main-header">
             <div>
                 <div className="logo-contenedor">
                     <div className="botones" onClick={() => navigate(-1)}>

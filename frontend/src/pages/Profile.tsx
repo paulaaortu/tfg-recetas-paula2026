@@ -8,6 +8,7 @@ import { getUserPreferences, getPreferencesCatalog, saveUserPreferences } from '
 import type { UserPreferences, PreferencesCatalog } from '../services/profileService'
 import CardRecipes from '../components/CardRecipes'
 import type { Recipe } from '../types/recipes'
+import AdminProfile from '../components/AdminProfile'
 import './Profile.css'
 
 type PreferenceType = 'intolerances' | 'objectives' | 'sports';
@@ -16,6 +17,8 @@ function Profile() {
     const [userName, setUserName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [userId, setUserId] = useState<number | null>(null)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<'ajustes' | 'misRecetas' | 'favoritas'>('ajustes')
     const [myRecipes, setMyRecipes] = useState<Recipe[]>([])
@@ -43,10 +46,15 @@ function Profile() {
             setUserName(user.username)
             setEmail(user.email)
             setUserId(user.id)
+            setIsAdmin(user.is_admin || false)
         } catch (error) {
             console.error('Error cogiendo los datos del usuario:', error)
             navigate('/login')
         }
+
+        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, [navigate])
 
     useEffect(() => {
@@ -155,6 +163,24 @@ function Profile() {
     const user = userName && email && userId ? { id: userId, username: userName, email: email } : null;
 
     if (!user) return null;
+
+    if (isAdmin) {
+        if (isMobile) {
+            return (
+                <div className="contenedor-perfil admin-mobile-fallback">
+                    <div className="perfil-contenido">
+                        <ShieldAlert size={48} color="#ef4444" style={{ marginBottom: '1rem' }} />
+                        <h2>Panel de Administración</h2>
+                        <p>Por seguridad y comodidad, el panel de administración solo está disponible en la versión de escritorio.</p>
+                        <button className="tab-btn active" onClick={handleLogout} style={{ marginTop: '2rem' }}>
+                            <LogOut size={20} /> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+        return <AdminProfile />;
+    }
 
     return (
         <div className="contenedor-perfil">

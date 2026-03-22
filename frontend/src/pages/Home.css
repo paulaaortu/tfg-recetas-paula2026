@@ -317,7 +317,7 @@ body {
 
                     .grid-recetas {
                         display: grid;
-                        grid-template-columns: repeat(3, 1fr);
+                        grid-template-columns: repeat(1, 1fr);
                         gap: 20px;
                         max-width: fit-content;
                     }
@@ -354,4 +354,4 @@ body {
     }
 }
 
-/* Local styles removed - moved to index.css */
+/* Local styles removed - moved to index.css */

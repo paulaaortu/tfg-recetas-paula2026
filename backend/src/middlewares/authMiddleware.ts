@@ -7,6 +7,7 @@ export interface AuthRequest extends Request {
     user?: {
         id: number;
         username: string;
+        is_admin?: boolean;
     };
 }
 
@@ -20,7 +21,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     const token = authHeader.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as { id: number; username: string };
+        const decoded = jwt.verify(token, JWT_SECRET) as { id: number; username: string; is_admin: boolean };
         req.user = decoded;
         next();
     } catch (error) {

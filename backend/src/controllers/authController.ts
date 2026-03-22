@@ -40,7 +40,7 @@ export const login = async (req: Request, res: Response) => {
         if (!usuario) {
             return res.status(400).json({ message: 'Credenciales inválidas.' });
         }
-
+        
         const coinciden = await bcrypt.compare(password, usuario.password_hash);
 
         if (!coinciden) {
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(
-            { id: usuario.id, username: usuario.username },
+            { id: usuario.id, username: usuario.username, is_admin: usuario.is_admin },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -60,6 +60,7 @@ export const login = async (req: Request, res: Response) => {
                 id: usuario.id,
                 username: usuario.username,
                 email: usuario.email,
+                is_admin: usuario.is_admin,
             },
         });
     } catch (error) {

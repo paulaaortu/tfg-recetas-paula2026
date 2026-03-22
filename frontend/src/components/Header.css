@@ -1,4 +1,4 @@
-header {
+.main-header {
     background: #FBF7F4;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -100,7 +100,7 @@ header {
 }
 
 @media (min-width: 1024px) {
-    header {
+    .main-header {
         >div {
             padding: 0 40px;
 

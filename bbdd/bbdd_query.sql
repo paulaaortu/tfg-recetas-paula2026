@@ -25,6 +25,7 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -148,10 +149,11 @@ CREATE TABLE pantry (
 -- ==========================
 
 -- Usuarios
-INSERT INTO users (username, email, password_hash)
+INSERT INTO users (username, email, password_hash, is_admin)
 VALUES
-('paula', 'paula@email.com', 'hash_prueba1'),
-('juan', 'juan@email.com', 'hash_prueba2');
+('paula', 'paula@email.com', 'hash_prueba1', false),
+('juan', 'juan@email.com', 'hash_prueba2', false),
+('admin', 'admin@email.com', '$2b$10$9v3X9S8K1i5oQ1gL2m8R7O3n7U4e.Iq3G.o/h6a/Y3P2J5l1G', true); -- password is 'admin123'
 
 -- Categorías
 INSERT INTO categories (name)

@@ -265,6 +265,7 @@ export class RecipeService {
         steps: string;
         category_id: number;
         image_url?: string;
+        is_official?: boolean;
     }) {
         let query: string;
         let values: any[];
@@ -273,27 +274,31 @@ export class RecipeService {
             query = `
                 UPDATE recipes 
                 SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5, 
-                    calories = $6, ingredients = $7, steps = $8, category_id = $9, image_url = $10
+                    calories = $6, ingredients = $7, steps = $8, category_id = $9, image_url = $10,
+                    is_official = COALESCE($11, is_official)
+                WHERE id = $12 AND author_id = $13
+                RETURNING *
+            `;
+            values = [
+                recipe.title, recipe.description || null, recipe.difficulty || null, 
+                recipe.allergens || null, recipe.time || null, recipe.calories || null,
+                recipe.ingredients, recipe.steps, recipe.category_id, recipe.image_url, 
+                recipe.is_official !== undefined ? recipe.is_official : null, id, userId
+            ];
+        } else {
+            query = `
+                UPDATE recipes 
+                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5,
+                    calories = $6, ingredients = $7, steps = $8, category_id = $9,
+                    is_official = COALESCE($10, is_official)
                 WHERE id = $11 AND author_id = $12
                 RETURNING *
             `;
             values = [
                 recipe.title, recipe.description || null, recipe.difficulty || null, 
                 recipe.allergens || null, recipe.time || null, recipe.calories || null,
-                recipe.ingredients, recipe.steps, recipe.category_id, recipe.image_url, id, userId
-            ];
-        } else {
-            query = `
-                UPDATE recipes 
-                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5,
-                    calories = $6, ingredients = $7, steps = $8, category_id = $9
-                WHERE id = $10 AND author_id = $11
-                RETURNING *
-            `;
-            values = [
-                recipe.title, recipe.description || null, recipe.difficulty || null, 
-                recipe.allergens || null, recipe.time || null, recipe.calories || null,
-                recipe.ingredients, recipe.steps, recipe.category_id, id, userId
+                recipe.ingredients, recipe.steps, recipe.category_id, 
+                recipe.is_official !== undefined ? recipe.is_official : null, id, userId
             ];
         }
 

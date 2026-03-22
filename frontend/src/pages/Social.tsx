@@ -14,9 +14,10 @@ function Social() {
     const recipeService = new RecipeService()
     const navigate = useNavigate()
 
-    // Check session
     const user = localStorage.getItem('user')
+    const userData = user ? JSON.parse(user) : null
     const isLoggedIn = !!user
+    const isAdmin = userData?.is_admin || false
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -75,13 +76,15 @@ function Social() {
                     </div>
                 </section>
 
-                <button
-                    className="fab-add-recipe"
-                    onClick={() => navigate('/upload')}
-                    title="Añadir receta"
-                >
-                    <Plus />
-                </button>
+                {!isAdmin && (
+                    <button
+                        className="fab-add-recipe"
+                        onClick={() => navigate('/upload')}
+                        title="Añadir receta"
+                    >
+                        <Plus />
+                    </button>
+                )}
             </div>
         </div>
     )

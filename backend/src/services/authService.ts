@@ -25,7 +25,7 @@ export class AuthService {
 
     async createUser(username: string, email: string, passwordHash: string) {
         const result = await pool.query(
-            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email',
+            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, is_admin',
             [username, email, passwordHash]
         );
         return result.rows[0];
@@ -43,7 +43,7 @@ export class AuthService {
             params.push(id);
         }
 
-        const result = await pool.query(query + ' RETURNING id, username, email', params);
+        const result = await pool.query(query + ' RETURNING id, username, email, is_admin', params);
         return result.rows[0];
     }
 }

@@ -121,7 +121,7 @@ export const createRecipe = async (req: Request, res: Response) => {
             category_id: Number(category_id),
             author_id: user.id,
             image_url: imageUrl,
-            is_official: is_official === 'true' || is_official === true
+            is_official: (user.is_admin && (is_official === 'true' || is_official === true))
         });
 
         res.status(201).json(newRecipe);
@@ -219,7 +219,7 @@ export const updateRecipe = async (req: Request, res: Response) => {
             imageUrl = `/uploads/${req.file.filename}`;
         }
 
-        const updatedRecipe = await recipeService.updateRecipe(numericId, user.id, {
+        const updateData: any = {
             title,
             description,
             difficulty,
@@ -228,8 +228,14 @@ export const updateRecipe = async (req: Request, res: Response) => {
             ingredients,
             steps,
             category_id: Number(category_id),
-            image_url: imageUrl
-        });
+            image_url: imageUrl,
+        };
+
+        if (user.is_admin) {
+            updateData.is_official = (req.body.is_official === 'true' || req.body.is_official === true);
+        }
+
+        const updatedRecipe = await recipeService.updateRecipe(numericId, user.id, updateData);
 
         if (!updatedRecipe) {
             return res.status(404).json({ message: "Receta no encontrada o no tienes permiso para editarla" });

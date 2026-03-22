@@ -98,10 +98,14 @@ export default function Upload() {
         if (calories) {
             formData.append('calories', calories);
         }
-        formData.append('ingredients', ingredients.join(', '));
         formData.append('steps', steps.trim());
+        formData.append('ingredients', ingredients.join(', '));
         formData.append('category_id', category.toString());
-        formData.append('is_official', 'false');
+        
+        const params = new URLSearchParams(window.location.search);
+        const isOfficialParam = params.get('official') === 'true';
+        formData.append('is_official', isOfficialParam.toString());
+
         if (imageFile) {
             formData.append('image', imageFile);
         }
@@ -295,7 +299,11 @@ export default function Upload() {
                         <p>Tu receta se ha publicado con éxito.</p>
                         <button 
                             className="success-popup-btn" 
-                            onClick={() => navigate('/social')}
+                            onClick={() => {
+                                const params = new URLSearchParams(window.location.search);
+                                const isOfficial = params.get('official') === 'true';
+                                navigate(isOfficial ? '/' : '/social');
+                            }}
                         >
                             Continuar
                         </button>
