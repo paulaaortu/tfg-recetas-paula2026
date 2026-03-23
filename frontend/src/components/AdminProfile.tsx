@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Users, BookOpen, FileText, Plus, Trash2, Edit } from 'lucide-react';
 import * as adminService from '../services/adminService';
 import type { Recipe } from '../types/recipes';
+import ConfirmModal from './ConfirmModal';
 import './AdminProfile.css';
 
 interface User {
@@ -18,6 +19,20 @@ const AdminProfile: React.FC = () => {
     const [officialRecipes, setOfficialRecipes] = useState<Recipe[]>([]);
     const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const [modalConfig, setModalConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+        isDanger: boolean;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => {},
+        isDanger: false
+    });
 
     useEffect(() => {
         loadData();
@@ -48,28 +63,44 @@ const AdminProfile: React.FC = () => {
         }
     };
 
-    const handleDeleteUser = async (id: number) => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar este usuario?')) return;
-        try {
-            await adminService.deleteUser(id);
-            setUsers(users.filter(u => u.id !== id));
-        } catch (error) {
-            alert('Error al eliminar usuario');
-        }
+    const handleDeleteUser = (id: number) => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Eliminar usuario',
+            message: '¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.',
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await adminService.deleteUser(id);
+                    setUsers(users.filter(u => u.id !== id));
+                    setModalConfig(prev => ({ ...prev, isOpen: false }));
+                } catch (error) {
+                    alert('Error al eliminar usuario');
+                }
+            }
+        });
     };
 
-    const handleDeleteRecipe = async (id: number) => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar esta receta?')) return;
-        try {
-            await adminService.deleteRecipe(id);
-            if (activeTab === 'official') {
-                setOfficialRecipes(officialRecipes.filter(r => r.id !== id));
-            } else {
-                setUserRecipes(userRecipes.filter(r => r.id !== id));
+    const handleDeleteRecipe = (id: number) => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Eliminar receta',
+            message: '¿Estás seguro de que quieres eliminar esta receta? Esta acción no se puede deshacer.',
+            isDanger: true,
+            onConfirm: async () => {
+                try {
+                    await adminService.deleteRecipe(id);
+                    if (activeTab === 'official') {
+                        setOfficialRecipes(officialRecipes.filter(r => r.id !== id));
+                    } else {
+                        setUserRecipes(userRecipes.filter(r => r.id !== id));
+                    }
+                    setModalConfig(prev => ({ ...prev, isOpen: false }));
+                } catch (error) {
+                    alert('Error al eliminar receta');
+                }
             }
-        } catch (error) {
-            alert('Error al eliminar receta');
-        }
+        });
     };
 
     return (
@@ -152,9 +183,11 @@ const AdminProfile: React.FC = () => {
                                         {activeTab === 'user_recipes' && <td>{recipe.author_name}</td>}
                                         <td>
                                             <div className="action-btns">
-                                                <button className="btn-edit" onClick={() => window.location.href = `/recipe/${recipe.id}`} title="Ver/Editar">
-                                                    <Edit size={16} />
-                                                </button>
+                                                {activeTab === 'official' && (
+                                                    <button className="btn-edit" onClick={() => window.location.href = `/upload?edit=${recipe.id}&official=true`} title="Editar receta">
+                                                        <Edit size={16} />
+                                                    </button>
+                                                )}
                                                 <button className="btn-delete" onClick={() => handleDeleteRecipe(recipe.id)} title="Eliminar receta">
                                                     <Trash2 size={16} />
                                                 </button>
@@ -167,6 +200,16 @@ const AdminProfile: React.FC = () => {
                     )}
                 </div>
             </main>
+
+            <ConfirmModal 
+                isOpen={modalConfig.isOpen}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                isDanger={modalConfig.isDanger}
+                onConfirm={modalConfig.onConfirm}
+                onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+                confirmText="Eliminar"
+            />
         </div>
     );
 };

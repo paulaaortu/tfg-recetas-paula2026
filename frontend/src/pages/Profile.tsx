@@ -357,9 +357,9 @@ function Profile() {
                                         </div>
                                         <div className="preference-option-text">
                                             <span className="preference-option-name">{option.name}</span>
-                                            {'description' in option && option.description && (
-                                                <small className="preference-option-desc">{option.description}</small>
-                                            )}
+                                            {('description' in option && (option as any).description) ? (
+                                                <small className="preference-option-desc">{(option as any).description}</small>
+                                            ) : null}
                                         </div>
                                     </div>
                                 );

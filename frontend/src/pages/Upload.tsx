@@ -26,17 +26,39 @@ export default function Upload() {
     const [availableAllergens, setAvailableAllergens] = useState<string[]>([]);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
+    const [editId, setEditId] = useState<number | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const params = new URLSearchParams(window.location.search);
+                const idParam = params.get('edit');
+                
                 const [categoriesData, allergensData] = await Promise.all([
                     recipeService.getCategories(),
                     recipeService.getAllAllergens()
                 ]);
                 setAvailableCategories(categoriesData);
-                setAvailableAllergens(allergensData.map((a: any) => a.name)); // Assuming the UI expects an array of strings
+                setAvailableAllergens(allergensData.map((a: any) => a.name));
+
+                if (idParam) {
+                    const id = parseInt(idParam, 10);
+                    setEditId(id);
+                    const recipe = await recipeService.getRecipeById(id);
+                    
+                    setTitle(recipe.title);
+                    setDescription(recipe.description || '');
+                    setTimeStr(recipe.time ? `${recipe.time}min` : '');
+                    setCalories(recipe.calories ? recipe.calories.toString() : '');
+                    setDifficulty(recipe.difficulty || 'Fácil');
+                    setCategory(recipe.category_id);
+                    setIngredients(recipe.ingredients ? recipe.ingredients.split(',').map((i: string) => i.trim()) : []);
+                    setAllergens(recipe.allergens && recipe.allergens !== 'Ninguno' ? recipe.allergens.split(',').map((a: string) => a.trim()) : []);
+                    setSteps(recipe.steps || '');
+                    setImagePreview(recipe.image_url ? (recipe.image_url.startsWith('http') ? recipe.image_url : `http://localhost:3001${recipe.image_url}`) : null);
+                }
             } catch (error) {
                 console.error('Error al cargar datos iniciales:', error);
             }
@@ -112,12 +134,16 @@ export default function Upload() {
 
         setIsSubmitting(true);
         try {
-            await recipeService.createRecipe(formData);
+            if (editId) {
+                await recipeService.updateRecipe(editId, formData);
+            } else {
+                await recipeService.createRecipe(formData);
+            }
 
             setShowSuccessPopup(true);
         } catch (error: any) {
-            console.error('Error al subir receta:', error);
-            alert('Hubo un error al publicar la receta. Inténtalo de nuevo.');
+            console.error(editId ? 'Error al actualizar receta:' : 'Error al subir receta:', error);
+            alert(editId ? 'Hubo un error al actualizar la receta.' : 'Hubo un error al publicar la receta. Inténtalo de nuevo.');
         } finally {
             setIsSubmitting(false);
         }
@@ -285,7 +311,7 @@ export default function Upload() {
                     onClick={handleSubmit} 
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? 'Publicando...' : 'Publicar receta'}
+                    {isSubmitting ? (editId ? 'Guardando...' : 'Publicando...') : (editId ? 'Guardar cambios' : 'Publicar receta')}
                 </button>
 
             </div>
@@ -295,8 +321,8 @@ export default function Upload() {
                 <div className="success-popup-overlay">
                     <div className="success-popup-content">
                         <CheckCircle size={50} className="success-popup-icon" />
-                        <h3>¡Receta publicada!</h3>
-                        <p>Tu receta se ha publicado con éxito.</p>
+                        <h3>{editId ? '¡Cambios guardados!' : '¡Receta publicada!'}</h3>
+                        <p>{editId ? 'La receta se ha actualizado con éxito.' : 'Tu receta se ha publicado con éxito.'}</p>
                         <button 
                             className="success-popup-btn" 
                             onClick={() => {

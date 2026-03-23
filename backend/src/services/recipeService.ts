@@ -57,7 +57,6 @@ export class RecipeService {
     }
 
     async getRecommendedRecipes(userId: number) {
-        // Get user preferences
         const [intolerancesRes, objectivesRes] = await Promise.all([
             pool.query(
                 `SELECT i.name FROM intolerances i
@@ -76,7 +75,6 @@ export class RecipeService {
         const userIntolerances = intolerancesRes.rows.map((r: any) => r.name.toLowerCase());
         const userObjectives = objectivesRes.rows.map((r: any) => r.name.toLowerCase());
 
-        // Base query - get all official recipes
         let query = `
             SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
@@ -85,12 +83,10 @@ export class RecipeService {
             WHERE r.is_official = true
         `;
 
-        // Filter intolerances: exclude recipes where allergens contain any user intolerance
         const conditions: string[] = [];
         const params: any[] = [];
 
         if (userIntolerances.length > 0) {
-            // Mapping of intolerances to list of corresponding allergen keywords in recipes
             const intoleranceMap: { [key: string]: string[] } = {
                 'lactosa': ['lactosa', 'lácteos', 'leche', 'queso', 'mantequilla'],
                 'huevo': ['huevo', 'huevos'],
@@ -103,7 +99,6 @@ export class RecipeService {
             
             userIntolerances.forEach((intolerance: string) => {
                 const searchTerms = intoleranceMap[intolerance] || [intolerance];
-                
                 searchTerms.forEach(term => {
                     params.push(`%${term}%`);
                     allergenConditions.push(`(r.allergens IS NOT NULL AND LOWER(r.allergens) LIKE $${params.length})`);
@@ -111,8 +106,6 @@ export class RecipeService {
             });
 
             if (allergenConditions.length > 0) {
-                // If the recipe has ANY of the forbidden allergens, skip it.
-                // Note: since we already have WHERE is_official = true, we use AND NOT (...)
                 conditions.push(`NOT (${allergenConditions.join(' OR ')})`);
             }
         }
@@ -121,7 +114,6 @@ export class RecipeService {
             query += ' AND ' + conditions.join(' AND ');
         }
 
-        // If user wants to lose weight, prioritize low-calorie recipes
         const wantsToLoseWeight = userObjectives.some((obj: string) =>
             obj.includes('adelgazar') || obj.includes('perder')
         );
@@ -135,18 +127,6 @@ export class RecipeService {
         query += ` LIMIT 20`;
 
         const result = await pool.query(query, params);
-        return result.rows;
-    }
-
-    async getCategories() {
-        const query = "SELECT * FROM categories ORDER BY name ASC";
-        const result = await pool.query(query);
-        return result.rows;
-    }
-
-    async getAllAllergies() {
-        const query = "SELECT * FROM allergies ORDER BY name ASC";
-        const result = await pool.query(query);
         return result.rows;
     }
 
@@ -201,20 +181,6 @@ export class RecipeService {
         return result.rows[0];
     }
 
-    async getFavorites(userId: number) {
-        const query = `
-            SELECT r.*, c.name as category_name, u.username as author_name
-            FROM recipes r
-            JOIN favorites f ON r.id = f.recipe_id
-            LEFT JOIN categories c ON r.category_id = c.id
-            LEFT JOIN users u ON r.author_id = u.id
-            WHERE f.user_id = $1
-            ORDER BY f.created_at DESC
-        `;
-        const result = await pool.query(query, [userId]);
-        return result.rows;
-    }
-
     async getMyRecipes(userId: number) {
         const query = `
             SELECT r.*, c.name as category_name, u.username as author_name
@@ -228,33 +194,7 @@ export class RecipeService {
         return result.rows;
     }
 
-    async addFavorite(userId: number, recipeId: number) {
-        const query = `
-            INSERT INTO favorites (user_id, recipe_id)
-            VALUES ($1, $2)
-            ON CONFLICT DO NOTHING
-        `;
-        await pool.query(query, [userId, recipeId]);
-    }
-
-    async removeFavorite(userId: number, recipeId: number) {
-        const query = `
-            DELETE FROM favorites
-            WHERE user_id = $1 AND recipe_id = $2
-        `;
-        await pool.query(query, [userId, recipeId]);
-    }
-
-    async isFavorite(userId: number, recipeId: number) {
-        const query = `
-            SELECT 1 FROM favorites
-            WHERE user_id = $1 AND recipe_id = $2
-        `;
-        const result = await pool.query(query, [userId, recipeId]);
-        return result.rowCount !== null && result.rowCount > 0;
-    }
-
-    async updateRecipe(id: number, userId: number, recipe: {
+    async updateRecipe(id: number, userId: number, isAdmin: boolean, recipe: {
         title: string;
         description?: string;
         difficulty?: string;
@@ -267,42 +207,50 @@ export class RecipeService {
         image_url?: string;
         is_official?: boolean;
     }) {
-        let query: string;
-        let values: any[];
+        const setClauses = [
+            'title = $1', 'description = $2', 'difficulty = $3', 'allergens = $4', 
+            'time = $5', 'calories = $6', 'ingredients = $7', 'steps = $8', 'category_id = $9'
+        ];
+        
+        const values: any[] = [
+            recipe.title, recipe.description || null, recipe.difficulty || null, 
+            recipe.allergens || null, recipe.time || null, recipe.calories || null,
+            recipe.ingredients, recipe.steps, recipe.category_id
+        ];
 
+        let paramCount = 10;
         if (recipe.image_url) {
-            query = `
-                UPDATE recipes 
-                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5, 
-                    calories = $6, ingredients = $7, steps = $8, category_id = $9, image_url = $10,
-                    is_official = COALESCE($11, is_official)
-                WHERE id = $12 AND author_id = $13
-                RETURNING *
-            `;
-            values = [
-                recipe.title, recipe.description || null, recipe.difficulty || null, 
-                recipe.allergens || null, recipe.time || null, recipe.calories || null,
-                recipe.ingredients, recipe.steps, recipe.category_id, recipe.image_url, 
-                recipe.is_official !== undefined ? recipe.is_official : null, id, userId
-            ];
-        } else {
-            query = `
-                UPDATE recipes 
-                SET title = $1, description = $2, difficulty = $3, allergens = $4, time = $5,
-                    calories = $6, ingredients = $7, steps = $8, category_id = $9,
-                    is_official = COALESCE($10, is_official)
-                WHERE id = $11 AND author_id = $12
-                RETURNING *
-            `;
-            values = [
-                recipe.title, recipe.description || null, recipe.difficulty || null, 
-                recipe.allergens || null, recipe.time || null, recipe.calories || null,
-                recipe.ingredients, recipe.steps, recipe.category_id, 
-                recipe.is_official !== undefined ? recipe.is_official : null, id, userId
-            ];
+            setClauses.push(`image_url = $${paramCount}`);
+            values.push(recipe.image_url);
+            paramCount++;
         }
 
-        const result = await pool.query(query, values);
+        if (isAdmin && recipe.is_official !== undefined) {
+            setClauses.push(`is_official = $${paramCount}`);
+            values.push(recipe.is_official);
+            paramCount++;
+        }
+
+        const idPos = paramCount;
+        const userPos = paramCount + 1;
+        
+        const finalQuery = `
+            UPDATE recipes 
+            SET ${setClauses.join(', ')}
+            ${isAdmin ? `WHERE id = $${idPos}` : `WHERE id = $${idPos} AND author_id = $${userPos}`}
+            RETURNING *
+        `;
+
+        values.push(id);
+        if (!isAdmin) {
+            values.push(userId);
+        }
+
+        const result = await pool.query(finalQuery, values);
         return result.rows[0];
+    }
+
+    async deleteRecipe(id: number) {
+        await pool.query('DELETE FROM recipes WHERE id = $1', [id]);
     }
 }

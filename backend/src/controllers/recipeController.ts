@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { RecipeService } from "../services/recipeService";
-
 import jwt from "jsonwebtoken";
 
 const recipeService = new RecipeService();
@@ -50,8 +49,6 @@ export const getRecommendedRecipes = async (req: Request, res: Response) => {
     }
 };
 
-
-
 export const getRecipeById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const numericId = Number(id);
@@ -72,33 +69,14 @@ export const getRecipeById = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllCategories = async (req: Request, res: Response) => {
-    try {
-        const categories = await recipeService.getCategories();
-        res.json(categories);
-    } catch (error) {
-        res.status(500).json({ error: "Error cargando las categorías" });
-    }
-};
-
-export const getAllAllergies = async (req: Request, res: Response) => {
-    try {
-        const allergies = await recipeService.getAllAllergies();
-        res.json(allergies);
-    } catch (error) {
-        res.status(500).json({ error: "Error cargando los alérgenos" });
-    }
-};
-
 export const createRecipe = async (req: Request, res: Response) => {
     try {
-        // req.user might be populated by authMiddleware if we set Request typing, but since it's an AuthRequest, let's type cast
         const user = (req as any).user;
         if (!user || !user.id) {
             return res.status(401).json({ message: "No autorizado" });
         }
 
-        const { title, description, difficulty, allergens, time, ingredients, steps, category_id, is_official } = req.body;
+        const { title, description, difficulty, allergens, time, calories, ingredients, steps, category_id, is_official } = req.body;
 
         if (!title || !ingredients || !steps || !category_id) {
             return res.status(400).json({ message: "Faltan campos obligatorios" });
@@ -106,7 +84,6 @@ export const createRecipe = async (req: Request, res: Response) => {
 
         let imageUrl = '';
         if (req.file) {
-            // Convertir la ruta del file server en URL pública
             imageUrl = `/uploads/${req.file.filename}`;
         }
 
@@ -116,6 +93,7 @@ export const createRecipe = async (req: Request, res: Response) => {
             difficulty,
             allergens,
             time: time ? Number(time) : undefined,
+            calories: calories ? Number(calories) : undefined,
             ingredients,
             steps,
             category_id: Number(category_id),
@@ -131,17 +109,6 @@ export const createRecipe = async (req: Request, res: Response) => {
     }
 };
 
-export const getFavorites = async (req: Request, res: Response) => {
-    try {
-        const user = (req as any).user;
-        if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
-        const favorites = await recipeService.getFavorites(user.id);
-        res.json(favorites);
-    } catch (error) {
-        res.status(500).json({ error: "Error obteniendo favoritos" });
-    }
-};
-
 export const getMyRecipes = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
@@ -150,48 +117,6 @@ export const getMyRecipes = async (req: Request, res: Response) => {
         res.json(recipes);
     } catch (error) {
         res.status(500).json({ error: "Error obteniendo mis recetas" });
-    }
-};
-
-export const addFavorite = async (req: Request, res: Response) => {
-    try {
-        const user = (req as any).user;
-        if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
-        const { id } = req.params;
-        const numericId = Number(id);
-        if (isNaN(numericId)) return res.status(400).json({ error: "ID de receta inválido" });
-        await recipeService.addFavorite(user.id, numericId);
-        res.json({ message: "Añadido a favoritos" });
-    } catch (error) {
-        res.status(500).json({ error: "Error añadiendo a favoritos" });
-    }
-};
-
-export const removeFavorite = async (req: Request, res: Response) => {
-    try {
-        const user = (req as any).user;
-        if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
-        const { id } = req.params;
-        const numericId = Number(id);
-        if (isNaN(numericId)) return res.status(400).json({ error: "ID de receta inválido" });
-        await recipeService.removeFavorite(user.id, numericId);
-        res.json({ message: "Eliminado de favoritos" });
-    } catch (error) {
-        res.status(500).json({ error: "Error eliminando de favoritos" });
-    }
-};
-
-export const isFavorite = async (req: Request, res: Response) => {
-    try {
-        const user = (req as any).user;
-        if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
-        const { id } = req.params;
-        const numericId = Number(id);
-        if (isNaN(numericId)) return res.status(400).json({ error: "ID de receta inválido" });
-        const isFav = await recipeService.isFavorite(user.id, numericId);
-        res.json({ isFavorite: isFav });
-    } catch (error) {
-        res.status(500).json({ error: "Error al checkear favorito" });
     }
 };
 
@@ -208,7 +133,7 @@ export const updateRecipe = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "ID de receta inválido" });
         }
 
-        const { title, description, difficulty, allergens, time, ingredients, steps, category_id } = req.body;
+        const { title, description, difficulty, allergens, time, calories, ingredients, steps, category_id } = req.body;
 
         if (!title || !ingredients || !steps || !category_id) {
             return res.status(400).json({ message: "Faltan campos obligatorios" });
@@ -225,6 +150,7 @@ export const updateRecipe = async (req: Request, res: Response) => {
             difficulty,
             allergens,
             time: time ? Number(time) : undefined,
+            calories: calories ? Number(calories) : undefined,
             ingredients,
             steps,
             category_id: Number(category_id),
@@ -235,7 +161,7 @@ export const updateRecipe = async (req: Request, res: Response) => {
             updateData.is_official = (req.body.is_official === 'true' || req.body.is_official === true);
         }
 
-        const updatedRecipe = await recipeService.updateRecipe(numericId, user.id, updateData);
+        const updatedRecipe = await recipeService.updateRecipe(numericId, user.id, user.is_admin, updateData);
 
         if (!updatedRecipe) {
             return res.status(404).json({ message: "Receta no encontrada o no tienes permiso para editarla" });
@@ -245,5 +171,27 @@ export const updateRecipe = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error al actualizar la receta", error);
         res.status(500).json({ error: "Error interno actualizando la receta" });
+    }
+};
+
+export const deleteRecipe = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        await recipeService.deleteRecipe(Number(id));
+        res.json({ message: "Receta eliminada correctamente" });
+    } catch (error) {
+        console.error("Error deleting recipe:", error);
+        res.status(500).json({ message: "Error al eliminar receta." });
+    }
+};
+
+export const getAdminRecipes = async (req: Request, res: Response) => {
+    const { type } = req.query;
+    try {
+        const recipes = await recipeService.getAllRecipes(type === 'official' ? 'true' : 'false');
+        res.json(recipes);
+    } catch (error) {
+        console.error("Error getting admin recipes:", error);
+        res.status(500).json({ message: "Error al obtener recetas." });
     }
 };

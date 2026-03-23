@@ -160,7 +160,7 @@ INSERT INTO categories (name)
 VALUES
 ('Carnes'), ('Pescados'), ('Verduras'), ('Postres'), ('Desayunos'), ('Otros');
 
--- Recetas oficiales (con calorías)
+-- Recetas oficiales
 INSERT INTO recipes (title, description, difficulty, allergens, time, calories, ingredients, steps, image_url, is_official, category_id)
 VALUES
 ('Tortilla de patatas', 'Receta tradicional española', 'Media', 'Huevo', 25, 350, 'Patatas, huevos, aceite, sal', 'Pelar patatas, freír, batir huevos, mezclar y cuajar', 'https://images.pexels.com/photos/14941246/pexels-photo-14941246.jpeg?_gl=1*i91e7c*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY3MzgkajU2JGwwJGgw', true, 6),
@@ -169,7 +169,7 @@ VALUES
 ('Pasta carbonara', 'Receta italiana con nata y bacon', 'Media', 'Gluten, Lácteos, Huevo', 30, 620, 'Pasta, nata, bacon, huevo, queso parmesano, pimienta', 'Cocer la pasta, preparar la salsa carbonara con huevo y nata, juntar todo', 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg', true, 1),
 ('Smoothie de frutas', 'Batido saludable y bajo en calorías', 'Fácil', 'Ninguno', 5, 150, 'Plátano, fresas, naranja, agua', 'Triturar todos los ingredientes hasta obtener una bebida suave', 'https://images.pexels.com/photos/775032/pexels-photo-775032.jpeg', true, 5);
 
--- Recetas de usuarios (con calorías)
+-- Recetas de usuarios
 INSERT INTO recipes (title, description, difficulty, allergens, time, calories, ingredients, steps, image_url, is_official, author_id, category_id)
 VALUES
 ('Ensalada de quinoa', 'Receta saludable y nutritiva', 'Fácil', 'Ninguno', 15, 310, 'Quinoa, tomate, pepino, limón', 'Cocer quinoa, mezclar ingredientes, aliñar', 'https://images.pexels.com/photos/248509/pexels-photo-248509.jpeg?_gl=1*47kvg4*_ga*MTExMTYzMjA2MC4xNzcyMzY2NTc3*_ga_8JE65Q40S6*czE3NzIzNjY1NzckbzEkZzEkdDE3NzIzNjY4ODgkajMxJGwwJGgw', false, 1, 3);
@@ -177,18 +177,18 @@ VALUES
 -- Favoritos
 INSERT INTO favorites (user_id, recipe_id)
 VALUES
-(1, 2),  -- Paula marcó Gazpacho como favorito
-(2, 1);  -- Juan marcó Tortilla de patatas como favorito
+(1, 2),
+(2, 1);
 
 -- Alergias
 INSERT INTO allergies (name)
 VALUES
-('Gluten'), ('Lácteos'), ('Frutos secos'), ('Mariscos'), ('Soja'), ('Sésamo');
+('Gluten'), ('Lactosa'), ('Frutos secos'), ('Mariscos'), ('Soja'), ('Sésamo'), ('Huevo'), ('Fructosa');
 
 -- Intolerancias
 INSERT INTO intolerances (name)
 VALUES
-('Lactosa'), ('Fructosa'), ('Huevo'), ('Gluten (celiaquía)'), ('Sodio');
+('Lactosa'), ('Fructosa'), ('Huevo'), ('Gluten'), ('Sodio');
 
 -- Objetivos
 INSERT INTO objectives (name, description)
@@ -210,29 +210,29 @@ VALUES
 ('Crossfit', 'Fuerza y resistencia funcional'),
 ('Ninguno', 'Sin deporte regular');
 
--- Usuario ↔ alergias
+-- Usuario -> alergias
 INSERT INTO user_allergies (user_id, allergy_id)
 VALUES
-(1, 1),  -- Paula es alérgica a Gluten
-(2, 2);  -- Juan es alérgico a Lácteos
+(1, 1), 
+(2, 2);
 
--- Usuario ↔ intolerancias
+-- Usuario -> intolerancias
 INSERT INTO user_intolerances (user_id, intolerance_id)
 VALUES
-(1, 3),  -- Paula intolerante a Huevo
-(2, 1);  -- Juan intolerante a Lactosa
+(1, 3),
+(2, 1);
 
--- Usuario ↔ objetivos
+-- Usuario -> objetivos
 INSERT INTO user_objectives (user_id, objective_id)
 VALUES
-(1, 2),  -- Paula: Ganar masa muscular
-(2, 1);  -- Juan: Adelgazar
+(1, 2),
+(2, 1);
 
--- Usuario ↔ deportes
+-- Usuario -> deportes
 INSERT INTO user_sports (user_id, sport_id)
 VALUES
-(1, 1),  -- Paula hace musculación
-(2, 2);  -- Juan hace running
+(1, 1),
+(2, 2);
 
 -- Datos de Despensa
 INSERT INTO pantry (user_id, ingredient_name, quantity, unit)
