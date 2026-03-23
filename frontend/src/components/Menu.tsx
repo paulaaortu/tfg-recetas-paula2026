@@ -36,11 +36,16 @@ interface MenuProps {
 }
 
 export default function Menu({ activeTab, onChange }: MenuProps) {
+    const hasSession = localStorage.getItem('user');
+    const user = hasSession ? JSON.parse(hasSession) : null;
+    const isAdmin = user?.is_admin || false;
+
+    const filteredTabs = TABS.filter(tab => !isAdmin || tab.id !== 'perfil');
 
     return (
         <nav className='menu-movil'>
             <div>
-                {TABS.map((tab) => (
+                {filteredTabs.map((tab) => (
                     <button
                         key={tab.id}
                         className={`nav-item nav-${tab.id} ${activeTab === tab.id ? 'nav-item--active' : ''}`}

@@ -18,7 +18,6 @@ function Profile() {
     const [email, setEmail] = useState<string | null>(null)
     const [userId, setUserId] = useState<number | null>(null)
     const [isAdmin, setIsAdmin] = useState(false)
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<'ajustes' | 'misRecetas' | 'favoritas'>('ajustes')
     const [myRecipes, setMyRecipes] = useState<Recipe[]>([])
@@ -51,10 +50,6 @@ function Profile() {
             console.error('Error cogiendo los datos del usuario:', error)
             navigate('/login')
         }
-
-        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
     }, [navigate])
 
     useEffect(() => {
@@ -165,20 +160,6 @@ function Profile() {
     if (!user) return null;
 
     if (isAdmin) {
-        if (isMobile) {
-            return (
-                <div className="contenedor-perfil admin-mobile-fallback">
-                    <div className="perfil-contenido">
-                        <ShieldAlert size={48} color="#ef4444" style={{ marginBottom: '1rem' }} />
-                        <h2>Panel de Administración</h2>
-                        <p>Por seguridad y comodidad, el panel de administración solo está disponible en la versión de escritorio.</p>
-                        <button className="tab-btn active" onClick={handleLogout} style={{ marginTop: '2rem' }}>
-                            <LogOut size={20} /> Cerrar Sesión
-                        </button>
-                    </div>
-                </div>
-            )
-        }
         return <AdminProfile />;
     }
 

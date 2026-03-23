@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserCircle, ArrowLeft } from 'lucide-react'
 import logo from '../assets/título.svg'
@@ -13,12 +14,22 @@ interface HeaderProps {
 
 export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderProps) {
     const navigate = useNavigate()
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024)
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const hasSession = localStorage.getItem('user');
+    const user = hasSession ? JSON.parse(hasSession) : null;
+    const isAdmin = user?.is_admin || false;
+
     const handleProfileClick = () => {
         if (onTabChange) {
             onTabChange('perfil');
         } else {
-            // Fallback en caso de que no se pase onTabChange
-            const hasSession = localStorage.getItem('user');
             navigate(hasSession ? '/perfil' : '/login');
         }
     }
@@ -51,9 +62,11 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
                     ))}
                 </nav>
                 <div className="acciones">
-                    <div className="botones" onClick={handleProfileClick}>
-                        <UserCircle size={32} className="header-icon" />
-                    </div>
+                    {(!isAdmin || !isMobile) && (
+                        <div className="botones" onClick={handleProfileClick}>
+                            <UserCircle size={32} className="header-icon" />
+                        </div>
+                    )}
                 </div>
             </div>
         </header>
