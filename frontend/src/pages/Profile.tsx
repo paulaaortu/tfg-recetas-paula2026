@@ -11,7 +11,7 @@ import type { Recipe } from '../types/recipes'
 import AdminProfile from '../components/AdminProfile'
 import './Profile.css'
 
-type PreferenceType = 'intolerances' | 'objectives' | 'sports';
+type PreferenceType = 'objectives' | 'sports' | 'allergies';
 
 function Profile() {
     const [userName, setUserName] = useState<string | null>(null)
@@ -26,8 +26,8 @@ function Profile() {
     const [loadingRecipes, setLoadingRecipes] = useState(false)
 
     // Preferences state
-    const [preferences, setPreferences] = useState<UserPreferences>({ intolerances: [], objectives: [], sports: [] })
-    const [catalog, setCatalog] = useState<PreferencesCatalog>({ intolerances: [], objectives: [], sports: [] })
+    const [preferences, setPreferences] = useState<UserPreferences>({ objectives: [], sports: [], allergies: [] })
+    const [catalog, setCatalog] = useState<PreferencesCatalog>({ objectives: [], sports: [], allergies: [] })
     const [openModal, setOpenModal] = useState<PreferenceType | null>(null)
     const [selectedIds, setSelectedIds] = useState<number[]>([])
     const [savingPrefs, setSavingPrefs] = useState(false)
@@ -117,9 +117,9 @@ function Profile() {
 
     const openPreferenceModal = (type: PreferenceType) => {
         let currentIds: number[] = [];
-        if (type === 'intolerances') currentIds = preferences.intolerances.map(i => i.id);
         if (type === 'objectives') currentIds = preferences.objectives.map(o => o.id);
         if (type === 'sports') currentIds = preferences.sports.map(s => s.id);
+        if (type === 'allergies') currentIds = (preferences.allergies || []).map(a => a.id);
         setSelectedIds(currentIds);
         setOpenModal(type);
     }
@@ -132,9 +132,9 @@ function Profile() {
         setSavingPrefs(true);
         try {
             const payload = {
-                intolerance_ids: openModal === 'intolerances' ? selectedIds : preferences.intolerances.map(i => i.id),
                 objective_ids: openModal === 'objectives' ? selectedIds : preferences.objectives.map(o => o.id),
                 sport_ids: openModal === 'sports' ? selectedIds : preferences.sports.map(s => s.id),
+                allergy_ids: openModal === 'allergies' ? selectedIds : (preferences.allergies || []).map(a => a.id),
             };
             const updated = await saveUserPreferences(payload);
             setPreferences(updated);
@@ -147,16 +147,16 @@ function Profile() {
     }
 
     const getModalOptions = () => {
-        if (openModal === 'intolerances') return catalog.intolerances;
         if (openModal === 'objectives') return catalog.objectives;
         if (openModal === 'sports') return catalog.sports;
+        if (openModal === 'allergies') return catalog.allergies;
         return [];
     }
 
     const getModalTitle = () => {
-        if (openModal === 'intolerances') return 'Selecciona tus intolerancias';
         if (openModal === 'objectives') return 'Selecciona tus objetivos';
         if (openModal === 'sports') return 'Selecciona tus deportes';
+        if (openModal === 'allergies') return 'Selecciona tus alergias';
         return '';
     }
 
@@ -229,16 +229,16 @@ function Profile() {
                         <div className="profile-menu-group">
                             <h2>Preferencias</h2>
 
-                            {/* INTOLERANCIAS */}
-                            <div className="menu-item" onClick={() => openPreferenceModal('intolerances')}>
+                            {/* ALERGIAS */}
+                            <div className="menu-item" onClick={() => openPreferenceModal('allergies')}>
                                 <div className="menu-item-left">
-                                    <ShieldAlert size={20} className="menu-icon" />
+                                    <ShieldAlert size={20} className="menu-icon" color="#f87171" />
                                     <div>
-                                        <span>Intolerancias</span>
-                                        {preferences.intolerances.length > 0 && (
+                                        <span>Alergias e Intolerancias</span>
+                                        {preferences.allergies && preferences.allergies.length > 0 && (
                                             <div className="preference-chips">
-                                                {preferences.intolerances.map(i => (
-                                                    <span key={i.id} className="pref-chip">{i.name}</span>
+                                                {preferences.allergies.map(a => (
+                                                    <span key={a.id} className="pref-chip">{a.name}</span>
                                                 ))}
                                             </div>
                                         )}

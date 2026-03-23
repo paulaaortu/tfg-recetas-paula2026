@@ -5,21 +5,6 @@ import jwt from 'jsonwebtoken';
 const profileService = new ProfileService();
 const JWT_SECRET = process.env.JWT_SECRET || 'jsnE982nsAsok.';
 
-// Helper to get userId from token
-function getUserId(req: Request): number | null {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-        const token = authHeader.split(' ')[1];
-        try {
-            const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-            return decoded.id;
-        } catch {
-            return null;
-        }
-    }
-    return null;
-}
-
 export const getCatalog = async (req: Request, res: Response) => {
     try {
         const catalog = await profileService.getAvailableCatalog();
@@ -45,12 +30,12 @@ export const savePreferences = async (req: Request, res: Response) => {
         const user = (req as any).user;
         if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
 
-        const { intolerance_ids, objective_ids, sport_ids } = req.body;
+        const { objective_ids, sport_ids, allergy_ids } = req.body;
 
         await Promise.all([
-            profileService.saveUserIntolerances(user.id, intolerance_ids || []),
             profileService.saveUserObjectives(user.id, objective_ids || []),
             profileService.saveUserSports(user.id, sport_ids || []),
+            profileService.saveUserAllergies(user.id, allergy_ids || []),
         ]);
 
         const updated = await profileService.getUserPreferences(user.id);

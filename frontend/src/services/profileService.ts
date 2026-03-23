@@ -1,15 +1,15 @@
 import { apiUrl } from './recipeService';
 
 export interface UserPreferences {
-    intolerances: { id: number; name: string }[];
     objectives: { id: number; name: string; description?: string }[];
     sports: { id: number; name: string }[];
+    allergies: { id: number; name: string }[];
 }
 
 export interface PreferencesCatalog {
-    intolerances: { id: number; name: string }[];
     objectives: { id: number; name: string; description?: string }[];
     sports: { id: number; name: string }[];
+    allergies: { id: number; name: string }[];
 }
 
 function getAuthHeaders(): Record<string, string> {
@@ -31,9 +31,9 @@ export async function getUserPreferences(): Promise<UserPreferences> {
 }
 
 export async function saveUserPreferences(data: {
-    intolerance_ids: number[];
     objective_ids: number[];
     sport_ids: number[];
+    allergy_ids: number[];
 }): Promise<UserPreferences> {
     const headers = { ...getAuthHeaders(), 'Content-Type': 'application/json' };
     const response = await fetch(`${apiUrl}/api/profile/preferences`, {

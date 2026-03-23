@@ -57,23 +57,23 @@ export class RecipeService {
     }
 
     async getRecommendedRecipes(userId: number) {
-        const [intolerancesRes, objectivesRes] = await Promise.all([
-            pool.query(
-                `SELECT i.name FROM intolerances i
-                 JOIN user_intolerances ui ON i.id = ui.intolerance_id
-                 WHERE ui.user_id = $1`,
-                [userId]
-            ),
+        const [objectivesRes, allergiesRes] = await Promise.all([
             pool.query(
                 `SELECT o.name FROM objectives o
                  JOIN user_objectives uo ON o.id = uo.objective_id
                  WHERE uo.user_id = $1`,
                 [userId]
             ),
+            pool.query(
+                `SELECT a.name FROM allergies a
+                 JOIN user_allergies ua ON a.id = ua.allergy_id
+                 WHERE ua.user_id = $1`,
+                [userId]
+            ),
         ]);
 
-        const userIntolerances = intolerancesRes.rows.map((r: any) => r.name.toLowerCase());
         const userObjectives = objectivesRes.rows.map((r: any) => r.name.toLowerCase());
+        const userAllergies = (allergiesRes as any).rows.map((r: any) => r.name.toLowerCase());
 
         let query = `
             SELECT r.*, c.name as category_name, u.username as author_name
@@ -86,28 +86,11 @@ export class RecipeService {
         const conditions: string[] = [];
         const params: any[] = [];
 
-        if (userIntolerances.length > 0) {
-            const intoleranceMap: { [key: string]: string[] } = {
-                'lactosa': ['lactosa', 'lácteos', 'leche', 'queso', 'mantequilla'],
-                'huevo': ['huevo', 'huevos'],
-                'fructosa': ['fructosa'],
-                'gluten (celiaquía)': ['gluten', 'trigo', 'cebada', 'centeno', 'avena'],
-                'sodio': ['sodio', 'sal'],
-            };
-
-            const allergenConditions: string[] = [];
-            
-            userIntolerances.forEach((intolerance: string) => {
-                const searchTerms = intoleranceMap[intolerance] || [intolerance];
-                searchTerms.forEach(term => {
-                    params.push(`%${term}%`);
-                    allergenConditions.push(`(r.allergens IS NOT NULL AND LOWER(r.allergens) LIKE $${params.length})`);
-                });
+        if (userAllergies.length > 0) {
+            userAllergies.forEach((allergy: string) => {
+                params.push(`%${allergy}%`);
+                conditions.push(`(r.allergens IS NULL OR LOWER(r.allergens) NOT LIKE $${params.length})`);
             });
-
-            if (allergenConditions.length > 0) {
-                conditions.push(`NOT (${allergenConditions.join(' OR ')})`);
-            }
         }
 
         if (conditions.length > 0) {
