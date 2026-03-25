@@ -6,7 +6,7 @@ const recipeService = new RecipeService();
 const JWT_SECRET = process.env.JWT_SECRET || 'jsnE982nsAsok.';
 
 export const getAllRecipes = async (req: Request, res: Response) => {
-    const { official, search, category, strictPantry } = req.query;
+    const { official, search, category, strictPantry, difficulty, maxIngredients } = req.query;
     let userId: number | undefined;
 
     if (strictPantry === 'true') {
@@ -30,7 +30,9 @@ export const getAllRecipes = async (req: Request, res: Response) => {
             search as string,
             category as string,
             strictPantry as string,
-            userId
+            userId,
+            difficulty as string,
+            maxIngredients ? Number(maxIngredients) : undefined
         );
         res.json(recipes);
     } catch (error) {

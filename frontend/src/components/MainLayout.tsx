@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import Header from './Header';
 import Menu from './Menu';
+import './MainLayout.css';
 import type { Tab } from './Menu';
 
 const MainLayout: React.FC = () => {
@@ -35,7 +36,7 @@ const MainLayout: React.FC = () => {
     return (
         <>
             <Header activeTab={activeTab} onTabChange={handleTabChange} />
-            <main style={{ paddingTop: '70px', paddingBottom: '120px' }}>
+            <main className="main-layout-container">
                 <Outlet />
             </main>
             <Menu activeTab={activeTab} onChange={handleTabChange} />

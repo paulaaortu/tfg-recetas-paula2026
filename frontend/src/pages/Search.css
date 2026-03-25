@@ -51,7 +51,13 @@
     position: relative;
     border: none;
     cursor: pointer;
-    color: #3B3B3B;
+    color: #7a5a68;
+    transition: all 0.2s ease;
+}
+
+.filter-button svg {
+    display: block;
+    color: inherit;
 }
 
 .filter-badge {
@@ -158,4 +164,159 @@
     width: 14px;
     height: 14px;
     margin-right: 4px;
+}
+
+/* Modal de Filtros */
+.filter-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end; /* En movil sale desde abajo */
+    justify-content: center;
+    z-index: 2000;
+}
+
+.filter-modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 30px 30px 0 0;
+    padding: 25px 20px;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.recipe-filter-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+    width: 100%;
+}
+
+.recipe-filter-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.recipe-filter-modal-header .filter-modal-close-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 10;
+}
+
+.recipe-filter-modal-header .filter-modal-close-btn:hover {
+    color: #e74c3c;
+    transform: scale(1.1);
+}
+
+.filter-section {
+    margin-bottom: 25px;
+
+.filter-section h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #6a8770;
+    letter-spacing: 0.5px;
+}
+
+.filter-section .filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+}
+
+.filter-chip {
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &.active {
+        background: #839E88;
+        color: white;
+        border-color: #839E88;
+    }
+
+    &.wide {
+        flex: 1;
+        min-width: 150px;
+    }
+}
+
+.filter-modal-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+
+    button {
+        flex: 1;
+        padding: 14px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .clear-btn {
+        background: #F3DDE8;
+        color: #7a5a68;
+        border: none;
+    }
+
+    .apply-btn {
+        background: #839E88;
+        color: white;
+        border: none;
+    }
+}
+
+.filter-button.has-filters {
+    background: #839E88;
+    color: white;
+}
+
+@media (min-width: 1024px) {
+    .filter-modal-overlay {
+        align-items: center;
+    }
+
+    .filter-modal-content {
+        border-radius: 20px;
+    }
 }

@@ -7,7 +7,7 @@ export const getImageUrl = (url: string | undefined | null) => {
 };
 
 export class RecipeService {
-    async getAllRecipes(official?: boolean, search?: string, category?: string, strictPantry?: boolean) {
+    async getAllRecipes(official?: boolean, search?: string, category?: string, strictPantry?: boolean, difficulty?: string, maxIngredients?: number) {
         let url = `${apiUrl}/api/recipes?`;
         const params = new URLSearchParams();
 
@@ -15,6 +15,8 @@ export class RecipeService {
         if (search) params.append('search', search);
         if (category && category !== 'Ver todo') params.append('category', category);
         if (strictPantry !== undefined) params.append('strictPantry', String(strictPantry));
+        if (difficulty) params.append('difficulty', difficulty);
+        if (maxIngredients) params.append('maxIngredients', String(maxIngredients));
 
         const headers: Record<string, string> = {};
         if (strictPantry) {

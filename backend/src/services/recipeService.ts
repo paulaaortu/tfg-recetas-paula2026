@@ -1,7 +1,7 @@
 import { pool } from "../db";
 
 export class RecipeService {
-    async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number) {
+    async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number, difficulty?: string, maxIngredients?: number) {
         let query = `
             SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
@@ -24,6 +24,16 @@ export class RecipeService {
         if (category && category !== 'Ver todo' && category !== 'undefined') {
             params.push(category);
             conditions.push(`c.name = $${params.length}`);
+        }
+
+        if (difficulty && difficulty !== 'undefined') {
+            params.push(difficulty);
+            conditions.push(`r.difficulty = $${params.length}`);
+        }
+
+        if (maxIngredients && !isNaN(maxIngredients)) {
+            params.push(maxIngredients);
+            conditions.push(`array_length(string_to_array(r.ingredients, ','), 1) <= $${params.length}`);
         }
 
         if (conditions.length > 0) {

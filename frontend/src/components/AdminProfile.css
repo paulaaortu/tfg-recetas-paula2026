@@ -3,17 +3,28 @@
     margin: 0 auto;
     padding: 20px;
     background: #FBF7F4;
-    min-height: calc(100vh - 190px);
+    height: calc(100vh - 190px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .admin-dashboard {
+        height: calc(100vh - 110px);
+    }
 }
 
 .admin-nav-tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background: white;
     padding: 10px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
 }
 
 .admin-nav-tabs button {
@@ -42,12 +53,42 @@
     color: #a37d8d;
 }
 
+.admin-nav-spacer {
+    flex: 2;
+}
+
+.btn-logout-admin {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-logout-admin:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
 .admin-content {
     background: white;
     border-radius: 20px;
     padding: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(131, 158, 136, 0.1);
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .content-header {
@@ -84,7 +125,10 @@
 }
 
 .table-container {
-    overflow-x: auto;
+    overflow: auto;
+    flex: 1;
+    margin-right: -5px; /* Espacio para el scrollbar */
+    padding-right: 5px;
 }
 
 .admin-table {
@@ -101,6 +145,10 @@
     letter-spacing: 0.05em;
     color: #839E88;
     border-bottom: 2px solid #F3DDE8;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
 }
 
 .admin-table tr {

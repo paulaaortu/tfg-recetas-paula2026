@@ -66,6 +66,17 @@ export default function Upload() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (showSuccessPopup) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showSuccessPopup]);
+
     const handleAddIngredient = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && ingredientInput.trim() !== '') {
             e.preventDefault();

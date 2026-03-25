@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Users, BookOpen, FileText, Plus, Trash2, Edit } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Users, BookOpen, FileText, Plus, Trash2, Edit, LogOut } from 'lucide-react';
 import * as adminService from '../services/adminService';
 import type { Recipe } from '../types/recipes';
 import ConfirmModal from './ConfirmModal';
@@ -19,6 +20,7 @@ const AdminProfile: React.FC = () => {
     const [officialRecipes, setOfficialRecipes] = useState<Recipe[]>([]);
     const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const [modalConfig, setModalConfig] = useState<{
         isOpen: boolean;
@@ -37,6 +39,17 @@ const AdminProfile: React.FC = () => {
     useEffect(() => {
         loadData();
     }, [activeTab]);
+
+    useEffect(() => {
+        if (modalConfig.isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [modalConfig.isOpen]);
 
     const loadData = async () => {
         setLoading(true);
@@ -103,6 +116,12 @@ const AdminProfile: React.FC = () => {
         });
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     return (
         <div className="admin-dashboard">
             <nav className="admin-nav-tabs">
@@ -123,6 +142,15 @@ const AdminProfile: React.FC = () => {
                     onClick={() => setActiveTab('user_recipes')}
                 >
                     <FileText size={20} /> Recetas Usuarios
+                </button>
+                <div className="admin-nav-spacer"></div>
+                <button 
+                    className="btn-logout-admin" 
+                    onClick={handleLogout}
+                    title="Cerrar Sesión"
+                >
+                    <LogOut size={20} />
+                    <span>Cerrar Sesión</span>
                 </button>
             </nav>
 

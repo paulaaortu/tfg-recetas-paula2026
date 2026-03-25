@@ -70,7 +70,7 @@ const Register: React.FC = () => {
                     <button type="submit">Regístrate</button>
                 </form>
 
-                <div>
+                <div className="auth-footer">
                     ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia sesión</span>
                 </div>
             </div>

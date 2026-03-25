@@ -1,4 +1,14 @@
 :root {
+  box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -73,14 +83,10 @@ button:focus-visible {
 
 .no-results {
   text-align: center;
-  padding: 20px 15px;
-  background-color: #F3DDE8; 
-  border-radius: 20px;
+  padding: 20px;
   margin: 10px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   color: #3B3B3B;
   width: 100%;
-  box-sizing: border-box;
 
   >p {
     margin: 0;

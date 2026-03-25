@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { SlidersHorizontal, X, SignalLow, SignalMedium, SignalHigh, Utensils, RotateCcw, Check } from 'lucide-react'
 import PantryCard from '../components/PantryCard'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
@@ -16,6 +17,9 @@ function Home() {
     const [strictPantry, setStrictPantry] = useState(false)
     const [pantryCount, setPantryCount] = useState(0)
     const [loadingRecommended, setLoadingRecommended] = useState(false)
+    const [showFilters, setShowFilters] = useState(false)
+    const [difficulty, setDifficulty] = useState<string>('')
+    const [maxIngredients, setMaxIngredients] = useState<number | undefined>(undefined)
     const recipeService = new RecipeService()
 
     useEffect(() => {
@@ -30,6 +34,18 @@ function Home() {
         fetchCategories()
     }, [])
 
+    // Bloquear scroll cuando los filtros están abiertos
+    useEffect(() => {
+        if (showFilters) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showFilters]);
+
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -37,14 +53,14 @@ function Home() {
                 if (searchTerm || activeCategory !== 'Ver todo') {
                     setStrictPantry(false);
                 }
-                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory, strictPantry)
+                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory, strictPantry, difficulty, maxIngredients)
                 setRecipes(data)
             } catch (error) {
                 console.error('Error al cargar recetas:', error)
             }
         }
         fetchRecipes()
-    }, [searchTerm, activeCategory, strictPantry])
+    }, [searchTerm, activeCategory, strictPantry, difficulty, maxIngredients])
 
     useEffect(() => {
         // usuario de localStorage
@@ -80,19 +96,30 @@ function Home() {
         }
     }, [])
 
+    const activeFiltersCount = (difficulty ? 1 : 0) + (maxIngredients ? 1 : 0);
+
+    const isSearchingOrFiltering = !!searchTerm || activeCategory !== 'Ver todo' || strictPantry || activeFiltersCount > 0;
+
     // Show recommendations section only when not searching/filtering
-    const showRecommendations = !!userName && !searchTerm && activeCategory === 'Ver todo' && !strictPantry
+    const showRecommendations = !!userName && !isSearchingOrFiltering
+
+    const handleClearFilters = () => {
+        setDifficulty('');
+        setMaxIngredients(undefined);
+    };
 
     return (
         <div className="contenedor-principal">
             <div>
-                <div className="bienvenida">
-                    <h1 className="name-underline">
-                        {userName ? `Hola, ` : 'Bienvenido'}
-                        <span>{userName}</span>
-                    </h1>
-                    <p className="subtitulo">¿Qué cocinamos hoy?</p>
-                </div>
+                {!isSearchingOrFiltering && (
+                    <div className="bienvenida">
+                        <h1 className="name-underline">
+                            {userName ? `Hola, ` : 'Bienvenido'}
+                            <span>{userName}</span>
+                        </h1>
+                        <p className="subtitulo">¿Qué cocinamos hoy?</p>
+                    </div>
+                )}
 
                 {/* Barra búsqueda desktop */}
                 <div className="barra-busqueda">
@@ -104,31 +131,43 @@ function Home() {
                             if (strictPantry) setStrictPantry(false)
                         }}
                     />
-                    <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
+                    <div className="search-buttons-group">
+                        <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
+                        <button 
+                            className={`filter-button-home ${activeFiltersCount > 0 ? 'active' : ''}`}
+                            onClick={() => setShowFilters(true)}
+                            title="Filtros"
+                        >
+                            <SlidersHorizontal size={22} color="#7a5a68" strokeWidth={2.5} />
+                            {activeFiltersCount > 0 && <span className="filter-badge-home">{activeFiltersCount}</span>}
+                        </button>
+                    </div>
                 </div>
 
-                <div className="categories-scroll-home">
-                    <button
-                        key="Ver todo"
-                        className={`category-chip ${activeCategory === 'Ver todo' ? 'active' : 'inactive'}`}
-                        onClick={() => setActiveCategory('Ver todo')}
-                    >
-                        Ver todo
-                    </button>
-                    {categories.map(category => (
+                {!isSearchingOrFiltering && (
+                    <div className="categories-scroll-home">
                         <button
-                            key={category.id}
-                            className={`category-chip ${activeCategory === category.name ? 'active' : 'inactive'}`}
-                            onClick={() => setActiveCategory(category.name)}
+                            key="Ver todo"
+                            className={`category-chip ${activeCategory === 'Ver todo' ? 'active' : 'inactive'}`}
+                            onClick={() => setActiveCategory('Ver todo')}
                         >
-                            {category.name}
+                            Ver todo
                         </button>
-                    ))}
-                </div>
+                        {categories.map(category => (
+                            <button
+                                key={category.id}
+                                className={`category-chip ${activeCategory === category.name ? 'active' : 'inactive'}`}
+                                onClick={() => setActiveCategory(category.name)}
+                            >
+                                {category.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 <div className="ordenador">
                     <div>
-                        {!searchTerm && activeCategory === 'Ver todo' && !strictPantry && userName && (
+                        {!isSearchingOrFiltering && userName && (
                             <PantryCard
                                 pantryCount={pantryCount}
                                 onViewRecipes={() => setStrictPantry(true)}
@@ -162,20 +201,31 @@ function Home() {
                         )}
 
                         {/* TODAS LAS RECETAS / BÚSQUEDA */}
-                        <section>
+                        <section style={{ marginTop: isSearchingOrFiltering ? '20px' : '0' }}>
                             <div className="titulo">
                                 <h2>
                                     {strictPantry
                                         ? 'Recetas con lo que tienes'
-                                        : (searchTerm || activeCategory !== 'Ver todo'
-                                            ? 'Resultados de búsqueda'
-                                            : (showRecommendations ? 'Explorar recetas' : (userName ? 'Recomendaciones' : 'Nuestras Recetas')))}
+                                        : (isSearchingOrFiltering
+                                            ? `Resultados (${recipes.length})`
+                                            : (userName ? 'Explorar recetas' : 'Nuestras Recetas'))}
                                 </h2>
-                                {!searchTerm && activeCategory === 'Ver todo' && !strictPantry && (
+                                {!isSearchingOrFiltering && (
                                     <span className="see-all">Ver todas</span>
                                 )}
-                                {strictPantry && (
-                                    <span className="see-all" onClick={() => setStrictPantry(false)} style={{ cursor: 'pointer', color: 'red' }}>Limpiar</span>
+                                {isSearchingOrFiltering && (
+                                    <span 
+                                        className="see-all" 
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            setActiveCategory('Ver todo');
+                                            setStrictPantry(false);
+                                            handleClearFilters();
+                                        }} 
+                                        style={{ cursor: 'pointer', color: '#e74c3c', fontWeight: 'bold' }}
+                                    >
+                                        Limpiar filtros
+                                    </span>
                                 )}
                             </div>
 
@@ -189,14 +239,14 @@ function Home() {
                                         <p>
                                             {strictPantry
                                                 ? "Vaya, parece que no tienes ingredientes suficientes para ninguna de nuestras recetas."
-                                                : (searchTerm
-                                                    ? `No se encontraron recetas para "${searchTerm}"`
+                                                : (isSearchingOrFiltering
+                                                    ? "No se han encontrado recetas con esas características."
                                                     : "No hay recetas disponibles en este momento.")
                                             }
                                         </p>
-                                        {strictPantry && (
+                                        {isSearchingOrFiltering && (
                                             <p style={{ marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
-                                                Prueba a añadir más alimentos a tu despensa o limpia el filtro.
+                                                Prueba a cambiar los filtros o a realizar otra búsqueda.
                                             </p>
                                         )}
                                     </div>
@@ -206,6 +256,73 @@ function Home() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal de Filtros (Reutilizando lógica de Search.tsx) */}
+            {showFilters && (
+                <div className="filter-modal-overlay" onClick={() => setShowFilters(false)}>
+                    <div className="filter-modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="recipe-filter-modal-header">
+                            <h3>Filtros avanzados</h3>
+                            <button className="filter-modal-close-btn" onClick={() => setShowFilters(false)}>
+                                <X size={24} color="#666" />
+                            </button>
+                        </div>
+                        
+                        <div className="filter-modal-body">
+                            <div className="filter-section">
+                                <h4>Dificultad</h4>
+                                <div className="filter-options">
+                                    {[
+                                        { label: 'Baja', icon: <SignalLow size={16} /> },
+                                        { label: 'Media', icon: <SignalMedium size={16} /> },
+                                        { label: 'Alta', icon: <SignalHigh size={16} /> }
+                                    ].map(level => (
+                                        <button 
+                                            key={level.label}
+                                            className={`filter-chip-modal ${difficulty === level.label ? 'active' : ''}`}
+                                            onClick={() => setDifficulty(difficulty === level.label ? '' : level.label)}
+                                        >
+                                            {level.icon}
+                                            <span>{level.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="filter-section">
+                                <h4>Cantidad de ingredientes</h4>
+                                <div className="filter-options">
+                                    {[
+                                        { label: 'Pocos ingredientes (≤ 5)', value: 5, icon: <Utensils size={16} /> },
+                                        { label: 'Normal (≤ 10)', value: 10, icon: <Utensils size={18} /> },
+                                        { label: 'Cualquier cantidad', value: undefined, icon: <Utensils size={20} /> }
+                                    ].map(option => (
+                                        <button 
+                                            key={option.label}
+                                            className={`filter-chip-modal wide ${maxIngredients === option.value ? 'active' : ''}`}
+                                            onClick={() => setMaxIngredients(option.value)}
+                                        >
+                                            {option.icon}
+                                            <span>{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="filter-modal-footer">
+                            <button className="clear-btn" onClick={handleClearFilters}>
+                                <RotateCcw size={18} />
+                                Limpiar
+                            </button>
+                            <button className="apply-btn" onClick={() => setShowFilters(false)}>
+                                <Check size={18} />
+                                Aplicar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -35,6 +35,17 @@ const Pantry: React.FC = () => {
         }
     }, [isLoggedIn]);
 
+    useEffect(() => {
+        if (isModalOpen || itemToDelete) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isModalOpen, itemToDelete]);
+
     const loadPantry = async () => {
         try {
             setLoading(true);

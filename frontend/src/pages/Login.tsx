@@ -60,7 +60,7 @@ const Login: React.FC = () => {
                     <button type="submit">Iniciar sesión</button>
                 </form>
 
-                <div>
+                <div className="auth-footer">
                     ¿No tienes cuenta?
                     <span onClick={() => navigate('/register')}> Regístrate</span>
                 </div>

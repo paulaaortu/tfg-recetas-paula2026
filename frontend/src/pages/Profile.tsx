@@ -70,6 +70,17 @@ function Profile() {
     }, [])
 
     useEffect(() => {
+        if (openModal || isEditModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [openModal, isEditModalOpen]);
+
+    useEffect(() => {
         if (activeTab === 'ajustes') return;
         const fetchRecipes = async () => {
             setLoadingRecipes(true);

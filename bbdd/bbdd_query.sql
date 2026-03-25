@@ -128,15 +128,15 @@ CREATE TABLE pantry (
 );
 
 -- ==========================
--- INSERTAR DATOS DE PRUEBA
+-- INSERTAR DATOS
 -- ==========================
 
 -- Usuarios
 INSERT INTO users (username, email, password_hash, is_admin)
 VALUES
-('paula', 'paula@email.com', 'hash_prueba1', false),
-('juan', 'juan@email.com', 'hash_prueba2', false),
-('admin', 'admin@email.com', '$2b$10$9v3X9S8K1i5oQ1gL2m8R7O3n7U4e.Iq3G.o/h6a/Y3P2J5l1G', true); -- password is 'admin123'
+('Paula', 'paula@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false),
+('Juan', 'juan@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false),
+('Administrador', 'admin@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', true);
 
 -- Categorías
 INSERT INTO categories (name)
