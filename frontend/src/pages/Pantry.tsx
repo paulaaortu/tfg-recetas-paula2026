@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getPantryItems, addPantryItem, deletePantryItem } from '../services/pantryService';
 import './Pantry.css';
 import { Trash, Plus } from 'lucide-react';
@@ -21,6 +21,7 @@ const Pantry: React.FC = () => {
     // Check session
     const user = localStorage.getItem('user');
     const isLoggedIn = !!user;
+    const nameInputRef = useRef<HTMLInputElement>(null);
 
     // Form state
     const [newItem, setNewItem] = useState({
@@ -45,6 +46,14 @@ const Pantry: React.FC = () => {
             document.body.style.overflow = 'unset';
         };
     }, [isModalOpen, itemToDelete]);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            setTimeout(() => {
+                nameInputRef.current?.focus();
+            }, 0);
+        }
+    }, [isModalOpen]);
 
     const loadPantry = async () => {
         try {
@@ -134,6 +143,7 @@ const Pantry: React.FC = () => {
                             <div className="form-group">
                                 <label>Nombre del ingrediente</label>
                                 <input
+                                    ref={nameInputRef}
                                     type="text"
                                     value={newItem.name}
                                     onChange={e => setNewItem({ ...newItem, name: e.target.value })}

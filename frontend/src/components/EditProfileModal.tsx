@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, User, Mail, Lock } from 'lucide-react';
 import './EditProfileModal.css';
 
@@ -21,6 +21,16 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const nameInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (isOpen) {
+            setTimeout(() => {
+                nameInputRef.current?.focus();
+            }, 0);
+        }
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -56,6 +66,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSave }: Edit
                         <div>
                             <User size={20} className="input-icon" />
                             <input
+                                ref={nameInputRef}
                                 type="text"
                                 id="username"
                                 value={username}
