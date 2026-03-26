@@ -8,27 +8,25 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     border: 1px solid #F3DDE8;
     gap: 12px;
-}
 
-.social-search-icon {
-    color: #839E88;
-}
+    .social-search-icon {
+        color: #839E88;
+    }
 
-.social-search-bar input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 16px;
-    color: #3B3B3B;
-    background: transparent;
-}
+    input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 16px;
+        color: #3B3B3B;
+        background: transparent;
 
-.social-search-bar input::placeholder {
-    color: #aaa;
-}
+        &::placeholder {
+            color: #aaa;
+        }
+    }
 
-@media (min-width: 1024px) {
-    .social-search-bar {
+    @media (min-width: 1024px) {
         max-width: 600px;
         margin: 0 auto 40px auto;
     }

@@ -36,6 +36,23 @@ export class RecipeService {
             conditions.push(`array_length(string_to_array(r.ingredients, ','), 1) <= $${params.length}`);
         }
 
+        if (strictPantry === 'true' && userId) {
+            params.push(userId);
+            const userIdParam = `$${params.length}`;
+            conditions.push(`
+                NOT EXISTS (
+                    SELECT unnest_ing 
+                    FROM unnest(string_to_array(r.ingredients, ',')) AS unnest_ing
+                    WHERE TRIM(unnest_ing) <> '' AND NOT EXISTS (
+                        SELECT 1 FROM pantry p 
+                        WHERE p.user_id = ${userIdParam}
+                        AND (TRIM(unnest_ing) ILIKE '%' || p.ingredient_name || '%' 
+                             OR p.ingredient_name ILIKE '%' || TRIM(unnest_ing) || '%')
+                    )
+                )
+            `);
+        }
+
         if (conditions.length > 0) {
             query += " WHERE " + conditions.join(" AND ");
         }
@@ -43,27 +60,7 @@ export class RecipeService {
         query += " ORDER BY r.created_at DESC";
 
         const result = await pool.query(query, params);
-        let recipes = result.rows;
-
-        if (strictPantry === 'true' && userId) {
-            const pantryQuery = `SELECT ingredient_name FROM pantry WHERE user_id = $1`;
-            const pantryResult = await pool.query(pantryQuery, [userId]);
-            const pantryIngredients = pantryResult.rows.map((row: any) => row.ingredient_name.toLowerCase());
-
-            recipes = recipes.filter((recipe: any) => {
-                if (!recipe.ingredients) return false;
-
-                const recipeIngredientsList = recipe.ingredients.split(',').map((i: string) => i.trim().toLowerCase());
-
-                return recipeIngredientsList.every((recipeIng: string) => {
-                    return pantryIngredients.some((pantryIng: string) => 
-                        recipeIng.includes(pantryIng) || pantryIng.includes(recipeIng)
-                    );
-                });
-            });
-        }
-
-        return recipes;
+        return result.rows;
     }
 
     async getRecommendedRecipes(userId: number) {

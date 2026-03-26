@@ -7,10 +7,8 @@
   background-color: #fbf7f4;
   overflow: hidden;
   box-sizing: border-box;
-}
 
-@media (min-width: 1024px) {
-  .auth-contenedor {
+  @media (min-width: 1024px) {
     height: calc(100vh - 110px);
   }
 }

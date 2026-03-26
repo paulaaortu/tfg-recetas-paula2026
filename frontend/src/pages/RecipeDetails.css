@@ -111,12 +111,8 @@
         height: 60vh;
         color: #FFFFFF;
     }
-}
 
-
-
-@media (min-width: 1024px) {
-    .contenedor-detalles {
+    @media (min-width: 1024px) {
         padding-bottom: 40px;
 
         .detalles-contenido {
@@ -226,4 +222,4 @@
             }
         }
     }
-}
+}

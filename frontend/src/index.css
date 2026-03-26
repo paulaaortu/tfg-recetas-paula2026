@@ -27,10 +27,10 @@ a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
-}
 
-a:hover {
-  color: #535bf2;
+  &:hover {
+    color: #535bf2;
+  }
 }
 
 body {
@@ -55,15 +55,15 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
 
-button:hover {
-  border-color: #646cff;
-}
+  &:hover {
+    border-color: #646cff;
+  }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  &:focus,
+  &:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -101,10 +101,8 @@ button:focus-visible {
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   width: 100%;
-}
 
-@media (min-width: 1024px) {
-  .grid-recetas {
+  @media (min-width: 1024px) {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
     gap: 25px !important;
     max-width: none !important;

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Home, Search, Package, Users, User } from 'lucide-react'
+import './Menu.css'
 
 export type Tab = 'inicio' | 'buscar' | 'despensa' | 'social' | 'perfil'
 export const TABS: { id: Tab; label: string; icon: React.ReactElement }[] = [

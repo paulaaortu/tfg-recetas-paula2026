@@ -2,10 +2,8 @@
     transition: padding 0.3s ease;
     padding-top: 70px;
     padding-bottom: 120px;
-}
 
-@media (min-width: 1024px) {
-    .main-layout-container {
+    @media (min-width: 1024px) {
         padding-bottom: 40px; /* Reducido en escritorio ya que el menú inferior no es visible */
     }
 }

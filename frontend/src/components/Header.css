@@ -1,5 +1,4 @@
 .main-header {
-    background: #FBF7F4;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     position: fixed;
@@ -13,7 +12,7 @@
     transition: background-color 0.3s ease;
 
     >div {
-        max-width: 1200px;
+        max-width: 100%;
         margin: 0 auto;
         width: 100%;
         height: 100%;
@@ -23,9 +22,27 @@
         padding: 0 20px;
         box-sizing: border-box;
 
+        .botones {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            color: #6a8770;
+            background: none;
+            border: none;
+            padding: 0;
+
+            &:hover {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
         .logo-contenedor {
             display: flex;
             align-items: center;
+            gap: 12px;
 
             .logo {
                 display: flex;
@@ -33,7 +50,7 @@
                 cursor: pointer;
                 transition: transform 0.2s ease;
 
-                :hover {
+                &:hover {
                     transform: scale(1.02);
                 }
 
@@ -61,11 +78,16 @@
                 border-radius: 8px;
                 transition: all 0.2s ease;
 
-                :hover {
+                &:hover {
                     background-color: rgba(106, 135, 112, 0.1);
                     color: #4a6750;
                 }
 
+                &.active {
+                    color: #4a6750;
+                    font-weight: 700;
+                    background: rgba(106, 135, 112, 0.15);
+                }
             }
         }
 
@@ -74,35 +96,16 @@
             align-items: center;
             gap: 16px;
 
-            >div {
-                .header-icon {
-                    color: #6a8770;
-                }
+            .header-icon {
+                color: #6a8770;
             }
         }
     }
-}
 
-.botones {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-
-    color: #6a8770;
-}
-
-.header-activo.active {
-    color: #4a6750;
-    font-weight: 700;
-    background: rgba(106, 135, 112, 0.15);
-}
-
-@media (min-width: 1024px) {
-    .main-header {
+    @media (min-width: 1024px) {
         >div {
-            padding: 0 40px;
+            padding: 0 20px;
+            max-width: 100%;
 
             .logo-contenedor {
                 flex: 1;

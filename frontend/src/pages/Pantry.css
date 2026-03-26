@@ -101,96 +101,96 @@
             font-size: 3rem;
             display: block;
             margin-bottom: 10px;
-        }
     }
 }
 
 
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    padding: 0 16px;
-}
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        padding: 0 16px;
 
-.modal {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
-.modal h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
+            h2 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                text-align: center;
+                color: #333;
+            }
 
-.form-group {
-    margin-bottom: 15px;
-}
+            .form-group {
+                margin-bottom: 15px;
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    color: #666;
-}
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-size: 0.9rem;
+                    color: #666;
+                }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
+                input,
+                select {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    font-size: 1rem;
+                    box-sizing: border-box;
+                }
+            }
 
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
+            .modal-actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
 
-.modal-actions button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: opacity 0.2s;
-}
+                button {
+                    flex: 1;
+                    padding: 12px;
+                    border-radius: 10px;
+                    border: none;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: opacity 0.2s;
 
-.cancel-btn {
-    background: #F3DDE8;
-    color: #6b4a5e;
-}
+                    &:hover {
+                        opacity: 0.9;
+                    }
 
-.save-btn {
-    background: #839E88;
-    color: white;
-}
+                    &.cancel-btn {
+                        background: #F3DDE8;
+                        color: #6b4a5e;
+                    }
 
-.delete-confirm-btn {
-    background: #839E88;
-    color: white;
-}
+                    &.save-btn {
+                        background: #839E88;
+                        color: white;
+                    }
 
-.modal-actions button:hover {
-    opacity: 0.9;
+                    &.delete-confirm-btn {
+                        background: #839E88;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
 }

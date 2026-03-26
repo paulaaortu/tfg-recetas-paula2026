@@ -101,103 +101,109 @@
             }
         }
     }
-}
+        .logout-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 10px;
 
+            &:hover {
+                background-color: #fff5f4;
+            }
 
-.logout-item {
-    margin-top: 10px;
+            >div {
+                display: flex;
+                align-items: center;
+                gap: 12px;
 
-    >div {
-        .logout-icon {
-            color: #e74c3c;
+                .logout-icon {
+                    color: #e74c3c;
+                }
+            }
+
+            >span {
+                color: #e74c3c;
+                font-weight: 500;
+            }
+        }
+
+        /* Tabs */
+        .profile-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+
+            .tab-btn {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 15px;
+                background-color: transparent;
+                border: 2px solid #839E88;
+                border-radius: 25px;
+                color: #839E88;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: rgba(243, 221, 232, 0.4);
+                }
+
+                &.active {
+                    background-color: #839E88;
+                    color: white;
+                }
+            }
+        }
+
+        /* Recipes Tab Content */
+        .recipes-tab-content {
+            background: transparent;
+
+            .grid-recetas {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+
+                @media (min-width: 768px) {
+                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    gap: 20px;
+                }
+
+                .no-recipes-msg {
+                    text-align: center;
+                    color: #666;
+                    font-size: 16px;
+                    margin-top: 40px;
+                    width: 100%;
+                    grid-column: 1 / -1;
+                }
+            }
+        }
+
+        /* Preference Chips in Menu Items */
+        .preference-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+
+            .pref-chip {
+                background-color: #f3f3f3;
+                color: #6a8770;
+                font-size: 11px;
+                padding: 2px 8px;
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
         }
     }
-
-    >span {
-        color: #e74c3c;
-        font-weight: 500;
-    }
-
-    :hover {
-        background-color: #fff5f4;
-    }
-}
-
-/* Tabs */
-.profile-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-}
-
-.tab-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 15px;
-    background-color: transparent;
-    border: 2px solid #839E88;
-    border-radius: 25px;
-    color: #839E88;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.tab-btn:hover {
-    background-color: rgba(243, 221, 232, 0.4);
-}
-
-.tab-btn.active {
-    background-color: #839E88;
-    color: white;
-}
-
-/* Recipes Tab Content */
-.recipes-tab-content {
-    background: transparent;
-}
-
-.grid-recetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-}
-
-@media (min-width: 768px) {
-    .grid-recetas {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-}
-
-.no-recipes-msg {
-    text-align: center;
-    color: #666;
-    font-size: 16px;
-    margin-top: 40px;
-    width: 100%;
-    grid-column: 1 / -1;
-}
-
-/* Preference Chips in Menu Items */
-.preference-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 5px;
-}
-
-.pref-chip {
-    background-color: #f3f3f3;
-    color: #6a8770;
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
 }
 
 /* Modal Overlay */
@@ -213,136 +219,136 @@
     justify-content: center;
     z-index: 2000;
     padding: 20px;
-}
 
-/* Modal Content */
-.modal-preference {
-    background: white;
-    width: 100%;
-    max-width: 450px;
-    border-radius: 20px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-height: 85vh;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-
-    .modal-preference-header {
-        padding: 20px;
+    /* Modal Content */
+    .modal-preference {
+        background: white;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 20px;
+        overflow: hidden;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #eee;
+        flex-direction: column;
+        max-height: 85vh;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 
-        h3 {
-            margin: 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .modal-close-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #999;
-        }
-    }
-
-    .modal-preference-options {
-        padding: 10px 20px;
-        overflow-y: auto;
-        flex: 1;
-
-        .preference-option {
+        .modal-preference-header {
+            padding: 20px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-bottom: 5px;
+            border-bottom: 1px solid #eee;
 
-            &:hover {
-                background-color: #f9f9f9;
+            h3 {
+                margin: 0;
+                font-size: 18px;
+                color: #333;
             }
 
-            &.selected {
-                background-color: #f0f7f1;
-
-                .preference-option-check {
-                    background-color: #839E88;
-                    border-color: #839E88;
-                    color: white;
-                }
+            .modal-close-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #999;
             }
+        }
 
-            .preference-option-check {
-                width: 22px;
-                height: 22px;
-                border: 2px solid #ddd;
-                border-radius: 6px;
+        .modal-preference-options {
+            padding: 10px 20px;
+            overflow-y: auto;
+            flex: 1;
+
+            .preference-option {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                gap: 15px;
+                padding: 12px 15px;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: background 0.2s;
+                margin-bottom: 5px;
+
+                &:hover {
+                    background-color: #f9f9f9;
+                }
+
+                &.selected {
+                    background-color: #f0f7f1;
+
+                    .preference-option-check {
+                        background-color: #839E88;
+                        border-color: #839E88;
+                        color: white;
+                    }
+                }
+
+                .preference-option-check {
+                    width: 22px;
+                    height: 22px;
+                    border: 2px solid #ddd;
+                    border-radius: 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s;
+                }
+
+                .preference-option-text {
+                    display: flex;
+                    flex-direction: column;
+
+                    .preference-option-name {
+                        font-weight: 500;
+                        color: #333;
+                    }
+
+                    .preference-option-desc {
+                        font-size: 11px;
+                        color: #888;
+                    }
+                }
+            }
+        }
+
+        .modal-preference-footer {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+
+            button {
+                flex: 1;
+                padding: 12px;
+                border-radius: 12px;
+                font-weight: 600;
+                cursor: pointer;
                 transition: all 0.2s;
             }
 
-            .preference-option-text {
-                display: flex;
-                flex-direction: column;
+            .btn-cancel {
+                background-color: #F3DDE8;
+                border: none;
+                color: #3c3c3c;
 
-                .preference-option-name {
-                    font-weight: 500;
-                    color: #333;
+                &:hover {
+                    background-color: #eee;
+                }
+            }
+
+            .btn-save {
+                background-color: #839E88;
+                border: none;
+                color: white;
+
+                &:hover {
+                    background-color: #6a8770;
                 }
 
-                .preference-option-desc {
-                    font-size: 11px;
-                    color: #888;
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
                 }
             }
         }
     }
-
-    .modal-preference-footer {
-        padding: 20px;
-        display: flex;
-        gap: 10px;
-        border-top: 1px solid #eee;
-
-        button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-cancel {
-            background-color: #F3DDE8;
-            border: none;
-            color: #3c3c3c;
-
-            &:hover {
-                background-color: #eee;
-            }
-        }
-
-        .btn-save {
-            background-color: #839E88;
-            border: none;
-            color: white;
-
-            &:hover {
-                background-color: #6a8770;
-            }
-
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
-        }
-    }
-}
+}

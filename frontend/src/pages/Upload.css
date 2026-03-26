@@ -7,181 +7,177 @@
     /* Soft pink base */
     font-family: 'Inter', sans-serif;
     /* To account for fixed Header */
-}
 
-.upload-header {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    min-height: 180px;
-    position: relative;
-}
+    .upload-header {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        min-height: 180px;
+        position: relative;
 
-.photo-upload-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    position: relative;
-}
+        .photo-upload-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            position: relative;
 
-.photo-btn {
-    background-color: rgba(255, 255, 255, 0.4);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-weight: 600;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-}
+            .photo-btn {
+                background-color: rgba(255, 255, 255, 0.4);
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-weight: 600;
+                backdrop-filter: blur(5px);
+                cursor: pointer;
+            }
 
-.close-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-}
+            .close-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+            }
+        }
+    }
 
-/* Bottom Sheet */
-.upload-form-sheet {
-    background-color: #fcfbf8;
-    border-radius: 30px 30px 0 0;
-    flex: 1;
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-bottom: 100px;
-    /* space for absolute button if needed */
-}
+    .upload-form-sheet {
+        background-color: #FBF7F4;
+        border-radius: 30px 30px 0 0;
+        flex: 1;
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #b07090;
+            text-transform: uppercase;
+        }
 
-.form-row {
-    display: flex;
-    gap: 15px;
-}
+        input,
+        select,
+        textarea {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 15px;
+            background-color: #ffffff;
+            outline: none;
+            color: #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 
-.form-group.half {
-    flex: 1;
-}
+            &::placeholder {
+                color: #b5b5b5;
+            }
+        }
 
-.upload-form-sheet label {
-    font-size: 14px;
-    font-weight: 700;
-    color: #b07090;
-    text-transform: uppercase;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
 
-.upload-form-sheet input,
-.upload-form-sheet select,
-.upload-form-sheet textarea {
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 12px 15px;
-    font-size: 15px;
-    background-color: #ffffff;
-    outline: none;
-    color: #555;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
+            &.half {
+                flex: 1;
+            }
 
-.upload-form-sheet input::placeholder,
-.upload-form-sheet textarea::placeholder {
-    color: #b5b5b5;
-}
+            .input-with-icon {
+                position: relative;
+                display: flex;
+                align-items: center;
 
-.input-with-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
+                .icon {
+                    position: absolute;
+                    left: 12px;
+                    color: #555;
+                }
 
-.input-with-icon .icon {
-    position: absolute;
-    left: 12px;
-    color: #555;
-}
+                input {
+                    padding-left: 35px;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+            }
 
-.input-with-icon input {
-    padding-left: 35px;
-    width: 100%;
-    box-sizing: border-box;
-}
+            .ingredient-input {
+                margin-bottom: 5px;
+            }
+        }
 
-.upload-form-sheet select {
-    appearance: none;
-    width: 100%;
-}
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
 
-.ingredient-input {
-    margin-bottom: 5px;
-}
+        select {
+            appearance: none;
+            width: 100%;
+        }
 
-.upload-form-sheet textarea {
-    min-height: 120px;
-    resize: none;
-}
+        textarea {
+            min-height: 120px;
+            resize: none;
+        }
 
-.pills-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
+        .pills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
 
-.display-pills {
-    margin-top: 5px;
-}
+            &.display-pills {
+                margin-top: 5px;
+            }
 
-.pill {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    color: #666;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
+            .pill {
+                background-color: #ffffff;
+                border: 1px solid #e0e0e0;
+                color: #666;
+                border-radius: 20px;
+                padding: 8px 15px;
+                font-weight: 500;
+                font-size: 14px;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 
-.pill.active {
-    background-color: #8fa093;
-    color: white;
-    border-color: #8fa093;
-}
+                &.active {
+                    background-color: #8fa093;
+                    color: white;
+                    border-color: #8fa093;
+                }
 
-.pill.light-green {
-    background-color: #F3DDE8;
-    border-color: #F3DDE8;
-    color: #7a5a68;
-}
+                &.light-green {
+                    background-color: #F3DDE8;
+                    border-color: #F3DDE8;
+                    color: #7a5a68;
+                }
+            }
+        }
 
-.submit-recipe-btn {
-    background-color: #8fa093;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(143, 160, 147, 0.3);
-}
+        .submit-recipe-btn {
+            background-color: #8fa093;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(143, 160, 147, 0.3);
 
-.submit-recipe-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+        }
+    }
 }
 
 /* Success Popup */
@@ -196,22 +192,61 @@
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    backdrop-filter: blur(3px); /* subtle blur for elegance */
-}
+    backdrop-filter: blur(3px);
+    /* subtle blur for elegance */
 
-.success-popup-content {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 80%;
-    width: 320px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    animation: popupFadeIn 0.3s ease-out;
+    .success-popup-content {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 80%;
+        width: 320px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        animation: popupFadeIn 0.3s ease-out;
+
+        .success-popup-icon {
+            font-size: 50px;
+            color: #8fa093;
+        }
+
+        h3 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+            color: #666;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .success-popup-btn {
+            background-color: #8fa093;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(143, 160, 147, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+
+            &:active {
+                transform: scale(0.97);
+            }
+        }
+    }
 }
 
 @keyframes popupFadeIn {
@@ -219,46 +254,9 @@
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
     }
-}
-
-.success-popup-icon {
-    font-size: 50px;
-    color: #8fa093;
-}
-
-.success-popup-content h3 {
-    margin: 0;
-    color: #333;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.success-popup-content p {
-    margin: 0;
-    color: #666;
-    font-size: 15px;
-    line-height: 1.4;
-}
-
-.success-popup-btn {
-    background-color: #8fa093;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-    cursor: pointer;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(143, 160, 147, 0.3);
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.success-popup-btn:active {
-    transform: scale(0.97);
 }

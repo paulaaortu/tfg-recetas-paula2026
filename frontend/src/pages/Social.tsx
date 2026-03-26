@@ -23,7 +23,7 @@ function Social() {
         if (isLoggedIn) {
             const fetchRecipes = async () => {
                 try {
-                    const data = await recipeService.getAllRecipes(false)
+                    const data = await recipeService.getAllRecipes(false, search)
                     setRecipes(data)
                 } catch (error) {
                     console.error('Error al cargar recetas sociales:', error)
@@ -31,15 +31,11 @@ function Social() {
             }
             fetchRecipes()
         }
-    }, [isLoggedIn])
+    }, [isLoggedIn, search])
 
     if (!isLoggedIn) {
         return <LoginOverlay pageName="Comunidad (Social)" />;
     }
-
-    const filtered = recipes.filter(r =>
-        r.title?.toLowerCase().includes(search.toLowerCase())
-    )
 
     return (
         <div className="contenedor-principal">
@@ -60,8 +56,8 @@ function Social() {
 
                 <section>
                     <div className="grid-recetas">
-                        {filtered.length > 0 ? (
-                            filtered.map((recipe) => (
+                        {recipes.length > 0 ? (
+                            recipes.map((recipe) => (
                                 <CardRecipes key={recipe.id} recipe={recipe} />
                             ))
                         ) : (
