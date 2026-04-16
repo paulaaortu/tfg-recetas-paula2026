@@ -13,10 +13,23 @@ export default function RecipeDetails() {
     const [isFavorite, setIsFavorite] = useState(false);
     const [isFavLoading, setIsFavLoading] = useState(false);
     const recipeService = new RecipeService();
-    
+
     // Check if user is logged in
     const token = localStorage.getItem('token');
     const isLoggedIn = !!token;
+
+    // Decode JWT to get current user id
+    const getCurrentUserId = (): number | null => {
+        if (!token) return null;
+        try {
+            const cleanToken = token.replace(/^"|"$/g, '');
+            const payload = JSON.parse(atob(cleanToken.split('.')[1]));
+            return payload.id ?? payload.userId ?? payload.sub ?? null;
+        } catch {
+            return null;
+        }
+    };
+    const currentUserId = getCurrentUserId();
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -89,13 +102,13 @@ export default function RecipeDetails() {
             <div className="detalles-contenido">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
                     <h2>{recipe.title}</h2>
-                    {isLoggedIn && (
-                        <button 
+                    {isLoggedIn && recipe.author_id !== currentUserId && (
+                        <button
                             onClick={handleToggleFavorite}
                             disabled={isFavLoading}
-                            style={{ 
-                                background: 'transparent', 
-                                border: 'none', 
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
                                 cursor: 'pointer',
                                 padding: '5px',
                                 display: 'flex',
@@ -104,9 +117,9 @@ export default function RecipeDetails() {
                             }}
                             title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
                         >
-                            <Heart 
-                                size={28} 
-                                color={isFavorite ? "#d9534f" : "#6a8770"} 
+                            <Heart
+                                size={28}
+                                color={isFavorite ? "#d9534f" : "#6a8770"}
                                 fill={isFavorite ? "#d9534f" : "none"}
                                 style={{ transition: 'all 0.2s' }}
                             />
@@ -119,7 +132,7 @@ export default function RecipeDetails() {
                     </p>
                 )}
                 {cleanDescription && <p className="receta-descripcion-corta">{cleanDescription}</p>}
-                
+
                 <div className='info-receta'>
                     <div className="bloque-izquierdo-escritorio">
                         <img src={getImageUrl(recipe.image_url)} alt={recipe.title} />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SlidersHorizontal, X, SignalLow, SignalMedium, SignalHigh, Utensils, RotateCcw, Check } from 'lucide-react'
+import { SlidersHorizontal, X, SignalLow, SignalMedium, SignalHigh, Utensils, RotateCcw, Check, Clock, Flame } from 'lucide-react'
 import PantryCard from '../components/PantryCard'
 import CardRecipes from '../components/CardRecipes'
 import { RecipeService } from '../services/recipeService'
@@ -12,15 +12,36 @@ function Home() {
     const [recommendedRecipes, setRecommendedRecipes] = useState<Recipe[]>([])
     const [categories, setCategories] = useState<{ id: number, name: string }[]>([])
     const [userName, setUserName] = useState<string | null>(null)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [activeCategory, setActiveCategory] = useState('Ver todo')
+    const [searchTerm, setSearchTerm] = useState(() => sessionStorage.getItem('home_searchTerm') || '')
+    const [activeCategory, setActiveCategory] = useState(() => sessionStorage.getItem('home_activeCategory') || 'Ver todo')
     const [strictPantry, setStrictPantry] = useState(false)
     const [pantryCount, setPantryCount] = useState(0)
     const [loadingRecommended, setLoadingRecommended] = useState(false)
     const [showFilters, setShowFilters] = useState(false)
-    const [difficulty, setDifficulty] = useState<string>('')
-    const [maxIngredients, setMaxIngredients] = useState<number | undefined>(undefined)
+    const [difficulty, setDifficulty] = useState<string>(() => sessionStorage.getItem('home_difficulty') || '')
+    const [maxIngredients, setMaxIngredients] = useState<number | undefined>(() => {
+        const v = sessionStorage.getItem('home_maxIngredients'); return v ? Number(v) : undefined
+    })
+    const [maxTime, setMaxTime] = useState<number | undefined>(() => {
+        const v = sessionStorage.getItem('home_maxTime'); return v ? Number(v) : undefined
+    })
+    const [maxCalories, setMaxCalories] = useState<number | undefined>(() => {
+        const v = sessionStorage.getItem('home_maxCalories'); return v ? Number(v) : undefined
+    })
     const recipeService = new RecipeService()
+
+    // Persistir filtros en sessionStorage
+    useEffect(() => {
+        sessionStorage.setItem('home_searchTerm', searchTerm)
+        sessionStorage.setItem('home_activeCategory', activeCategory)
+        sessionStorage.setItem('home_difficulty', difficulty)
+        if (maxIngredients !== undefined) sessionStorage.setItem('home_maxIngredients', String(maxIngredients))
+        else sessionStorage.removeItem('home_maxIngredients')
+        if (maxTime !== undefined) sessionStorage.setItem('home_maxTime', String(maxTime))
+        else sessionStorage.removeItem('home_maxTime')
+        if (maxCalories !== undefined) sessionStorage.setItem('home_maxCalories', String(maxCalories))
+        else sessionStorage.removeItem('home_maxCalories')
+    }, [searchTerm, activeCategory, difficulty, maxIngredients, maxTime, maxCalories])
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -53,14 +74,14 @@ function Home() {
                 if (searchTerm || activeCategory !== 'Ver todo') {
                     setStrictPantry(false);
                 }
-                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory, strictPantry, difficulty, maxIngredients)
+                const data = await recipeService.getAllRecipes(true, searchTerm, activeCategory, strictPantry, difficulty, maxIngredients, maxTime, maxCalories)
                 setRecipes(data)
             } catch (error) {
                 console.error('Error al cargar recetas:', error)
             }
         }
         fetchRecipes()
-    }, [searchTerm, activeCategory, strictPantry, difficulty, maxIngredients])
+    }, [searchTerm, activeCategory, strictPantry, difficulty, maxIngredients, maxTime, maxCalories])
 
     useEffect(() => {
         // usuario de localStorage
@@ -96,7 +117,7 @@ function Home() {
         }
     }, [])
 
-    const activeFiltersCount = (difficulty ? 1 : 0) + (maxIngredients ? 1 : 0);
+    const activeFiltersCount = (difficulty ? 1 : 0) + (maxIngredients ? 1 : 0) + (maxTime ? 1 : 0) + (maxCalories ? 1 : 0);
 
     const isSearchingOrFiltering = !!searchTerm || activeCategory !== 'Ver todo' || strictPantry || activeFiltersCount > 0;
 
@@ -106,6 +127,8 @@ function Home() {
     const handleClearFilters = () => {
         setDifficulty('');
         setMaxIngredients(undefined);
+        setMaxTime(undefined);
+        setMaxCalories(undefined);
     };
 
     return (
@@ -301,6 +324,47 @@ function Home() {
                                             key={option.label}
                                             className={`filter-chip-modal wide ${maxIngredients === option.value ? 'active' : ''}`}
                                             onClick={() => setMaxIngredients(option.value)}
+                                        >
+                                            {option.icon}
+                                            <span>{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="filter-section">
+                                <h4>Tiempo de preparación</h4>
+                                <div className="filter-options">
+                                    {[
+                                        { label: '≤ 15 min', value: 15, icon: <Clock size={16} /> },
+                                        { label: '≤ 30 min', value: 30, icon: <Clock size={16} /> },
+                                        { label: '≤ 60 min', value: 60, icon: <Clock size={16} /> },
+                                        { label: 'Cualquier tiempo', value: undefined, icon: <Clock size={16} /> },
+                                    ].map(option => (
+                                        <button
+                                            key={option.label}
+                                            className={`filter-chip-modal ${maxTime === option.value ? 'active' : ''}`}
+                                            onClick={() => setMaxTime(option.value)}
+                                        >
+                                            {option.icon}
+                                            <span>{option.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="filter-section">
+                                <h4>Calorías máximas</h4>
+                                <div className="filter-options">
+                                    {[
+                                        { label: '≤ 300 kcal', value: 300, icon: <Flame size={16} /> },
+                                        { label: '≤ 600 kcal', value: 600, icon: <Flame size={16} /> },
+                                        { label: 'Sin límite', value: undefined, icon: <Flame size={16} /> },
+                                    ].map(option => (
+                                        <button
+                                            key={option.label}
+                                            className={`filter-chip-modal ${maxCalories === option.value ? 'active' : ''}`}
+                                            onClick={() => setMaxCalories(option.value)}
                                         >
                                             {option.icon}
                                             <span>{option.label}</span>

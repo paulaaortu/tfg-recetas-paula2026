@@ -25,25 +25,32 @@ export class AuthService {
 
     async createUser(username: string, email: string, passwordHash: string) {
         const result = await pool.query(
-            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, is_admin',
+            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, is_admin, avatar_url',
             [username, email, passwordHash]
         );
         return result.rows[0];
     }
 
-    async updateUser(id: string, username: string, email: string, passwordHash?: string) {
+    async updateUser(id: string, username: string, email: string, passwordHash?: string, avatarUrl?: string) {
         let query = 'UPDATE users SET username = $1, email = $2';
         const params: any[] = [username, email];
 
+        let paramIndex = 3;
         if (passwordHash) {
-            query += ', password_hash = $3 WHERE id = $4';
-            params.push(passwordHash, id);
-        } else {
-            query += ' WHERE id = $3';
-            params.push(id);
+            query += `, password_hash = $${paramIndex}`;
+            params.push(passwordHash);
+            paramIndex++;
+        }
+        if (avatarUrl) {
+            query += `, avatar_url = $${paramIndex}`;
+            params.push(avatarUrl);
+            paramIndex++;
         }
 
-        const result = await pool.query(query + ' RETURNING id, username, email, is_admin', params);
+        query += ` WHERE id = $${paramIndex}`;
+        params.push(id);
+
+        const result = await pool.query(query + ' RETURNING id, username, email, is_admin, avatar_url', params);
         return result.rows[0];
     }
 }

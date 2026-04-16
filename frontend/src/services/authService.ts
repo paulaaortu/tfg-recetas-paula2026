@@ -30,9 +30,10 @@ export const register = async (username: string, email: string, password: string
     return await response.json();
 };
 
-export const updateProfile = async (userId: number, username: string, email: string, password?: string) => {
+export const updateProfile = async (userId: number, username: string, email: string, password?: string, avatar_url?: string) => {
     const body: any = { username, email };
     if (password) body.password = password;
+    if (avatar_url) body.avatar_url = avatar_url;
 
     const response = await fetch(`${API_URL}/update/${userId}`, {
         method: 'PUT',
@@ -46,6 +47,23 @@ export const updateProfile = async (userId: number, username: string, email: str
     if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Error al actualizar el perfil');
+    }
+
+    return await response.json();
+};
+
+export const uploadAvatar = async (formData: FormData) => {
+    const response = await fetch(`${API_URL}/upload-avatar`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Error al subir el avatar');
     }
 
     return await response.json();

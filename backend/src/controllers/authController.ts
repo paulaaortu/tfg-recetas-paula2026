@@ -61,6 +61,7 @@ export const login = async (req: Request, res: Response) => {
                 username: usuario.username,
                 email: usuario.email,
                 is_admin: usuario.is_admin,
+                avatar_url: usuario.avatar_url,
             },
         });
     } catch (error) {
@@ -71,7 +72,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar_url } = req.body;
 
     try {
         let passwordHasheada;
@@ -80,7 +81,7 @@ export const updateUser = async (req: Request, res: Response) => {
             passwordHasheada = await bcrypt.hash(password, salt);
         }
 
-        const usuario = await authService.updateUser(id as string, username, email, passwordHasheada);
+        const usuario = await authService.updateUser(id as string, username, email, passwordHasheada, avatar_url);
 
         if (!usuario) {
             return res.status(404).json({ message: 'Usuario no encontrado.' });
@@ -92,6 +93,21 @@ export const updateUser = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error('Error al actualizar usuario:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
+    }
+};
+
+export const uploadAvatar = async (req: Request, res: Response) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No se ha subido ninguna imagen.' });
+        }
+
+        // Devolvemos la ruta relativa para que el frontend la use
+        const imageUrl = `/uploads/${req.file.filename}`;
+        res.json({ imageUrl });
+    } catch (error) {
+        console.error('Error al subir avatar:', error);
         res.status(500).json({ message: 'Error interno del servidor.' });
     }
 };

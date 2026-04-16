@@ -1,7 +1,7 @@
 import { pool } from "../db";
 
 export class RecipeService {
-    async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number, difficulty?: string, maxIngredients?: number) {
+    async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number, difficulty?: string, maxIngredients?: number, maxTime?: number, maxCalories?: number) {
         let query = `
             SELECT r.*, c.name as category_name, u.username as author_name
             FROM recipes r
@@ -36,6 +36,16 @@ export class RecipeService {
             conditions.push(`array_length(string_to_array(r.ingredients, ','), 1) <= $${params.length}`);
         }
 
+        if (maxTime && !isNaN(maxTime)) {
+            params.push(maxTime);
+            conditions.push(`r.time <= $${params.length}`);
+        }
+
+        if (maxCalories && !isNaN(maxCalories)) {
+            params.push(maxCalories);
+            conditions.push(`r.calories <= $${params.length}`);
+        }
+
         if (strictPantry === 'true' && userId) {
             params.push(userId);
             const userIdParam = `$${params.length}`;
@@ -64,7 +74,7 @@ export class RecipeService {
     }
 
     async getRecommendedRecipes(userId: number) {
-        const [objectivesRes, allergiesRes] = await Promise.all([
+        const [objectivesRes, allergiesRes, sportsRes] = await Promise.all([
             pool.query(
                 `SELECT o.name FROM objectives o
                  JOIN user_objectives uo ON o.id = uo.objective_id
@@ -77,10 +87,17 @@ export class RecipeService {
                  WHERE ua.user_id = $1`,
                 [userId]
             ),
+            pool.query(
+                `SELECT s.name FROM sports s
+                 JOIN user_sports us ON s.id = us.sport_id
+                 WHERE us.user_id = $1`,
+                [userId]
+            ),
         ]);
 
         const userObjectives = objectivesRes.rows.map((r: any) => r.name.toLowerCase());
-        const userAllergies = (allergiesRes as any).rows.map((r: any) => r.name.toLowerCase());
+        const userAllergies = allergiesRes.rows.map((r: any) => r.name.toLowerCase());
+        const userSports = sportsRes.rows.map((r: any) => r.name.toLowerCase());
 
         let query = `
             SELECT r.*, c.name as category_name, u.username as author_name
@@ -108,9 +125,36 @@ export class RecipeService {
             obj.includes('adelgazar') || obj.includes('perder')
         );
 
+        const needsHighProtein = userSports.some((s: string) =>
+            s.includes('musculación') || s.includes('musculacion') || s.includes('crossfit')
+        );
+
+        const needsHighEnergy = userSports.some((s: string) =>
+            s.includes('running') || s.includes('ciclismo')
+        );
+
+        const prefersLight = userSports.some((s: string) =>
+            s.includes('yoga')
+        );
+
+        // Objetivo "Adelgazar" siempre prevalece sobre el deporte
         if (wantsToLoseWeight) {
             query += ` ORDER BY CASE WHEN r.calories IS NULL THEN 9999 ELSE r.calories END ASC`;
+        } else if (needsHighProtein) {
+            // Musculación / Crossfit: priorizar recetas con ingredientes proteicos
+            query += `
+                ORDER BY CASE
+                    WHEN LOWER(r.ingredients) SIMILAR TO '%(pollo|pechuga|ternera|carne|atún|atun|salmon|salmón|huevo|legumbre|lenteja|garbanzo|proteína|proteina|tofu|queso)%'
+                    THEN 0 ELSE 1
+                END ASC, r.calories DESC NULLS LAST`;
+        } else if (needsHighEnergy) {
+            // Running / Ciclismo: más calorías primero (reponer energía)
+            query += ` ORDER BY CASE WHEN r.calories IS NULL THEN 0 ELSE r.calories END DESC`;
+        } else if (prefersLight) {
+            // Yoga: recetas ligeras, menos calorías
+            query += ` ORDER BY CASE WHEN r.calories IS NULL THEN 9999 ELSE r.calories END ASC`;
         } else {
+            // Natación / Ninguno / sin deporte: más recientes
             query += ` ORDER BY r.created_at DESC`;
         }
 
@@ -198,12 +242,12 @@ export class RecipeService {
         is_official?: boolean;
     }) {
         const setClauses = [
-            'title = $1', 'description = $2', 'difficulty = $3', 'allergens = $4', 
+            'title = $1', 'description = $2', 'difficulty = $3', 'allergens = $4',
             'time = $5', 'calories = $6', 'ingredients = $7', 'steps = $8', 'category_id = $9'
         ];
-        
+
         const values: any[] = [
-            recipe.title, recipe.description || null, recipe.difficulty || null, 
+            recipe.title, recipe.description || null, recipe.difficulty || null,
             recipe.allergens || null, recipe.time || null, recipe.calories || null,
             recipe.ingredients, recipe.steps, recipe.category_id
         ];
@@ -223,7 +267,7 @@ export class RecipeService {
 
         const idPos = paramCount;
         const userPos = paramCount + 1;
-        
+
         const finalQuery = `
             UPDATE recipes 
             SET ${setClauses.join(', ')}

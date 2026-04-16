@@ -17,6 +17,7 @@ function Profile() {
     const [userName, setUserName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [userId, setUserId] = useState<number | null>(null)
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
     const [isAdmin, setIsAdmin] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<'ajustes' | 'misRecetas' | 'favoritas'>('ajustes')
@@ -45,6 +46,7 @@ function Profile() {
             setUserName(user.username)
             setEmail(user.email)
             setUserId(user.id)
+            setAvatarUrl(user.avatar_url || null)
             setIsAdmin(user.is_admin || false)
         } catch (error) {
             console.error('Error cogiendo los datos del usuario:', error)
@@ -102,16 +104,17 @@ function Profile() {
         fetchRecipes();
     }, [activeTab]);
 
-    const handleSaveProfile = async (updatedData: { username: string; email: string; password?: string }) => {
+    const handleSaveProfile = async (updatedData: { username: string; email: string; password?: string; avatar_url?: string }) => {
         if (!userId) return;
 
-        const result = await updateProfile(userId, updatedData.username, updatedData.email, updatedData.password);
+        const result = await updateProfile(userId, updatedData.username, updatedData.email, updatedData.password, updatedData.avatar_url);
 
         setUserName(result.user.username);
         setEmail(result.user.email);
+        setAvatarUrl(result.user.avatar_url);
 
         const usuarioLocal = JSON.parse(localStorage.getItem('user') || '{}');
-        const newUser = { ...usuarioLocal, username: result.user.username, email: result.user.email };
+        const newUser = { ...usuarioLocal, username: result.user.username, email: result.user.email, avatar_url: result.user.avatar_url };
         localStorage.setItem('user', JSON.stringify(newUser));
     };
 
@@ -166,7 +169,7 @@ function Profile() {
         return '';
     }
 
-    const user = userName && email && userId ? { id: userId, username: userName, email: email } : null;
+    const user = userName && email && userId ? { id: userId, username: userName, email: email, avatar_url: avatarUrl || undefined } : null;
 
     if (!user) return null;
 
@@ -178,8 +181,12 @@ function Profile() {
         <div className="contenedor-perfil">
             <div className="perfil-contenido">
                 <div className="cabezera">
-                    <div>
-                        <User size={40} />
+                    <div className="avatar-header">
+                        {avatarUrl ? (
+                            <img src={`http://localhost:3001${avatarUrl}`} alt="Profile Avatar" className="profile-avatar-img" />
+                        ) : (
+                            <User size={40} />
+                        )}
                     </div>
                     <h1>{userName}</h1>
                     <p>{email}</p>

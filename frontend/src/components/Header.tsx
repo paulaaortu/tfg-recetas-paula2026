@@ -64,7 +64,13 @@ export default function Header({ onLogoClick, activeTab, onTabChange }: HeaderPr
                 <div className="acciones">
                     {(!isAdmin || !isMobile) && (
                         <div className="botones" onClick={handleProfileClick}>
-                            <UserCircle size={32} className="header-icon" />
+                            {user?.avatar_url ? (
+                                <div className="header-avatar-container">
+                                    <img src={`http://localhost:3001${user.avatar_url}`} alt="Avatar" className="header-avatar-img" />
+                                </div>
+                            ) : (
+                                <UserCircle size={32} className="header-icon" />
+                            )}
                         </div>
                     )}
                 </div>
