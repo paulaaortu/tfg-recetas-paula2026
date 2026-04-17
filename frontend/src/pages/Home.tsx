@@ -156,7 +156,7 @@ function Home() {
                     />
                     <div className="search-buttons-group">
                         <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
-                        <button 
+                        <button
                             className={`filter-button-home ${activeFiltersCount > 0 ? 'active' : ''}`}
                             onClick={() => setShowFilters(true)}
                             title="Filtros"
@@ -201,7 +201,7 @@ function Home() {
                         {showRecommendations && (
                             <section style={{ marginBottom: '30px' }}>
                                 <div className="titulo">
-                                    <h2>✨ Recomendaciones para ti</h2>
+                                    <h2>Recomendaciones para ti</h2>
                                 </div>
                                 {loadingRecommended ? (
                                     <div className="grid-recetas">
@@ -237,14 +237,14 @@ function Home() {
                                     <span className="see-all">Ver todas</span>
                                 )}
                                 {isSearchingOrFiltering && (
-                                    <span 
-                                        className="see-all" 
+                                    <span
+                                        className="see-all"
                                         onClick={() => {
                                             setSearchTerm('');
                                             setActiveCategory('Ver todo');
                                             setStrictPantry(false);
                                             handleClearFilters();
-                                        }} 
+                                        }}
                                         style={{ cursor: 'pointer', color: '#e74c3c', fontWeight: 'bold' }}
                                     >
                                         Limpiar filtros
@@ -290,7 +290,7 @@ function Home() {
                                 <X size={24} color="#666" />
                             </button>
                         </div>
-                        
+
                         <div className="filter-modal-body">
                             <div className="filter-section">
                                 <h4>Dificultad</h4>
@@ -300,7 +300,7 @@ function Home() {
                                         { label: 'Media', icon: <SignalMedium size={16} /> },
                                         { label: 'Alta', icon: <SignalHigh size={16} /> }
                                     ].map(level => (
-                                        <button 
+                                        <button
                                             key={level.label}
                                             className={`filter-chip-modal ${difficulty === level.label ? 'active' : ''}`}
                                             onClick={() => setDifficulty(difficulty === level.label ? '' : level.label)}
@@ -320,7 +320,7 @@ function Home() {
                                         { label: 'Normal (≤ 10)', value: 10, icon: <Utensils size={18} /> },
                                         { label: 'Cualquier cantidad', value: undefined, icon: <Utensils size={20} /> }
                                     ].map(option => (
-                                        <button 
+                                        <button
                                             key={option.label}
                                             className={`filter-chip-modal wide ${maxIngredients === option.value ? 'active' : ''}`}
                                             onClick={() => setMaxIngredients(option.value)}

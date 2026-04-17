@@ -100,118 +100,88 @@ export default function RecipeDetails() {
     return (
         <div className="contenedor-detalles">
             <div className="detalles-contenido">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
-                    <h2>{recipe.title}</h2>
-                    {isLoggedIn && recipe.author_id !== currentUserId && (
-                        <button
-                            onClick={handleToggleFavorite}
-                            disabled={isFavLoading}
-                            style={{
-                                background: 'transparent',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: '5px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                outline: 'none'
-                            }}
-                            title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
-                        >
-                            <Heart
-                                size={28}
-                                color={isFavorite ? "#d9534f" : "#6a8770"}
-                                fill={isFavorite ? "#d9534f" : "none"}
-                                style={{ transition: 'all 0.2s' }}
-                            />
-                        </button>
-                    )}
-                </div>
-                {!recipe.is_official && recipe.author_name && (
-                    <p style={{ textAlign: 'center', fontSize: '14px', color: '#6a8770', marginTop: '-5px', marginBottom: '10px' }}>
-                        Publicada por <strong>{recipe.author_name}</strong>
-                    </p>
-                )}
-                {cleanDescription && <p className="receta-descripcion-corta">{cleanDescription}</p>}
-
-                <div className='info-receta'>
-                    <div className="bloque-izquierdo-escritorio">
+                <div className="layout-receta">
+                    {/* LADO IZQUIERDO: Imagen */}
+                    <div className="lado-imagen">
                         <img src={getImageUrl(recipe.image_url)} alt={recipe.title} />
+                    </div>
 
-                        <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginTop: '10px' }}>
-                            <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Tiempo</small>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <Clock size={16} />
-                                    <span>{recipe.time} min</span>
-                                </div>
+                    {/* LADO DERECHO: Detalles (Sticky on desktop) */}
+                    <div className="lado-detalles">
+                        <header className="detalles-header">
+                            <div className="categoria-tag">{recipe.category_name}</div>
+                            <div className="titulo-y-favorito">
+                                <h1>{recipe.title}</h1>
+                                {isLoggedIn && recipe.author_id !== currentUserId && (
+                                    <button
+                                        onClick={handleToggleFavorite}
+                                        disabled={isFavLoading}
+                                        className="fav-btn-minimal"
+                                        title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
+                                    >
+                                        <Heart
+                                            size={24}
+                                            color={isFavorite ? "#d9534f" : "#3B3B3B"}
+                                            fill={isFavorite ? "#d9534f" : "none"}
+                                        />
+                                    </button>
+                                )}
                             </div>
-                            {recipe.category_name && (
-                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Categoría</small>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                        <Tag size={16} />
-                                        <span>{recipe.category_name}</span>
-                                    </div>
-                                </div>
+
+                            {!recipe.is_official && recipe.author_name && (
+                                <p className="autor-nombre">Por <span>{recipe.author_name}</span></p>
                             )}
+
+                            {cleanDescription && <p className="descripcion-corta">{cleanDescription}</p>}
+                        </header>
+
+                        <div className="stats-grid-minimal">
+                            <div className="stat-box">
+                                <Clock size={16} />
+                                <span>{recipe.time} min</span>
+                            </div>
                             {difficulty && (
-                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Dificultad</small>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                        <Activity size={16} />
-                                        <span>{difficulty}</span>
-                                    </div>
-                                </div>
-                            )}
-                            {allergens && allergens !== 'Ninguno' && (
-                                <div className="info-basica" style={{ color: '#d9534f', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <small style={{ fontSize: '10px', color: '#d9534f', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Alérgenos</small>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                        <AlertTriangle size={16} />
-                                        <span>{allergens}</span>
-                                    </div>
+                                <div className="stat-box">
+                                    <Activity size={16} />
+                                    <span>{difficulty}</span>
                                 </div>
                             )}
                             {recipe.calories != null && (
-                                <div className="info-basica" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <small style={{ fontSize: '10px', color: '#6a8770', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Calorías</small>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                        <Flame size={16} color="#e67e22" />
-                                        <span>{recipe.calories} kcal</span>
-                                    </div>
+                                <div className="stat-box">
+                                    <Flame size={16} color="#e67e22" />
+                                    <span>{recipe.calories} kcal</span>
                                 </div>
                             )}
-
-                        </div>
-                    </div>
-
-                    <div className="divisor-seccion mobile-only" />
-
-                    <div className="bloque-derecho-escritorio">
-                        <div className="receta-seccion">
-                            <h2>Ingredientes</h2>
-                            <ul>
-                                {recipe.ingredients.split(/[,\n;.]+/).map((ing, index) => {
-                                    const trimmedIng = ing.trim();
-                                    if (!trimmedIng) return null;
-                                    return <li key={index}>{trimmedIng}</li>;
-                                })}
-                            </ul>
+                            {allergens && allergens !== 'Ninguno' && (
+                                <div className="stat-box error-stat">
+                                    <AlertTriangle size={16} />
+                                    <span>{allergens}</span>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="divisor-seccion" />
+                        <div className="secciones-info">
+                            <div className="seccion-minimal">
+                                <h3>Ingredientes</h3>
+                                <ul className="lista-ingredientes">
+                                    {recipe.ingredients.split(/[,\n;.]+/).map((ing, index) => {
+                                        const trimmedIng = ing.trim();
+                                        if (!trimmedIng) return null;
+                                        return <li key={index}><span>•</span> {trimmedIng}</li>;
+                                    })}
+                                </ul>
+                            </div>
 
-                        <div className="receta-seccion">
-                            <h2>Pasos a seguir</h2>
-                            <div className="pasos-texto">
-                                {recipe.steps}
+                            <div className="seccion-minimal">
+                                <h3>Preparación</h3>
+                                <div className="pasos-texto-minimal">
+                                    {recipe.steps}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 }
