@@ -233,9 +233,6 @@ function Home() {
                                             ? `Resultados (${recipes.length})`
                                             : (userName ? 'Explorar recetas' : 'Nuestras Recetas'))}
                                 </h2>
-                                {!isSearchingOrFiltering && (
-                                    <span className="see-all">Ver todas</span>
-                                )}
                                 {isSearchingOrFiltering && (
                                     <span
                                         className="see-all"
