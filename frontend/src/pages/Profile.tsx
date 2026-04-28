@@ -34,6 +34,8 @@ function Profile() {
 
     const navigate = useNavigate()
 
+
+
     useEffect(() => {
         const usuarioLocal = localStorage.getItem('user')
         if (!usuarioLocal) {
@@ -170,8 +172,17 @@ function Profile() {
     }
 
     const user = userName && email && userId ? { id: userId, username: userName, email: email, avatar_url: avatarUrl || undefined } : null;
-
-    if (!user) return null;
+    
+    if (!user) {
+        return (
+            <div className="contenedor-perfil">
+                <div className="loading-contenedor">
+                    <Loader2 className="animate-spin" size={40} />
+                    <p>Cargando perfil...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (isAdmin) {
         return <AdminProfile />;
@@ -179,7 +190,7 @@ function Profile() {
 
     return (
         <div className="contenedor-perfil">
-            <div className="perfil-contenido">
+            <div className={`perfil-contenido ${activeTab !== 'ajustes' ? 'wide' : ''}`}>
                 <div className="cabezera">
                     <div className="avatar-header">
                         {avatarUrl ? (

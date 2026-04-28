@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame, Trash2 } from 'lucide-react';
 import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
+import ConfirmModal from '../components/ConfirmModal';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isFavorite, setIsFavorite] = useState(false);
     const [isFavLoading, setIsFavLoading] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const recipeService = new RecipeService();
 
     // Check if user is logged in
@@ -30,6 +33,17 @@ export default function RecipeDetails() {
         }
     };
     const currentUserId = getCurrentUserId();
+    const getIsAdmin = (): boolean => {
+        try {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                return user.is_admin === true;
+            }
+        } catch { return false; }
+        return false;
+    };
+    const isAdmin = getIsAdmin();
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -68,6 +82,23 @@ export default function RecipeDetails() {
             console.error('Error toggling favorite:', error);
         } finally {
             setIsFavLoading(false);
+        }
+    };
+
+
+    const handleDeleteRecipe = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDeleteRecipe = async () => {
+        try {
+            await recipeService.deleteRecipe(recipe!.id);
+            // Redirigir a Home tras eliminar con éxito
+            navigate('/');
+        } catch (err) {
+            console.error('Error al eliminar la receta:', err);
+            alert('No se pudo eliminar la receta.');
+            setIsDeleteModalOpen(false);
         }
     };
 
@@ -126,6 +157,15 @@ export default function RecipeDetails() {
                                         />
                                     </button>
                                 )}
+                                {isLoggedIn && (recipe.author_id === currentUserId || isAdmin) && (
+                                    <button
+                                        onClick={handleDeleteRecipe}
+                                        className="fav-btn-minimal"
+                                        title="Eliminar receta"
+                                    >
+                                        <Trash2 size={24} color="#d9534f" />
+                                    </button>
+                                )}
                             </div>
 
                             {!recipe.is_official && recipe.author_name && (
@@ -182,6 +222,17 @@ export default function RecipeDetails() {
                     </div>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={isDeleteModalOpen}
+                title="Eliminar receta"
+                message="¿Estás seguro de que deseas eliminar esta receta? Esta acción no se puede deshacer."
+                confirmText="Eliminar"
+                cancelText="Cancelar"
+                onConfirm={confirmDeleteRecipe}
+                onCancel={() => setIsDeleteModalOpen(false)}
+                isDanger={true}
+            />
         </div>
     );
 }

@@ -5,7 +5,8 @@ import {
     createRecipe, 
     getMyRecipes, 
     updateRecipe, 
-    getRecommendedRecipes 
+    getRecommendedRecipes,
+    deleteRecipe
 } from '../controllers/recipeController';
 import * as categoryController from '../controllers/categoryController';
 import * as allergyController from '../controllers/allergyController';
@@ -28,6 +29,7 @@ router.post("/:id/favorite", authMiddleware, favoriteController.addFavorite);
 router.delete("/:id/favorite", authMiddleware, favoriteController.removeFavorite);
 router.get("/:id/is-favorite", authMiddleware, favoriteController.isFavorite);
 router.put("/:id", authMiddleware, upload.single('image'), updateRecipe);
+router.delete("/:id", authMiddleware, deleteRecipe);
 router.get("/:id", getRecipeById);
 
 export default router;

@@ -148,4 +148,21 @@ export class RecipeService {
 
         return response.json();
     }
+
+    async deleteRecipe(id: number) {
+        const token = localStorage.getItem('token')?.replace(/^"|"$/g, '');
+        const headers: Record<string, string> = token ? { 'Authorization': `Bearer ${token}` } : {};
+        
+        const response = await fetch(`${apiUrl}/api/recipes/${id}`, {
+            method: 'DELETE',
+            headers
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `Error al eliminar receta: ${response.statusText}`);
+        }
+        
+        return response.json();
+    }
 }

@@ -25,6 +25,7 @@ export default function Upload() {
     const [availableCategories, setAvailableCategories] = useState<{ id: number, name: string }[]>([]);
     const [availableAllergens, setAvailableAllergens] = useState<string[]>([]);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const [editId, setEditId] = useState<number | null>(null);
 
@@ -50,8 +51,8 @@ export default function Upload() {
                     
                     setTitle(recipe.title);
                     setDescription(recipe.description || '');
-                    setTimeStr(recipe.time ? `${recipe.time}min` : '');
-                    setCalories(recipe.calories ? recipe.calories.toString() : '');
+                    setTimeStr(recipe.time !== undefined && recipe.time !== null ? `${recipe.time}min` : '');
+                    setCalories(recipe.calories !== undefined && recipe.calories !== null ? recipe.calories.toString() : '');
                     setDifficulty(recipe.difficulty || 'Fácil');
                     setCategory(recipe.category_id);
                     setIngredients(recipe.ingredients ? recipe.ingredients.split(',').map((i: string) => i.trim()) : []);
@@ -113,14 +114,29 @@ export default function Upload() {
         }
     };
 
+    const validateForm = () => {
+        const newErrors: { [key: string]: string } = {};
+        if (!title.trim()) newErrors.title = 'El nombre de la receta es obligatorio';
+        if (!timeStr.trim()) {
+            newErrors.time = 'El tiempo de preparación es obligatorio';
+        } else if (isNaN(Number(timeStr.replace(/[^0-9]/g, '')))) {
+            newErrors.time = 'Introduce un número válido';
+        }
+        if (!category) newErrors.category = 'Debes seleccionar una categoría';
+        if (ingredients.length === 0) newErrors.ingredients = 'Añade al menos un ingrediente';
+        if (!steps.trim()) newErrors.steps = 'Los pasos de preparación son obligatorios';
+        if (calories && isNaN(Number(calories))) newErrors.calories = 'Introduce un número válido';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async () => {
-        if (!title.trim() || !timeStr.trim() || !category || ingredients.length === 0 || !steps.trim()) {
-            alert('Por favor, rellena todos los campos obligatorios (Nombre, Tiempo, Categoría, Ingredientes, Pasos).');
+        if (!validateForm()) {
             return;
         }
 
-        const timeMatches = timeStr.match(/\d+/);
-        const timeNum = timeMatches ? parseInt(timeMatches[0], 10) : 0;
+        const timeNum = parseInt(timeStr.replace(/[^0-9]/g, ''), 10) || 0;
 
         const formData = new FormData();
         formData.append('title', title.trim());
@@ -128,7 +144,7 @@ export default function Upload() {
         formData.append('difficulty', difficulty);
         formData.append('allergens', allergens.length > 0 ? allergens.join(', ') : 'Ninguno');
         formData.append('time', timeNum.toString());
-        if (calories) {
+        if (calories !== '') {
             formData.append('calories', calories);
         }
         formData.append('steps', steps.trim());
@@ -199,13 +215,18 @@ export default function Upload() {
                 
                 {/* Nombre */}
                 <div className="form-group">
-                    <label>NOMBRE</label>
+                    <label>NOMBRE <span className="required">*</span></label>
                     <input 
                         type="text" 
                         placeholder="Ej: Lasaña de verduras..." 
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                            if (errors.title) setErrors(prev => ({ ...prev, title: '' }));
+                        }}
+                        className={errors.title ? 'error' : ''}
                     />
+                    {errors.title && <span className="error-message">{errors.title}</span>}
                 </div>
 
                 {/* Descripción Corta */}
@@ -222,16 +243,21 @@ export default function Upload() {
                 {/* Info row */}
                 <div className="form-row">
                     <div className="form-group half">
-                        <label>TIEMPO</label>
+                        <label>TIEMPO (min) <span className="required">*</span></label>
                         <div className="input-with-icon">
                             <Clock size={18} className="icon" />
                             <input 
-                                type="text" 
-                                placeholder="30min" 
-                                value={timeStr}
-                                onChange={(e) => setTimeStr(e.target.value)}
+                                type="number" 
+                                placeholder="30" 
+                                value={timeStr.replace(/[^0-9]/g, '')}
+                                onChange={(e) => {
+                                    setTimeStr(e.target.value);
+                                    if (errors.time) setErrors(prev => ({ ...prev, time: '' }));
+                                }}
+                                className={errors.time ? 'error' : ''}
                             />
                         </div>
+                        {errors.time && <span className="error-message">{errors.time}</span>}
                     </div>
                     <div className="form-group half">
                         <label>CALORÍAS (Kcal)</label>
@@ -239,8 +265,13 @@ export default function Upload() {
                             type="number" 
                             placeholder="Ej: 350" 
                             value={calories}
-                            onChange={(e) => setCalories(e.target.value)}
+                            onChange={(e) => {
+                                setCalories(e.target.value);
+                                if (errors.calories) setErrors(prev => ({ ...prev, calories: '' }));
+                            }}
+                            className={errors.calories ? 'error' : ''}
                         />
+                        {errors.calories && <span className="error-message">{errors.calories}</span>}
                     </div>
                 </div>
 
@@ -255,31 +286,39 @@ export default function Upload() {
 
                 {/* Categorías */}
                 <div className="form-group">
-                    <label>CATEGORÍAS</label>
-                    <div className="pills-container">
+                    <label>CATEGORÍAS <span className="required">*</span></label>
+                    <div className={`pills-container ${errors.category ? 'error-border' : ''}`}>
                         {availableCategories.map(cat => (
                             <button
                                 key={cat.id}
                                 className={`pill ${category === cat.id ? 'active' : ''}`}
-                                onClick={() => setCategory(cat.id)}
+                                onClick={() => {
+                                    setCategory(cat.id);
+                                    if (errors.category) setErrors(prev => ({ ...prev, category: '' }));
+                                }}
                             >
                                 {cat.name}
                             </button>
                         ))}
                     </div>
+                    {errors.category && <span className="error-message">{errors.category}</span>}
                 </div>
 
                 {/* Ingredientes */}
                 <div className="form-group">
-                    <label>INGREDIENTES</label>
+                    <label>INGREDIENTES <span className="required">*</span></label>
                     <input 
                         type="text" 
                         placeholder="Escribe y presiona Enter..." 
                         value={ingredientInput}
                         onChange={(e) => setIngredientInput(e.target.value)}
-                        onKeyDown={handleAddIngredient}
-                        className="ingredient-input"
+                        onKeyDown={(e) => {
+                            handleAddIngredient(e);
+                            if (errors.ingredients) setErrors(prev => ({ ...prev, ingredients: '' }));
+                        }}
+                        className={`ingredient-input ${errors.ingredients ? 'error' : ''}`}
                     />
+                    {errors.ingredients && <span className="error-message">{errors.ingredients}</span>}
                     {ingredients.length > 0 && (
                         <div className="pills-container display-pills">
                             {ingredients.map((ing, idx) => (
@@ -309,12 +348,17 @@ export default function Upload() {
 
                 {/* Pasos */}
                 <div className="form-group">
-                    <label>Pasos</label>
+                    <label>PASOS <span className="required">*</span></label>
                     <textarea 
                         placeholder="Explica la elaboración de la receta por pasos"
                         value={steps}
-                        onChange={(e) => setSteps(e.target.value)}
+                        onChange={(e) => {
+                            setSteps(e.target.value);
+                            if (errors.steps) setErrors(prev => ({ ...prev, steps: '' }));
+                        }}
+                        className={errors.steps ? 'error' : ''}
                     ></textarea>
+                    {errors.steps && <span className="error-message">{errors.steps}</span>}
                 </div>
 
                 <button 

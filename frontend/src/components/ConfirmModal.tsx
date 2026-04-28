@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { AlertTriangle, X } from 'lucide-react';
 import './ConfirmModal.css';
 
@@ -25,7 +26,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 }) => {
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="confirm-modal-overlay" onClick={onCancel}>
             <div className="confirm-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="confirm-modal-header">
@@ -52,7 +53,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

@@ -249,12 +249,35 @@
     }
 }
 
+.error {
+    border-color: #f87171 !important;
+    background-color: #fef2f2 !important;
+}
+
+.error-border {
+    border: 1px solid #f87171 !important;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.error-message {
+    color: #f87171;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
+.required {
+    color: #f87171;
+    margin-left: 2px;
+}
+
 @keyframes popupFadeIn {
     from {
         opacity: 0;
         transform: scale(0.9);
     }
-
     to {
         opacity: 1;
         transform: scale(1);

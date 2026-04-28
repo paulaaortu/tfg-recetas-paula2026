@@ -201,8 +201,8 @@ export class RecipeService {
             recipe.description || null,
             recipe.difficulty || null,
             recipe.allergens || null,
-            recipe.time || null,
-            recipe.calories || null,
+            recipe.time !== undefined ? recipe.time : null,
+            recipe.calories !== undefined ? recipe.calories : null,
             recipe.ingredients,
             recipe.steps,
             recipe.image_url || null,
@@ -248,7 +248,9 @@ export class RecipeService {
 
         const values: any[] = [
             recipe.title, recipe.description || null, recipe.difficulty || null,
-            recipe.allergens || null, recipe.time || null, recipe.calories || null,
+            recipe.allergens || null, 
+            recipe.time !== undefined ? recipe.time : null, 
+            recipe.calories !== undefined ? recipe.calories : null,
             recipe.ingredients, recipe.steps, recipe.category_id
         ];
 

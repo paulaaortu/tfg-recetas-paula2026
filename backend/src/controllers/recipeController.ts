@@ -81,6 +81,7 @@ export const createRecipe = async (req: Request, res: Response) => {
         }
 
         const { title, description, difficulty, allergens, time, calories, ingredients, steps, category_id, is_official } = req.body;
+        console.log('CREATE RECIPE REQ BODY:', { time, calories });
 
         if (!title || !ingredients || !steps || !category_id) {
             return res.status(400).json({ message: "Faltan campos obligatorios" });
@@ -96,8 +97,8 @@ export const createRecipe = async (req: Request, res: Response) => {
             description,
             difficulty,
             allergens,
-            time: time ? Number(time) : undefined,
-            calories: calories ? Number(calories) : undefined,
+            time: (time !== undefined && time !== null && time !== '') ? Number(time) : undefined,
+            calories: (calories !== undefined && calories !== null && calories !== '') ? Number(calories) : undefined,
             ingredients,
             steps,
             category_id: Number(category_id),
@@ -138,6 +139,7 @@ export const updateRecipe = async (req: Request, res: Response) => {
         }
 
         const { title, description, difficulty, allergens, time, calories, ingredients, steps, category_id } = req.body;
+        console.log('UPDATE RECIPE REQ BODY:', { time, calories });
 
         if (!title || !ingredients || !steps || !category_id) {
             return res.status(400).json({ message: "Faltan campos obligatorios" });
@@ -153,8 +155,8 @@ export const updateRecipe = async (req: Request, res: Response) => {
             description,
             difficulty,
             allergens,
-            time: time ? Number(time) : undefined,
-            calories: calories ? Number(calories) : undefined,
+            time: (time !== undefined && time !== null && time !== '') ? Number(time) : undefined,
+            calories: (calories !== undefined && calories !== null && calories !== '') ? Number(calories) : undefined,
             ingredients,
             steps,
             category_id: Number(category_id),
@@ -181,7 +183,23 @@ export const updateRecipe = async (req: Request, res: Response) => {
 export const deleteRecipe = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        await recipeService.deleteRecipe(Number(id));
+        const user = (req as any).user;
+        if (!user || !user.id) {
+            return res.status(401).json({ message: "No autorizado" });
+        }
+
+        const numericId = Number(id);
+        const recipe = await recipeService.getRecipeById(numericId);
+        
+        if (!recipe) {
+            return res.status(404).json({ message: "Receta no encontrada" });
+        }
+
+        if (recipe.author_id !== user.id && !user.is_admin) {
+            return res.status(403).json({ message: "No tienes permiso para eliminar esta receta" });
+        }
+
+        await recipeService.deleteRecipe(numericId);
         res.json({ message: "Receta eliminada correctamente" });
     } catch (error) {
         console.error("Error deleting recipe:", error);
