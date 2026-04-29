@@ -139,7 +139,6 @@ export const updateRecipe = async (req: Request, res: Response) => {
         }
 
         const { title, description, difficulty, allergens, time, calories, ingredients, steps, category_id } = req.body;
-        console.log('UPDATE RECIPE REQ BODY:', { time, calories });
 
         if (!title || !ingredients || !steps || !category_id) {
             return res.status(400).json({ message: "Faltan campos obligatorios" });

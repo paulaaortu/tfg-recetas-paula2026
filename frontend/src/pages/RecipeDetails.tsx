@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame, Trash2 } from 'lucide-react';
+import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame, Trash2, Pencil } from 'lucide-react';
 import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import ConfirmModal from '../components/ConfirmModal';
@@ -158,13 +158,22 @@ export default function RecipeDetails() {
                                 <div className="categoria-tag">{recipe.category_name}</div>
                                 <div className="header-actions">
                                     {isLoggedIn && (recipe.author_id === currentUserId || isAdmin) && (
-                                        <button
-                                            onClick={handleDeleteRecipe}
-                                            className="action-circle-btn delete-btn-new"
-                                            title="Eliminar receta"
-                                        >
-                                            <Trash2 size={22} />
-                                        </button>
+                                        <>
+                                            <button
+                                                onClick={() => navigate(`/upload?edit=${recipe.id}`)}
+                                                className="action-circle-btn edit-btn-new"
+                                                title="Editar receta"
+                                            >
+                                                <Pencil size={22} />
+                                            </button>
+                                            <button
+                                                onClick={handleDeleteRecipe}
+                                                className="action-circle-btn delete-btn-new"
+                                                title="Eliminar receta"
+                                            >
+                                                <Trash2 size={22} />
+                                            </button>
+                                        </>
                                     )}
                                 </div>
                             </div>

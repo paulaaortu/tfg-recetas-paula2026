@@ -64,6 +64,36 @@
                         }
 
                         .header-actions {
+                            display: flex;
+                            gap: 8px;
+
+                            .edit-btn-new {
+                                background: transparent;
+                                color: #839E88; /* Verde corporativo */
+                                border: none;
+                                width: 44px;
+                                height: 44px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                cursor: pointer;
+                                transition: all 0.2s;
+                                z-index: 20;
+                                position: relative;
+                                padding: 0;
+
+                                &:hover {
+                                    color: #6a8770;
+                                    transform: scale(1.15);
+                                }
+
+                                svg {
+                                    width: 26px;
+                                    height: 26px;
+                                    stroke-width: 2.5px;
+                                }
+                            }
+
                             .delete-btn-new {
                                 background: transparent;
                                 color: #ff4d4d;

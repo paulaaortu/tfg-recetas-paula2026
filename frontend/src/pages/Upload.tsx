@@ -25,6 +25,7 @@ export default function Upload() {
     const [availableCategories, setAvailableCategories] = useState<{ id: number, name: string }[]>([]);
     const [availableAllergens, setAvailableAllergens] = useState<string[]>([]);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [targetRecipeId, setTargetRecipeId] = useState<number | null>(null);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const [editId, setEditId] = useState<number | null>(null);
@@ -161,12 +162,16 @@ export default function Upload() {
 
         setIsSubmitting(true);
         try {
+            let response;
             if (editId) {
-                await recipeService.updateRecipe(editId, formData);
+                response = await recipeService.updateRecipe(editId, formData);
             } else {
-                await recipeService.createRecipe(formData);
+                response = await recipeService.createRecipe(formData);
             }
 
+            if (response && response.id) {
+                setTargetRecipeId(response.id);
+            }
             setShowSuccessPopup(true);
         } catch (error: any) {
             console.error(editId ? 'Error al actualizar receta:' : 'Error al subir receta:', error);
@@ -381,9 +386,13 @@ export default function Upload() {
                         <button 
                             className="success-popup-btn" 
                             onClick={() => {
-                                const params = new URLSearchParams(window.location.search);
-                                const isOfficial = params.get('official') === 'true';
-                                navigate(isOfficial ? '/' : '/social');
+                                if (targetRecipeId) {
+                                    navigate(`/recipe/${targetRecipeId}`);
+                                } else {
+                                    const params = new URLSearchParams(window.location.search);
+                                    const isOfficial = params.get('official') === 'true';
+                                    navigate(isOfficial ? '/' : '/social');
+                                }
                             }}
                         >
                             Continuar
