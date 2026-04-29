@@ -48,6 +48,8 @@
                 color: #333;
                 margin: 0;
                 margin-bottom: 5px;
+                overflow-wrap: break-word;
+                word-break: break-word;
             }
 
             >p {

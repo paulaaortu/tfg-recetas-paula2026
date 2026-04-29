@@ -104,6 +104,8 @@ body {
             margin: 0 0 3px 0;
             font-size: 13px;
             color: #ffffff;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         >span {

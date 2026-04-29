@@ -153,6 +153,8 @@
                     font-size: 13px;
                     font-weight: 700;
                     line-height: 1.2;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
                 }
 
                 .card-meta {
