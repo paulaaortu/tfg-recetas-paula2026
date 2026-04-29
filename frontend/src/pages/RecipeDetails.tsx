@@ -134,38 +134,43 @@ export default function RecipeDetails() {
                 <div className="layout-receta">
                     {/* LADO IZQUIERDO: Imagen */}
                     <div className="lado-imagen">
-                        <img src={getImageUrl(recipe.image_url)} alt={recipe.title} />
+                        <div className="main-image-container">
+                            <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="principal-img" />
+                            
+                            {/* Botón Guardar flotante */}
+                            {isLoggedIn && (
+                                <button 
+                                    className={`floating-save-btn ${isFavorite ? 'active' : ''}`}
+                                    onClick={handleToggleFavorite}
+                                    disabled={isFavLoading}
+                                >
+                                    <Heart size={18} fill={isFavorite ? "white" : "none"} />
+                                    <span>{isFavorite ? 'Guardada' : 'Guardar receta'}</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
 
-                    {/* LADO DERECHO: Detalles (Sticky on desktop) */}
+                    {/* LADO DERECHO: Detalles */}
                     <div className="lado-detalles">
                         <header className="detalles-header">
-                            <div className="categoria-tag">{recipe.category_name}</div>
-                            <div className="titulo-y-favorito">
+                            <div className="header-top-row">
+                                <div className="categoria-tag">{recipe.category_name}</div>
+                                <div className="header-actions">
+                                    {isLoggedIn && (recipe.author_id === currentUserId || isAdmin) && (
+                                        <button
+                                            onClick={handleDeleteRecipe}
+                                            className="action-circle-btn delete-btn-new"
+                                            title="Eliminar receta"
+                                        >
+                                            <Trash2 size={22} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                            
+                            <div className="titulo-principal">
                                 <h1>{recipe.title}</h1>
-                                {isLoggedIn && recipe.author_id !== currentUserId && (
-                                    <button
-                                        onClick={handleToggleFavorite}
-                                        disabled={isFavLoading}
-                                        className="fav-btn-minimal"
-                                        title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
-                                    >
-                                        <Heart
-                                            size={24}
-                                            color={isFavorite ? "#d9534f" : "#3B3B3B"}
-                                            fill={isFavorite ? "#d9534f" : "none"}
-                                        />
-                                    </button>
-                                )}
-                                {isLoggedIn && (recipe.author_id === currentUserId || isAdmin) && (
-                                    <button
-                                        onClick={handleDeleteRecipe}
-                                        className="fav-btn-minimal"
-                                        title="Eliminar receta"
-                                    >
-                                        <Trash2 size={24} color="#d9534f" />
-                                    </button>
-                                )}
                             </div>
 
                             {!recipe.is_official && recipe.author_name && (
@@ -175,47 +180,77 @@ export default function RecipeDetails() {
                             {cleanDescription && <p className="descripcion-corta">{cleanDescription}</p>}
                         </header>
 
-                        <div className="stats-grid-minimal">
-                            <div className="stat-box">
-                                <Clock size={16} />
-                                <span>{recipe.time} min</span>
+                        <div className="stats-cards-row">
+                            <div className="stat-card">
+                                <Clock size={20} />
+                                <div className="stat-info">
+                                    <span className="stat-value">{recipe.time} min</span>
+                                    <span className="stat-label">Tiempo total</span>
+                                </div>
                             </div>
                             {difficulty && (
-                                <div className="stat-box">
-                                    <Activity size={16} />
-                                    <span>{difficulty}</span>
+                                <div className="stat-card">
+                                    <Activity size={20} />
+                                    <div className="stat-info">
+                                        <span className="stat-value">{difficulty}</span>
+                                        <span className="stat-label">Dificultad</span>
+                                    </div>
                                 </div>
                             )}
                             {recipe.calories != null && (
-                                <div className="stat-box">
-                                    <Flame size={16} color="#e67e22" />
-                                    <span>{recipe.calories} kcal</span>
+                                <div className="stat-card">
+                                    <Flame size={20} />
+                                    <div className="stat-info">
+                                        <span className="stat-value">{recipe.calories} kcal</span>
+                                        <span className="stat-label">Por ración</span>
+                                    </div>
                                 </div>
                             )}
                             {allergens && allergens !== 'Ninguno' && (
-                                <div className="stat-box error-stat">
-                                    <AlertTriangle size={16} />
-                                    <span>{allergens}</span>
+                                <div className="stat-card danger">
+                                    <AlertTriangle size={20} />
+                                    <div className="stat-info">
+                                        <span className="stat-value">{allergens}</span>
+                                        <span className="stat-label">Alérgeno</span>
+                                    </div>
                                 </div>
                             )}
                         </div>
 
-                        <div className="secciones-info">
-                            <div className="seccion-minimal">
-                                <h3>Ingredientes</h3>
-                                <ul className="lista-ingredientes">
-                                    {recipe.ingredients.split(/[,\n;.]+/).map((ing, index) => {
-                                        const trimmedIng = ing.trim();
-                                        if (!trimmedIng) return null;
-                                        return <li key={index}><span>•</span> {trimmedIng}</li>;
-                                    })}
-                                </ul>
-                            </div>
+                        <div className="grid-info-receta single-card-layout">
+                            <div className="card-info-blanca unified-card">
+                                <div className="grid-two-columns">
+                                    <div className="columna-ingredientes">
+                                        <div className="card-header">
+                                            <Tag size={20} />
+                                            <h3>INGREDIENTES</h3>
+                                        </div>
+                                        <ul className="lista-ingredientes-nueva">
+                                            {recipe.ingredients.split(/[,\n;]+/).map((ing, index) => {
+                                                const cleanedIng = ing.replace(/^[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]+/, '').trim();
+                                                if (!cleanedIng) return null;
+                                                return (
+                                                    <li key={index}>
+                                                        <span className="nombre-ing">{cleanedIng}</span>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
 
-                            <div className="seccion-minimal">
-                                <h3>Preparación</h3>
-                                <div className="pasos-texto-minimal">
-                                    {recipe.steps}
+                                    <div className="columna-preparacion">
+                                        <div className="card-header">
+                                            <Activity size={20} />
+                                            <h3>PREPARACIÓN</h3>
+                                        </div>
+                                        <div className="pasos-numerados">
+                                            {recipe.steps.split('\n').filter(p => p.trim()).map((paso, index) => (
+                                                <div key={index} className="paso-item">
+                                                    <p>{paso.trim()}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
