@@ -134,36 +134,38 @@ function Home() {
     return (
         <div className="contenedor-principal">
             <div>
-                {!isSearchingOrFiltering && (
-                    <div className="bienvenida">
-                        <h1 className="name-underline">
-                            {userName ? `Hola, ` : 'Bienvenido'}
-                            <span>{userName}</span>
-                        </h1>
-                        <p className="subtitulo">¿Qué cocinamos hoy?</p>
-                    </div>
-                )}
+                <div className="home-header-top">
+                    {!isSearchingOrFiltering && (
+                        <div className="bienvenida">
+                            <h1 className="name-underline">
+                                {userName ? `Hola, ` : 'Bienvenido'}
+                                <span>{userName}</span>
+                            </h1>
+                            <p className="subtitulo">¿Qué cocinamos hoy?</p>
+                        </div>
+                    )}
 
-                {/* Barra búsqueda desktop */}
-                <div className="barra-busqueda">
-                    <input
-                        placeholder="Busca una receta, ingrediente o categoría..."
-                        value={searchTerm}
-                        onChange={(e) => {
-                            setSearchTerm(e.target.value)
-                            if (strictPantry) setStrictPantry(false)
-                        }}
-                    />
-                    <div className="search-buttons-group">
-                        <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
-                        <button
-                            className={`filter-button-home ${activeFiltersCount > 0 ? 'active' : ''}`}
-                            onClick={() => setShowFilters(true)}
-                            title="Filtros"
-                        >
-                            <SlidersHorizontal size={22} color="#7a5a68" strokeWidth={2.5} />
-                            {activeFiltersCount > 0 && <span className="filter-badge-home">{activeFiltersCount}</span>}
-                        </button>
+                    {/* Barra búsqueda desktop */}
+                    <div className="barra-busqueda">
+                        <input
+                            placeholder="Busca una receta, ingrediente o categoría..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value)
+                                if (strictPantry) setStrictPantry(false)
+                            }}
+                        />
+                        <div className="search-buttons-group">
+                            <button onClick={() => setSearchTerm(searchTerm)}>Buscar</button>
+                            <button
+                                className={`filter-button-home ${activeFiltersCount > 0 ? 'active' : ''}`}
+                                onClick={() => setShowFilters(true)}
+                                title="Filtros"
+                            >
+                                <SlidersHorizontal size={22} color="#7a5a68" strokeWidth={2.5} />
+                                {activeFiltersCount > 0 && <span className="filter-badge-home">{activeFiltersCount}</span>}
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -293,9 +295,9 @@ function Home() {
                                 <h4>Dificultad</h4>
                                 <div className="filter-options">
                                     {[
-                                        { label: 'Baja', icon: <SignalLow size={16} /> },
+                                        { label: 'Fácil', icon: <SignalLow size={16} /> },
                                         { label: 'Media', icon: <SignalMedium size={16} /> },
-                                        { label: 'Alta', icon: <SignalHigh size={16} /> }
+                                        { label: 'Difícil', icon: <SignalHigh size={16} /> }
                                     ].map(level => (
                                         <button
                                             key={level.label}

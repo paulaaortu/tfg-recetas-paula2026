@@ -122,9 +122,9 @@ export default function Search() {
                                 <h4>Dificultad</h4>
                                 <div className="filter-options">
                                     {[
-                                        { label: 'Baja', icon: <SignalLow size={16} /> },
+                                        { label: 'Fácil', icon: <SignalLow size={16} /> },
                                         { label: 'Media', icon: <SignalMedium size={16} /> },
-                                        { label: 'Alta', icon: <SignalHigh size={16} /> }
+                                        { label: 'Difícil', icon: <SignalHigh size={16} /> }
                                     ].map(level => (
                                         <button 
                                             key={level.label}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, BookOpen, FileText, Plus, Trash2, Edit, LogOut } from 'lucide-react';
+import { Users, BookOpen, FileText, Plus, Trash2, Edit, LogOut, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import * as adminService from '../services/adminService';
 import type { Recipe } from '../types/recipes';
 import ConfirmModal from './ConfirmModal';
@@ -20,6 +20,9 @@ const AdminProfile: React.FC = () => {
     const [officialRecipes, setOfficialRecipes] = useState<Recipe[]>([]);
     const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState(false);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4;
     const navigate = useNavigate();
 
     const [modalConfig, setModalConfig] = useState<{
@@ -37,6 +40,7 @@ const AdminProfile: React.FC = () => {
     });
 
     useEffect(() => {
+        setCurrentPage(1); // Reset page when switching tabs
         loadData();
     }, [activeTab]);
 
@@ -172,14 +176,23 @@ const AdminProfile: React.FC = () => {
                             <thead>
                                 {activeTab === 'users' ? (
                                     <tr>
-                                        <th>ID</th>
+                                        <th onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} style={{ cursor: 'pointer', userSelect: 'none' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                ID {sortOrder === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                            </div>
+                                        </th>
                                         <th>Usuario</th>
                                         <th>Email</th>
+                                        <th>Rol</th>
                                         <th>Acciones</th>
                                     </tr>
                                 ) : (
                                     <tr>
-                                        <th>ID</th>
+                                        <th onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} style={{ cursor: 'pointer', userSelect: 'none' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                ID {sortOrder === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                            </div>
+                                        </th>
                                         <th>Título</th>
                                         <th>Dificultad</th>
                                         {activeTab === 'user_recipes' && <th>Autor</th>}
@@ -188,7 +201,11 @@ const AdminProfile: React.FC = () => {
                                 )}
                             </thead>
                             <tbody>
-                                {activeTab === 'users' && users.filter(user => !user.is_admin).map(user => (
+                                {activeTab === 'users' && users
+                                    .filter(user => !user.is_admin)
+                                    .sort((a, b) => sortOrder === 'asc' ? a.id - b.id : b.id - a.id)
+                                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                                    .map(user => (
                                     <tr key={user.id}>
                                         <td>{user.id}</td>
                                         <td>{user.username}</td>
@@ -197,13 +214,18 @@ const AdminProfile: React.FC = () => {
                                             <span className="badge">Usuario</span>
                                         </td>
                                         <td>
-                                            <button className="btn-delete" onClick={() => handleDeleteUser(user.id)} title="Eliminar usuario">
-                                                <Trash2 size={16} />
-                                            </button>
+                                            <div className="action-btns">
+                                                <button className="btn-delete" onClick={() => handleDeleteUser(user.id)} title="Eliminar usuario">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
-                                {activeTab !== 'users' && (activeTab === 'official' ? officialRecipes : userRecipes).map(recipe => (
+                                {activeTab !== 'users' && (activeTab === 'official' ? officialRecipes : userRecipes)
+                                    .sort((a, b) => sortOrder === 'asc' ? a.id - b.id : b.id - a.id)
+                                    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                                    .map(recipe => (
                                     <tr key={recipe.id}>
                                         <td>{recipe.id}</td>
                                         <td>{recipe.title}</td>
@@ -227,6 +249,31 @@ const AdminProfile: React.FC = () => {
                         </table>
                     )}
                 </div>
+
+                {/* Pagination Controls */}
+                {!loading && (
+                    <div className="admin-pagination">
+                        <button 
+                            disabled={currentPage === 1} 
+                            onClick={() => setCurrentPage(prev => prev - 1)}
+                            className="pagination-btn-small"
+                            title="Anterior"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+                        <span className="pagination-info-small">
+                            {currentPage} / {Math.ceil((activeTab === 'users' ? users.filter(u => !u.is_admin).length : (activeTab === 'official' ? officialRecipes : userRecipes).length) / itemsPerPage) || 1}
+                        </span>
+                        <button 
+                            disabled={currentPage >= Math.ceil((activeTab === 'users' ? users.filter(u => !u.is_admin).length : (activeTab === 'official' ? officialRecipes : userRecipes).length) / itemsPerPage)} 
+                            onClick={() => setCurrentPage(prev => prev + 1)}
+                            className="pagination-btn-small"
+                            title="Siguiente"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                    </div>
+                )}
             </main>
 
             <ConfirmModal 

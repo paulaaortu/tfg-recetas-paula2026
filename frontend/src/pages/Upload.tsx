@@ -254,11 +254,12 @@ export default function Upload() {
                         <div className="input-with-icon">
                             <Clock size={18} className="icon" />
                             <input 
-                                type="number" 
+                                type="text" 
                                 placeholder="30" 
-                                value={timeStr.replace(/[^0-9]/g, '')}
+                                value={timeStr}
                                 onChange={(e) => {
-                                    setTimeStr(e.target.value);
+                                    const val = e.target.value.replace(/[^0-9]/g, '');
+                                    setTimeStr(val);
                                     if (errors.time) setErrors(prev => ({ ...prev, time: '' }));
                                 }}
                                 className={errors.time ? 'error' : ''}
@@ -269,11 +270,12 @@ export default function Upload() {
                     <div className="form-group half">
                         <label>CALORÍAS (Kcal)</label>
                         <input 
-                            type="number" 
+                            type="text" 
                             placeholder="Ej: 350" 
                             value={calories}
                             onChange={(e) => {
-                                setCalories(e.target.value);
+                                const val = e.target.value.replace(/[^0-9]/g, '');
+                                setCalories(val);
                                 if (errors.calories) setErrors(prev => ({ ...prev, calories: '' }));
                             }}
                             className={errors.calories ? 'error' : ''}

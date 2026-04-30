@@ -11,7 +11,7 @@ body {
         .bienvenida {
             padding: 10px 15px;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
 
             >h1 {
                 font-size: 20px;
@@ -24,9 +24,20 @@ body {
             }
 
             .subtitulo {
-                margin-top: 2px;
+                margin-top: 1px;
                 color: #6a8770;
                 font-size: 13px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bienvenida {
+                padding: 5px 20px;
+                margin-bottom: 10px;
+                
+                h1 {
+                    font-size: 18px;
+                }
             }
         }
 
@@ -166,42 +177,53 @@ body {
 /*Pantalla ordenador*/
 @media (min-width: 1024px) {
     .contenedor-principal {
-        padding: 60px 30px 30px 30px;
+        padding: 30px 30px 30px 30px;
+
+        .home-header-top {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto 20px auto;
+            gap: 20px;
+        }
 
         .barra-busqueda {
             display: flex;
-            max-width: 700px;
-            margin: 0 auto 40px auto;
+            grid-column: 2;
+            width: 600px;
+            margin: 0;
             background: #ffffff;
             border-radius: 40px;
-            padding: 8px 12px;
-            gap: 12px;
+            padding: 6px 10px;
+            gap: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(106, 135, 112, 0.1);
 
             input {
                 flex: 1;
-                padding: 14px 18px;
+                padding: 10px 16px;
                 border-radius: 30px;
                 border: none;
                 outline: none;
-                font-size: 15px;
+                font-size: 14px;
             }
 
             button {
                 background: #d9b8bf;
                 border: none;
-                padding: 12px 22px;
+                padding: 10px 20px;
                 border-radius: 25px;
                 cursor: pointer;
+                font-size: 14px;
             }
         }
 
         .categories-scroll-home {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
+            gap: 10px;
+            margin-bottom: 25px;
             padding: 0 20px;
             overflow-x: auto;
             scrollbar-width: none;
@@ -211,12 +233,28 @@ body {
             }
         }
 
+        .bienvenida {
+            grid-column: 1;
+            padding: 0 !important;
+            margin: 0 !important;
+
+            h1 {
+                font-size: 18px;
+                white-space: nowrap;
+            }
+
+            .subtitulo {
+                font-size: 12px;
+                white-space: nowrap;
+            }
+        }
+
         .category-chip {
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 30px;
             white-space: nowrap;
             border: none;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -239,10 +277,22 @@ body {
     }
 
     .btn-accion-home {
-        margin: 20px 0;
+        margin: 0 auto 20px auto;
+        max-width: 1200px;
+        padding: 10px 20px;
 
         span {
-            font-size: 20px;
+            font-size: 18px;
+        }
+
+        p {
+            margin: 4px 0;
+            font-size: 13px;
+        }
+
+        button {
+            margin-top: 5px;
+            padding: 8px 15px;
         }
     }
 
