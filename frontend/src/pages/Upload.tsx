@@ -150,7 +150,9 @@ export default function Upload() {
         }
         formData.append('steps', steps.trim());
         formData.append('ingredients', ingredients.join(', '));
-        formData.append('category_id', category.toString());
+        if (category !== null) {
+            formData.append('category_id', category.toString());
+        }
         
         const params = new URLSearchParams(window.location.search);
         const isOfficialParam = params.get('official') === 'true';
