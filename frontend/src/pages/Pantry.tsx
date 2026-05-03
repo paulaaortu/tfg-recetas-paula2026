@@ -18,12 +18,12 @@ const Pantry: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<PantryItem | null>(null);
 
-    // Check session
+    // Comprobar sesión
     const user = localStorage.getItem('user');
     const isLoggedIn = !!user;
     const nameInputRef = useRef<HTMLInputElement>(null);
 
-    // Form state
+    // Estado del formulario
     const [newItem, setNewItem] = useState({
         name: '',
         quantity: '',

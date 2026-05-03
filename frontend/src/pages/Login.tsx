@@ -11,7 +11,7 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // No user info needed here anymore for Menu
+        // Ya no se necesita información del usuario aquí para el Menú
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {

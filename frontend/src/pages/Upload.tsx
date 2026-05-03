@@ -8,11 +8,11 @@ export default function Upload() {
     const navigate = useNavigate();
     const recipeService = new RecipeService();
 
-    // Form states
+    // Estados del formulario
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [timeStr, setTimeStr] = useState('');
-    const [calories, setCalories] = useState(''); // New field
+    const [calories, setCalories] = useState(''); // Nuevo campo
     const [difficulty, setDifficulty] = useState('Fácil');
     const [category, setCategory] = useState<number | null>(null);
     const [ingredientInput, setIngredientInput] = useState('');

@@ -70,7 +70,7 @@ function Home() {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                // If searching or filtering by category, disable strictPantry
+                // Si se busca o se filtra por categoría, desactivar strictPantry (solo lo que tienes)
                 if (searchTerm || activeCategory !== 'Ver todo') {
                     setStrictPantry(false);
                 }
@@ -91,14 +91,14 @@ function Home() {
                 const user = JSON.parse(usuario)
                 setUserName(user.username)
 
-                // Fetch pantry items
+                // Obtener elementos de la despensa
                 getPantryItems().then(items => {
                     setPantryCount(items.length)
                 }).catch(err => {
                     console.error('Error loading pantry count', err)
                 })
 
-                // Fetch personalized recommendations
+                // Obtener recomendaciones personalizadas
                 const fetchRecommended = async () => {
                     setLoadingRecommended(true)
                     try {
@@ -121,7 +121,7 @@ function Home() {
 
     const isSearchingOrFiltering = !!searchTerm || activeCategory !== 'Ver todo' || strictPantry || activeFiltersCount > 0;
 
-    // Show recommendations section only when not searching/filtering
+    // Mostrar sección de recomendaciones solo cuando no se esté buscando/filtrando
     const showRecommendations = !!userName && !isSearchingOrFiltering
 
     const handleClearFilters = () => {

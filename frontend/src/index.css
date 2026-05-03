@@ -95,7 +95,7 @@ button {
   }
 }
 
-/* Recetas Grid System */
+
 .grid-recetas {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

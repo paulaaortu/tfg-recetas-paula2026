@@ -5,7 +5,7 @@ import type { Recipe } from '../types/recipes'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search } from 'lucide-react'
 import LoginOverlay from '../components/LoginOverlay'
-import './Home.css' // Reuse Home styles for consistency
+import './Home.css' // Reutilizar estilos de Home para consistencia
 import './Social.css'
 
 function Social() {

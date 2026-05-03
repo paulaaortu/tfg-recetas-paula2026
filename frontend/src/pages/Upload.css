@@ -2,11 +2,11 @@
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 140px);
-    /* 70px header + 70px menu typical height */
+    
     background-color: #c9a8b8;
-    /* Soft pink base */
+    
     font-family: 'Inter', sans-serif;
-    /* To account for fixed Header */
+    
 
     .upload-header {
         padding: 20px;
@@ -180,7 +180,7 @@
     }
 }
 
-/* Success Popup */
+
 .success-popup-overlay {
     position: fixed;
     top: 0;
@@ -193,7 +193,7 @@
     align-items: center;
     z-index: 2000;
     backdrop-filter: blur(3px);
-    /* subtle blur for elegance */
+    
 
     .success-popup-content {
         background-color: #ffffff;

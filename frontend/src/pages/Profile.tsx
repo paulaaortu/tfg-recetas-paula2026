@@ -25,7 +25,7 @@ function Profile() {
     const [favorites, setFavorites] = useState<Recipe[]>([])
     const [loadingRecipes, setLoadingRecipes] = useState(false)
 
-    // Preferences state
+    // Estado de preferencias
     const [preferences, setPreferences] = useState<UserPreferences>({ objectives: [], sports: [], allergies: [] })
     const [catalog, setCatalog] = useState<PreferencesCatalog>({ objectives: [], sports: [], allergies: [] })
     const [openModal, setOpenModal] = useState<PreferenceType | null>(null)
@@ -57,7 +57,7 @@ function Profile() {
     }, [navigate])
 
     useEffect(() => {
-        // Load catalog and user preferences
+        // Cargar catálogo y preferencias del usuario
         const loadPreferences = async () => {
             try {
                 const [cat, prefs] = await Promise.all([

@@ -4,6 +4,7 @@
     padding-bottom: 120px;
 
     @media (min-width: 1024px) {
-        padding-bottom: 40px; /* Reducido en escritorio ya que el menú inferior no es visible */
+        padding-bottom: 40px; 
     }
 }
+

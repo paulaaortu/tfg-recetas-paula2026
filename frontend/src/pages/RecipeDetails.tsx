@@ -4,6 +4,7 @@ import { Clock, Loader2, Tag, AlertTriangle, Activity, Heart, Flame, Trash2, Pen
 import { RecipeService, getImageUrl } from '../services/recipeService';
 import type { Recipe } from '../types/recipes';
 import ConfirmModal from '../components/ConfirmModal';
+import LoginOverlay from '../components/LoginOverlay';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
@@ -17,11 +18,11 @@ export default function RecipeDetails() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const recipeService = new RecipeService();
 
-    // Check if user is logged in
+    // Comprobar si el usuario ha iniciado sesión
     const token = localStorage.getItem('token');
     const isLoggedIn = !!token;
 
-    // Decode JWT to get current user id
+    // Decodificar JWT para obtener el ID del usuario actual
     const getCurrentUserId = (): number | null => {
         if (!token) return null;
         try {
@@ -123,13 +124,13 @@ export default function RecipeDetails() {
         );
     }
 
-    // Use difficulty and allergens from the database directly, fallback if not present
+    // Usar dificultad y alérgenos directamente de la base de datos, con alternativa si no están presentes
     const cleanDescription = recipe.description || '';
     const difficulty = recipe.difficulty || '';
     const allergens = recipe.allergens || '';
 
     return (
-        <div className="contenedor-detalles">
+        <div className={`contenedor-detalles ${!isLoggedIn ? 'restringido' : ''}`}>
             <div className="detalles-contenido">
                 <div className="layout-receta">
                     {/* LADO IZQUIERDO: Imagen */}
@@ -266,6 +267,12 @@ export default function RecipeDetails() {
                     </div>
                 </div>
             </div>
+
+            {!isLoggedIn && (
+                <div className="overlay-restringido">
+                    <LoginOverlay pageName="detalle de la receta" />
+                </div>
+            )}
 
             <ConfirmModal
                 isOpen={isDeleteModalOpen}

@@ -86,11 +86,11 @@
         gap: 10px;
         padding: 0 20px 20px 20px;
         scrollbar-width: none;
-        /* Firefox */
+        
 
         &::-webkit-scrollbar {
             display: none;
-            /* Chrome/Safari */
+            
         }
 
         .category-chip {
@@ -121,7 +121,7 @@
         gap: 12px;
         padding: 0 15px;
 
-        /* Custom Recipe Card for Search Results */
+        
         .search-recipe-card {
             background: #ffffff;
             border-radius: 20px;
@@ -172,7 +172,7 @@
         }
     }
 
-    /* Modal de Filtros */
+    
     .filter-modal-overlay {
         position: fixed;
         top: 0;
@@ -181,7 +181,7 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
         display: flex;
-        align-items: flex-end; /* En movil sale desde abajo */
+        align-items: flex-end; 
         justify-content: center;
         z-index: 2000;
 

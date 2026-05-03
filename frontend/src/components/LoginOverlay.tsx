@@ -18,17 +18,17 @@ const LoginOverlay: React.FC<LoginOverlayProps> = ({ pageName }) => {
                 </div>
                 <h2>Acceso Restringido</h2>
                 <p>
-                    Para utilizar la sección de <strong>{pageName}</strong>, necesitas registrarte o iniciar sesión en tu cuenta.
+                    Para poder ver el <strong>{pageName}</strong>, necesitas registrarte o iniciar sesión en tu cuenta.
                 </p>
                 <div className="login-overlay-buttons">
-                    <button 
-                        className="login-overlay-btn-primary" 
+                    <button
+                        className="login-overlay-btn-primary"
                         onClick={() => navigate('/login')}
                     >
                         Iniciar Sesión
                     </button>
-                    <button 
-                        className="login-overlay-btn-secondary" 
+                    <button
+                        className="login-overlay-btn-secondary"
                         onClick={() => navigate('/register')}
                     >
                         Crear Cuenta

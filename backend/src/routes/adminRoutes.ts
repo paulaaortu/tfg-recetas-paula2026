@@ -6,7 +6,7 @@ import * as recipeController from '../controllers/recipeController';
 
 const router = Router();
 
-// Apply auth and admin middleware to all routes
+// Aplicar middleware de autenticación y administrador a todas las rutas
 router.use(authMiddleware as any);
 router.use(adminMiddleware as any);
 

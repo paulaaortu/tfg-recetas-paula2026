@@ -40,7 +40,7 @@ const AdminProfile: React.FC = () => {
     });
 
     useEffect(() => {
-        setCurrentPage(1); // Reset page when switching tabs
+        setCurrentPage(1); // Reiniciar página al cambiar de pestaña
         loadData();
     }, [activeTab]);
 
