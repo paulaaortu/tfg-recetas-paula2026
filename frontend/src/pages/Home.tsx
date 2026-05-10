@@ -148,7 +148,7 @@ function Home() {
                     {/* Barra búsqueda desktop */}
                     <div className="barra-busqueda">
                         <input
-                            placeholder="Busca una receta, ingrediente o categoría..."
+                            placeholder="Busca por nombre o descripción..."
                             value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value)

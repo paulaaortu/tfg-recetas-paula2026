@@ -133,11 +133,11 @@ CREATE TABLE pantry (
 -- ==========================
 
 -- Usuarios
-INSERT INTO users (username, email, password_hash, is_admin)
+INSERT INTO users (username, email, password_hash, is_admin, avatar_url)
 VALUES
-('Paula', 'paula@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false),
-('Juan', 'juan@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false),
-('Administrador', 'admin@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', true);
+('Paula', 'paula@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://i.pravatar.cc/300?img=5'),
+('Juan', 'juan@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://i.pravatar.cc/300?img=11'),
+('Administrador', 'admin@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', true, 'https://i.pravatar.cc/300?img=8');
 
 -- Categorías
 INSERT INTO categories (name)
@@ -147,16 +147,18 @@ VALUES
 -- Recetas oficiales
 INSERT INTO recipes (title, description, difficulty, allergens, time, calories, ingredients, steps, image_url, is_official, category_id)
 VALUES
-('Tortilla de patatas', 'Receta tradicional española', 'Media', 'Huevo', 25, 350, 'Patatas, huevos, aceite, sal', 'Pelar patatas, freír, batir huevos, mezclar y cuajar', 'https://images.pexels.com/photos/14941246/pexels-photo-14941246.jpeg', true, 6),
-('Gazpacho', 'Sopa fría de tomate, muy refrescante y baja en calorías', 'Fácil', 'Ninguno', 30, 120, 'Tomate, pepino, pimiento, aceite, vinagre, sal', 'Triturar todos los ingredientes y servir frío', 'https://plus.unsplash.com/premium_photo-1692781059201-d049a375a4d4', true, 3),
-('Ensalada de pollo', 'Ensalada proteica baja en calorías, ideal para adelgazar', 'Fácil', 'Ninguno', 20, 280, 'Pollo a la plancha, lechuga, tomate cherry, pepino, limón, aceite', 'Cocinar el pollo, cortar en tiras, mezclar con la verdura y aliñar', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', true, 3),
-('Pasta carbonara', 'Receta italiana con nata y bacon', 'Media', 'Gluten, Lácteos, Huevo', 30, 620, 'Pasta, nata, bacon, huevo, queso parmesano, pimienta', 'Cocer la pasta, preparar la salsa carbonara con huevo y nata, juntar todo', 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg', true, 1),
-('Smoothie de frutas', 'Batido saludable y bajo en calorías', 'Fácil', 'Ninguno', 5, 150, 'Plátano, fresas, naranja, agua', 'Triturar todos los ingredientes hasta obtener una bebida suave', 'https://images.pexels.com/photos/775032/pexels-photo-775032.jpeg', true, 5);
+('Tortilla de patatas', 'Receta tradicional española, jugosa y en su punto', 'Media', 'Huevo', 25, 350, 'Patatas, huevos, aceite de oliva virgen extra, sal', 'Pelar las patatas y cortarlas en láminas. Freírlas en aceite. Batir los huevos, mezclar con las patatas y cuajar en la sartén por ambos lados.', 'https://images.pexels.com/photos/14941246/pexels-photo-14941246.jpeg', true, 6),
+('Gazpacho Andaluz', 'Sopa fría de tomate, muy refrescante y baja en calorías', 'Fácil', 'Ninguno', 30, 120, 'Tomate, pepino, pimiento, aceite, vinagre, sal', 'Triturar todos los ingredientes y servir bien frío.', 'https://plus.unsplash.com/premium_photo-1692781059201-d049a375a4d4', true, 3),
+('Ensalada de pollo', 'Ensalada proteica baja en calorías, ideal para adelgazar', 'Fácil', 'Ninguno', 20, 280, 'Pollo a la plancha, lechuga, tomate cherry, pepino, limón, aceite', 'Cocinar el pollo, cortar en tiras, mezclar con la verdura y aliñar generosamente.', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', true, 3),
+('Pasta carbonara', 'Receta italiana clásica con nata y bacon', 'Media', 'Gluten, Lácteos, Huevo', 30, 620, 'Pasta, nata, bacon, huevo, queso parmesano, pimienta', 'Cocer la pasta. Preparar la salsa carbonara batiendo el huevo y la nata, juntar todo y remover rápido.', 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg', true, 1),
+('Smoothie de Frutas', 'Batido saludable y muy energético', 'Fácil', 'Ninguno', 5, 150, 'Plátano, fresas, naranja, agua o leche', 'Triturar todos los ingredientes hasta obtener una bebida muy suave. Servir frío.', 'https://images.pexels.com/photos/775032/pexels-photo-775032.jpeg', true, 5);
 
 -- Recetas de usuarios
 INSERT INTO recipes (title, description, difficulty, allergens, time, calories, ingredients, steps, image_url, is_official, author_id, category_id)
 VALUES
-('Ensalada de quinoa', 'Receta saludable y nutritiva', 'Fácil', 'Ninguno', 15, 310, 'Quinoa, tomate, pepino, limón', 'Cocer quinoa, mezclar ingredientes, aliñar', 'https://images.pexels.com/photos/248509/pexels-photo-248509.jpeg', false, 1, 3);
+('Ensalada de Quinoa y Aguacate', 'Receta saludable, nutritiva y con grasas buenas', 'Fácil', 'Ninguno', 15, 310, 'Quinoa, tomate, pepino, aguacate, limón', 'Cocer la quinoa y dejar enfriar. Cortar los vegetales y el aguacate. Mezclar todo y aliñar.', 'https://images.pexels.com/photos/248509/pexels-photo-248509.jpeg', false, 1, 3),
+('Tacos de Pollo Suaves', 'Auténticos tacos con verduras, perfectos para compartir', 'Media', 'Ninguno', 40, 420, 'Pechuga de pollo, especias, tortillas de maíz, cilantro, cebolla, tomate', 'Marinar el pollo. Asarlo a la plancha. Servir sobre las tortillas calientes y añadir verduras picadas.', 'https://images.pexels.com/photos/4958792/pexels-photo-4958792.jpeg', false, 1, 1),
+('Tarta Dulce de Frutos', 'Postre rico y sabroso para una ocasión especial', 'Media', 'Lácteos, Huevo', 50, 320, 'Queso crema, huevos, azúcar, yogur natural, frutos rojos', 'Mezclar bien todos los ingredientes. Verter en un molde y hornear a 180º durante 40 min.', 'https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg', false, 2, 4);
 
 -- Favoritos
 INSERT INTO favorites (user_id, recipe_id)
