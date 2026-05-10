@@ -184,7 +184,16 @@ export default function RecipeDetails() {
                             </div>
 
                             {!recipe.is_official && recipe.author_name && (
-                                <p className="autor-nombre">Por <span>{recipe.author_name}</span></p>
+                                <div className="autor-info-contenedor">
+                                    {recipe.author_avatar ? (
+                                        <img src={getImageUrl(recipe.author_avatar)} alt={recipe.author_name} className="autor-avatar-small" />
+                                    ) : (
+                                        <div className="autor-avatar-small fallback-avatar">
+                                            {recipe.author_name.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                    <p className="autor-nombre">Por <span>{recipe.author_name}</span></p>
+                                </div>
                             )}
 
                             {cleanDescription && <p className="descripcion-corta">{cleanDescription}</p>}

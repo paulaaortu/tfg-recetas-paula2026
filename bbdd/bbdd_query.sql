@@ -135,9 +135,9 @@ CREATE TABLE pantry (
 -- Usuarios
 INSERT INTO users (username, email, password_hash, is_admin, avatar_url)
 VALUES
-('Paula', 'paula@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://i.pravatar.cc/300?img=5'),
-('Juan', 'juan@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://i.pravatar.cc/300?img=11'),
-('Administrador', 'admin@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', true, 'https://i.pravatar.cc/300?img=8');
+('Paula', 'paula@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg'),
+('Juan', 'juan@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', false, 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg'),
+('Administrador', 'admin@gmail.com', '$2b$10$57j87qMGTkmFkrpitTSYQelYANvrNN3t86xDB8xmDcgPLO9B0IrRi', true, 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg');
 
 -- Categorías
 INSERT INTO categories (name)

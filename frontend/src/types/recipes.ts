@@ -14,5 +14,6 @@ export interface Recipe {
     is_official?: boolean;
     category_name?: string;
     author_name?: string;
+    author_avatar?: string;
     created_at?: string;
 }

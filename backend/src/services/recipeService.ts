@@ -3,7 +3,7 @@ import { pool } from "../db";
 export class RecipeService {
     async getAllRecipes(official?: string, search?: string, category?: string, strictPantry?: string, userId?: number, difficulty?: string, maxIngredients?: number, maxTime?: number, maxCalories?: number) {
         let query = `
-            SELECT r.*, c.name as category_name, u.username as author_name
+            SELECT r.*, c.name as category_name, u.username as author_name, u.avatar_url as author_avatar
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
             LEFT JOIN users u ON r.author_id = u.id
@@ -100,7 +100,7 @@ export class RecipeService {
         const userSports = sportsRes.rows.map((r: any) => r.name.toLowerCase());
 
         let query = `
-            SELECT r.*, c.name as category_name, u.username as author_name
+            SELECT r.*, c.name as category_name, u.username as author_name, u.avatar_url as author_avatar
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
             LEFT JOIN users u ON r.author_id = u.id
@@ -166,7 +166,7 @@ export class RecipeService {
 
     async getRecipeById(id: number) {
         const query = `
-            SELECT r.*, c.name as category_name, u.username as author_name
+            SELECT r.*, c.name as category_name, u.username as author_name, u.avatar_url as author_avatar
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
             LEFT JOIN users u ON r.author_id = u.id
@@ -217,7 +217,7 @@ export class RecipeService {
 
     async getMyRecipes(userId: number) {
         const query = `
-            SELECT r.*, c.name as category_name, u.username as author_name
+            SELECT r.*, c.name as category_name, u.username as author_name, u.avatar_url as author_avatar
             FROM recipes r
             LEFT JOIN categories c ON r.category_id = c.id
             LEFT JOIN users u ON r.author_id = u.id

@@ -225,9 +225,49 @@
                         word-break: break-word;
                     }
 
+                    .autor-info-contenedor {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        margin-top: 15px;
+                        margin-bottom: 15px;
+
+                        .autor-avatar-small {
+                            width: 35px;
+                            height: 35px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            border: 2px solid white;
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                        }
+
+                        .fallback-avatar {
+                            background-color: #839E88;
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 16px;
+                        }
+
+                        .autor-nombre {
+                            margin: 0;
+                            color: #7a5a68;
+                            font-size: 14px;
+                            font-weight: 500;
+
+                            span {
+                                font-weight: 800;
+                                color: #2D3A2F;
+                            }
+                        }
+                    }
+
                     .descripcion-corta {
                         overflow-wrap: break-word;
                         word-break: break-word;
+                        margin-top: 15px;
                     }
                 }
 
