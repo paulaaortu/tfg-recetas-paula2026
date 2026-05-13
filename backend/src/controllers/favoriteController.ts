@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { FavoriteService } from "../services/favoriteService";
+import { RecipeService } from "../services/recipeService";
 
 const favoriteService = new FavoriteService();
+const recipeService = new RecipeService();
 
 export const getFavorites = async (req: Request, res: Response) => {
     try {
@@ -22,6 +24,14 @@ export const addFavorite = async (req: Request, res: Response) => {
         const { id } = req.params;
         const numericId = Number(id);
         if (isNaN(numericId)) return res.status(400).json({ error: "ID de receta inválido" });
+        
+        const recipe = await recipeService.getRecipeById(numericId);
+        if (!recipe) return res.status(404).json({ error: "Receta no encontrada" });
+        
+        if (recipe.author_id === user.id) {
+            return res.status(400).json({ error: "No puedes guardar tu propia receta en favoritos" });
+        }
+
         await favoriteService.addFavorite(user.id, numericId);
         res.json({ message: "Añadido a favoritos" });
     } catch (error) {

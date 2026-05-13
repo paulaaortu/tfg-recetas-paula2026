@@ -273,14 +273,12 @@ export class RecipeService {
         const finalQuery = `
             UPDATE recipes 
             SET ${setClauses.join(', ')}
-            ${isAdmin ? `WHERE id = $${idPos}` : `WHERE id = $${idPos} AND author_id = $${userPos}`}
+            ${isAdmin ? `WHERE id = $${idPos} AND (author_id = $${userPos} OR is_official = true)` : `WHERE id = $${idPos} AND author_id = $${userPos}`}
             RETURNING *
         `;
 
         values.push(id);
-        if (!isAdmin) {
-            values.push(userId);
-        }
+        values.push(userId); // Always push userId so userPos works in both cases
 
         const result = await pool.query(finalQuery, values);
         return result.rows[0];

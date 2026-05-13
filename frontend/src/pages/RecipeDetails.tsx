@@ -139,7 +139,7 @@ export default function RecipeDetails() {
                             <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="principal-img" />
                             
                             {/* Botón Guardar flotante */}
-                            {isLoggedIn && (
+                            {isLoggedIn && recipe.author_id !== currentUserId && (
                                 <button 
                                     className={`floating-save-btn ${isFavorite ? 'active' : ''}`}
                                     onClick={handleToggleFavorite}
@@ -158,22 +158,26 @@ export default function RecipeDetails() {
                             <div className="header-top-row">
                                 <div className="categoria-tag">{recipe.category_name}</div>
                                 <div className="header-actions">
-                                    {isLoggedIn && (recipe.author_id === currentUserId || isAdmin) && (
+                                    {isLoggedIn && (
                                         <>
-                                            <button
-                                                onClick={() => navigate(`/upload?edit=${recipe.id}`)}
-                                                className="action-circle-btn edit-btn-new"
-                                                title="Editar receta"
-                                            >
-                                                <Pencil size={22} />
-                                            </button>
-                                            <button
-                                                onClick={handleDeleteRecipe}
-                                                className="action-circle-btn delete-btn-new"
-                                                title="Eliminar receta"
-                                            >
-                                                <Trash2 size={22} />
-                                            </button>
+                                            {(recipe.author_id === currentUserId || (isAdmin && recipe.is_official)) && (
+                                                <button
+                                                    onClick={() => navigate(`/upload?edit=${recipe.id}`)}
+                                                    className="action-circle-btn edit-btn-new"
+                                                    title="Editar receta"
+                                                >
+                                                    <Pencil size={22} />
+                                                </button>
+                                            )}
+                                            {(recipe.author_id === currentUserId || isAdmin) && (
+                                                <button
+                                                    onClick={handleDeleteRecipe}
+                                                    className="action-circle-btn delete-btn-new"
+                                                    title="Eliminar receta"
+                                                >
+                                                    <Trash2 size={22} />
+                                                </button>
+                                            )}
                                         </>
                                     )}
                                 </div>
