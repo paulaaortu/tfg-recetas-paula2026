@@ -103,7 +103,7 @@
                     }
 
                     &:hover {
-                        border-color: #839E88;
+                        border-color: #5F7363;
 
                         .avatar-overlay {
                             opacity: 1;
@@ -114,7 +114,7 @@
                 .change-avatar-btn {
                     background: none;
                     border: none;
-                    color: #839E88;
+                    color: #5F7363;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
@@ -147,7 +147,7 @@
                     .input-icon {
                         position: absolute;
                         left: 12px;
-                        color: #839E88;
+                        color: #5F7363;
                     }
 
                     >input {
@@ -160,7 +160,7 @@
 
                         :focus {
                             outline: none;
-                            border-color: #839E88;
+                            border-color: #5F7363;
                             box-shadow: 0 0 0 3px rgba(131, 158, 136, 0.1);
                         }
                     }
@@ -204,7 +204,7 @@
                 }
 
                 .save-btn {
-                    background: #839E88;
+                    background: #5F7363;
                     color: white;
                     border: none;
 

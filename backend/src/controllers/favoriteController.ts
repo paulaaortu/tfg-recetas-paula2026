@@ -21,6 +21,7 @@ export const addFavorite = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
         if (!user || !user.id) return res.status(401).json({ message: "No autorizado" });
+        if (user.is_admin) return res.status(403).json({ error: "Los administradores no pueden guardar favoritos" });
         const { id } = req.params;
         const numericId = Number(id);
         if (isNaN(numericId)) return res.status(400).json({ error: "ID de receta inválido" });

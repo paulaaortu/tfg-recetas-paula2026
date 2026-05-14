@@ -139,7 +139,7 @@ export default function RecipeDetails() {
                             <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="principal-img" />
                             
                             {/* Botón Guardar flotante */}
-                            {isLoggedIn && recipe.author_id !== currentUserId && (
+                            {isLoggedIn && !isAdmin && recipe.author_id !== currentUserId && (
                                 <button 
                                     className={`floating-save-btn ${isFavorite ? 'active' : ''}`}
                                     onClick={handleToggleFavorite}

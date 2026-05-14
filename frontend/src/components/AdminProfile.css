@@ -92,7 +92,7 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
-        min-height: 48px; 
+        min-height: 48px;
 
         h1 {
             font-size: 22px;
@@ -105,7 +105,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #839E88;
+            background: #5F7363;
             color: white;
             padding: 10px 18px;
             border: none;
@@ -137,13 +137,13 @@
                 font-size: 12px;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: #839E88;
+                color: #5F7363;
                 border-bottom: 2px solid #F3DDE8;
                 position: sticky;
                 top: 0;
                 background: white;
                 z-index: 10;
-                height: 35px; 
+                height: 35px;
             }
 
             tr {
@@ -212,7 +212,7 @@
         color: #6a8770;
 
         &:hover {
-            background-color: #839E88;
+            background-color: #5F7363;
             color: white;
         }
     }
@@ -231,7 +231,7 @@
 .loader {
     padding: 40px;
     text-align: center;
-    color: #839E88;
+    color: #5F7363;
 }
 
 
@@ -264,7 +264,7 @@
     }
 
     &:not(:disabled):hover {
-        background: #839E88;
+        background: #5F7363;
         color: white;
         transform: scale(1.1);
     }

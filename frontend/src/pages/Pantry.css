@@ -24,7 +24,7 @@
 
         >button {
             background: #F3DDE8;
-            color: #839E88;
+            color: #5F7363;
             border: none;
             width: 55px;
             height: 55px;
@@ -79,7 +79,7 @@
             >button {
                 background: none;
                 border: none;
-                color: #839E88;
+                color: #5F7363;
                 cursor: pointer;
                 font-size: 1.2rem;
                 padding: 5px;
@@ -101,11 +101,11 @@
             font-size: 3rem;
             display: block;
             margin-bottom: 10px;
+        }
     }
-}
 
 
-    
+
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -181,12 +181,12 @@
                     }
 
                     &.save-btn {
-                        background: #839E88;
+                        background: #5F7363;
                         color: white;
                     }
 
                     &.delete-confirm-btn {
-                        background: #839E88;
+                        background: #5F7363;
                         color: white;
                     }
                 }

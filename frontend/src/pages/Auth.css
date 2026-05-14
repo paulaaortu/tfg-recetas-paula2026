@@ -13,7 +13,7 @@
   }
 }
 
-.auth-contenedor > div {
+.auth-contenedor>div {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
         padding: 16px 16px 16px 48px;
         border-radius: 12px;
         border: none;
-        background-color: #F3DDE8; 
+        background-color: #F3DDE8;
         font-size: 16px;
         color: #333;
         box-sizing: border-box;
@@ -75,7 +75,7 @@
       padding: 14px;
       border-radius: 20px;
       border: none;
-      background-color: #839E88;
+      background-color: #5F7363;
       color: white;
       font-size: 18px;
       font-weight: 600;
@@ -91,11 +91,11 @@
   .auth-footer {
     margin-top: 24px;
     font-size: 14px;
-    color: #839E88;
+    color: #5F7363;
     font-weight: 600;
 
     span {
-      color: #839E88;
+      color: #5F7363;
       text-decoration: underline;
       cursor: pointer;
     }

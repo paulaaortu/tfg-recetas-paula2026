@@ -23,7 +23,7 @@
             width: 80px;
             height: 80px;
             background-color: #F3DDE8;
-            color: #839E88;
+            color: #5F7363;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -53,7 +53,7 @@
             margin-top: 10px;
 
             .login-overlay-btn-primary {
-                background-color: #839E88;
+                background-color: #5F7363;
                 color: white;
                 border: none;
                 border-radius: 25px;
@@ -71,8 +71,8 @@
 
             .login-overlay-btn-secondary {
                 background-color: transparent;
-                color: #839E88;
-                border: 2px solid #839E88;
+                color: #5F7363;
+                border: 2px solid #5F7363;
                 border-radius: 25px;
                 padding: 12px;
                 font-size: 16px;
@@ -87,4 +87,3 @@
         }
     }
 }
-
