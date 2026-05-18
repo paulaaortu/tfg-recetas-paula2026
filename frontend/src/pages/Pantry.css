@@ -1,11 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-
 .contenedor-despensa {
     padding: 15px;
     padding-bottom: 90px;
     max-width: 800px;
     margin: 0 auto;
-    font-family: 'Outfit', sans-serif;
 
     .pantry-header {
         display: flex;
